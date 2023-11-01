@@ -50,12 +50,17 @@ set(GOOGLE_CLOUD_CPP_BUILD_METADATA
 # default CMake UIs.
 mark_as_advanced(GOOGLE_CLOUD_CPP_BUILD_METADATA)
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/google_cloud_cpp_common.cmake")
+if (NOT TARGET google_cloud_cpp_common)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/google_cloud_cpp_common.cmake")
+endif()
 
 add_subdirectory(testing_util)
 
 if (GOOGLE_CLOUD_CPP_ENABLE_GRPC)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/google_cloud_cpp_grpc_utils.cmake")
+    if (NOT TARGET google_cloud_cpp_grpc_utils)
+        # Prevent it being included multiple times.
+        include("${CMAKE_CURRENT_SOURCE_DIR}/google_cloud_cpp_grpc_utils.cmake")
+    endif()
 endif ()
 
 if (GOOGLE_CLOUD_CPP_ENABLE_REST)

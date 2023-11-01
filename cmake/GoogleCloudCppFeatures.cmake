@@ -404,7 +404,7 @@ function (google_cloud_cpp_enable_features)
                 )
                 continue()
             endif ()
-            add_subdirectory(google/cloud/${feature})
+            add_subdirectory(google/cloud/${feature} ${CMAKE_CURRENT_BINARY_DIR}/google/cloud/${feature}/build)
             if (GOOGLE_CLOUD_CPP_ENABLE_EXAMPLES
                 AND IS_DIRECTORY
                     "${CMAKE_CURRENT_SOURCE_DIR}/google/cloud/${feature}/samples"

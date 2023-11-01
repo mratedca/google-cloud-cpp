@@ -188,9 +188,13 @@ add_custom_target(google-cloud-cpp-protos)
 add_custom_target(doxygen-docs)
 add_custom_target(all-docfx)
 
-find_package(absl CONFIG REQUIRED)
+if (NOT TARGET absl::strings)
+    find_package(absl CONFIG REQUIRED)
+endif()
 if (GOOGLE_CLOUD_CPP_ENABLE_GRPC)
-    find_package(gRPC REQUIRED QUIET)
+    if (NOT TARGET gRPC::grpc++)
+        find_package(gRPC REQUIRED QUIET)
+    endif()
     # `Protobuf_PROTOC_EXECUTABLE` is pretty standard. It has been in use by
     # CMake's FindProtobuf module for years, and it is defined by Protobuf's
     # CMake configuration files. There is no obvious analog for the gRPC plugin.
@@ -210,12 +214,17 @@ host environment.
 
     set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
         "find_dependency(Protobuf CONFIG)")
-    find_package(Protobuf CONFIG QUIET)
-    if (NOT Protobuf_FOUND)
+    if (NOT TARGET protobuf::libprotobuf)
+        find_package(Protobuf CONFIG QUIET)
+        if (NOT Protobuf_FOUND)
+            set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
+                "find_dependency(Protobuf)")
+            find_package(Protobuf REQUIRED)
+        endif ()
+    else()
         set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
-            "find_dependency(Protobuf)")
-        find_package(Protobuf REQUIRED)
-    endif ()
+            "TARGET protobuf:libprotobuf)")
+    endif()
 endif ()
 
 # Enable testing in this directory so we can do a top-level `make test`. This

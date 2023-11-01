@@ -14,7 +14,9 @@
 # limitations under the License.
 # ~~~
 
-find_package(OpenSSL REQUIRED)
+if (NOT TARGET ssl)
+    find_package(OpenSSL REQUIRED)
+endif()
 
 # Generate the version information from the CMake values.
 configure_file(internal/version_info.h.in
