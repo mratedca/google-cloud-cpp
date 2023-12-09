@@ -45,7 +45,7 @@ using ::google::cloud::testing_util::SpanKindIsClient;
 using ::google::cloud::testing_util::SpanKindIsProducer;
 using ::google::cloud::testing_util::SpanLinkAttributesAre;
 using ::google::cloud::testing_util::SpanNamed;
-using ::google::cloud::testing_util::SpanWithParentSpanId;
+using ::google::cloud::testing_util::SpanWithParent;
 using ::google::cloud::testing_util::SpanWithStatus;
 using ::testing::AllOf;
 using ::testing::Contains;
@@ -134,22 +134,16 @@ TEST(OpenTelemetry, MakeSpanWithKind) {
 TEST(OpenTelemetry, MakeSpanWithParent) {
   auto span_catcher = InstallSpanCatcher();
 
-  auto s1 = MakeSpan("span1");
+  auto parent = MakeSpan("parent");
   opentelemetry::trace::StartSpanOptions options;
-  options.parent = s1->GetContext();
-  auto s2 = MakeSpan("span2", options);
-  s1->End();
-  s2->End();
+  options.parent = parent->GetContext();
+  auto child = MakeSpan("child", options);
+  child->End();
+  parent->End();
 
   auto spans = span_catcher->GetSpans();
-  ASSERT_EQ(2, spans.size());
-  // Span data will be in the order the spans are ended. The spans are
-  // returned in a `vector<unique_ptr<SpanData>>`, so we can't extract a span
-  // directly to get the span id from the span data. Instead we are accessing
-  // the span data via the vector.
   EXPECT_THAT(spans,
-              Contains(AllOf(SpanNamed("span2"),
-                             SpanWithParentSpanId(spans[0]->GetSpanId()))));
+              Contains(AllOf(SpanNamed("child"), SpanWithParent(parent))));
 }
 
 TEST(OpenTelemetry, EndSpanImplEndsSpan) {
@@ -381,7 +375,7 @@ TEST(OpenTelemetry, MakeTracedSleeperEnabled) {
   EXPECT_CALL(mock_sleeper, Call(ms(42)));
 
   auto sleeper = mock_sleeper.AsStdFunction();
-  auto result = MakeTracedSleeper(EnableTracing(Options{}), sleeper);
+  auto result = MakeTracedSleeper(EnableTracing(Options{}), sleeper, "Backoff");
   result(ms(42));
 
   // Verify that a span was made.
@@ -396,8 +390,24 @@ TEST(OpenTelemetry, MakeTracedSleeperDisabled) {
   EXPECT_CALL(mock_sleeper, Call(ms(42)));
 
   auto sleeper = mock_sleeper.AsStdFunction();
-  auto result = MakeTracedSleeper(DisableTracing(Options{}), sleeper);
+  auto result =
+      MakeTracedSleeper(DisableTracing(Options{}), sleeper, "Backoff");
   result(ms(42));
+
+  // Verify that no spans were made.
+  auto spans = span_catcher->GetSpans();
+  EXPECT_THAT(spans, IsEmpty());
+}
+
+TEST(OpenTelemetry, MakeTracedSleeperNoSpansIfNoSleep) {
+  auto span_catcher = InstallSpanCatcher();
+
+  MockFunction<void(ms)> mock_sleeper;
+  EXPECT_CALL(mock_sleeper, Call(ms(0)));
+
+  auto sleeper = mock_sleeper.AsStdFunction();
+  auto result = MakeTracedSleeper(EnableTracing(Options{}), sleeper, "Backoff");
+  result(ms(0));
 
   // Verify that no spans were made.
   auto spans = span_catcher->GetSpans();
@@ -409,8 +419,7 @@ TEST(OpenTelemetry, AddSpanAttributeEnabled) {
 
   auto span = MakeSpan("span");
   auto scope = opentelemetry::trace::Scope(span);
-  OptionsSpan o(EnableTracing(Options{}));
-  AddSpanAttribute("key", "value");
+  AddSpanAttribute(EnableTracing(Options{}), "key", "value");
   span->End();
 
   auto spans = span_catcher->GetSpans();
@@ -425,8 +434,7 @@ TEST(OpenTelemetry, AddSpanAttributeDisabled) {
 
   auto span = MakeSpan("span");
   auto scope = opentelemetry::trace::Scope(span);
-  OptionsSpan o(DisableTracing(Options{}));
-  AddSpanAttribute("key", "value");
+  AddSpanAttribute(DisableTracing(Options{}), "key", "value");
   span->End();
 
   auto spans = span_catcher->GetSpans();
@@ -448,7 +456,7 @@ TEST(NoOpenTelemetry, MakeTracedSleeper) {
   EXPECT_CALL(mock_sleeper, Call(ms(42)));
 
   auto sleeper = mock_sleeper.AsStdFunction();
-  auto result = MakeTracedSleeper(Options{}, sleeper);
+  auto result = MakeTracedSleeper(Options{}, sleeper, "Backoff");
   result(ms(42));
 }
 

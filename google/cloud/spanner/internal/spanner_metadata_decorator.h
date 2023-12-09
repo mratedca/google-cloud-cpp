@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_SPANNER_INTERNAL_SPANNER_METADATA_DECORATOR_H
 
 #include "google/cloud/spanner/internal/spanner_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <map>
 #include <memory>
@@ -57,7 +58,7 @@ class SpannerMetadata : public SpannerStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::spanner::v1::PartialResultSet>>
   ExecuteStreamingSql(
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::v1::ExecuteSqlRequest const& request) override;
 
   StatusOr<google::spanner::v1::ExecuteBatchDmlResponse> ExecuteBatchDml(
@@ -67,6 +68,7 @@ class SpannerMetadata : public SpannerStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::spanner::v1::PartialResultSet>>
   StreamingRead(std::shared_ptr<grpc::ClientContext> context,
+                Options const& options,
                 google::spanner::v1::ReadRequest const& request) override;
 
   StatusOr<google::spanner::v1::Transaction> BeginTransaction(
@@ -91,6 +93,7 @@ class SpannerMetadata : public SpannerStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::spanner::v1::BatchWriteResponse>>
   BatchWrite(std::shared_ptr<grpc::ClientContext> context,
+             Options const& options,
              google::spanner::v1::BatchWriteRequest const& request) override;
 
   future<StatusOr<google::spanner::v1::BatchCreateSessionsResponse>>
@@ -110,9 +113,9 @@ class SpannerMetadata : public SpannerStub {
       google::spanner::v1::ExecuteSqlRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<SpannerStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

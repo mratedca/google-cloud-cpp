@@ -21,6 +21,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_BEYONDCORP_APPCONNECTIONS_V1_INTERNAL_APP_CONNECTIONS_METADATA_DECORATOR_H
 
 #include "google/cloud/beyondcorp/appconnections/v1/internal/app_connections_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -53,19 +54,19 @@ class AppConnectionsServiceMetadata : public AppConnectionsServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAppConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::beyondcorp::appconnections::v1::
           CreateAppConnectionRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAppConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::beyondcorp::appconnections::v1::
           UpdateAppConnectionRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAppConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::beyondcorp::appconnections::v1::
           DeleteAppConnectionRequest const& request) override;
 
@@ -78,18 +79,18 @@ class AppConnectionsServiceMetadata : public AppConnectionsServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<AppConnectionsServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

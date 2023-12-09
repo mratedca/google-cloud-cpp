@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_DATASET_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/dataset_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -40,7 +41,7 @@ class DatasetServiceMetadata : public DatasetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateDatasetRequest const& request)
       override;
 
@@ -60,29 +61,29 @@ class DatasetServiceMetadata : public DatasetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteDatasetRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::ImportDataRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::ExportDataRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateDatasetVersion(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateDatasetVersionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteDatasetVersion(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteDatasetVersionRequest const& request)
       override;
 
@@ -99,7 +100,7 @@ class DatasetServiceMetadata : public DatasetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncRestoreDatasetVersion(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::RestoreDatasetVersionRequest const&
           request) override;
 
@@ -120,7 +121,7 @@ class DatasetServiceMetadata : public DatasetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteSavedQuery(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteSavedQueryRequest const& request)
       override;
 
@@ -136,18 +137,18 @@ class DatasetServiceMetadata : public DatasetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<DatasetServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

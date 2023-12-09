@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_DIALOGFLOW_CX_INTERNAL_ENTITY_TYPES_METADATA_DECORATOR_H
 
 #include "google/cloud/dialogflow_cx/internal/entity_types_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <map>
 #include <memory>
@@ -36,12 +37,6 @@ class EntityTypesMetadata : public EntityTypesStub {
   EntityTypesMetadata(std::shared_ptr<EntityTypesStub> child,
                       std::multimap<std::string, std::string> fixed_metadata,
                       std::string api_client_header = "");
-
-  StatusOr<google::cloud::dialogflow::cx::v3::ListEntityTypesResponse>
-  ListEntityTypes(
-      grpc::ClientContext& context,
-      google::cloud::dialogflow::cx::v3::ListEntityTypesRequest const& request)
-      override;
 
   StatusOr<google::cloud::dialogflow::cx::v3::EntityType> GetEntityType(
       grpc::ClientContext& context,
@@ -63,10 +58,16 @@ class EntityTypesMetadata : public EntityTypesStub {
       google::cloud::dialogflow::cx::v3::DeleteEntityTypeRequest const& request)
       override;
 
+  StatusOr<google::cloud::dialogflow::cx::v3::ListEntityTypesResponse>
+  ListEntityTypes(
+      grpc::ClientContext& context,
+      google::cloud::dialogflow::cx::v3::ListEntityTypesRequest const& request)
+      override;
+
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<EntityTypesStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

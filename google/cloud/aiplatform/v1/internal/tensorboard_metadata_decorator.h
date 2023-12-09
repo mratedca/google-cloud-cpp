@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_TENSORBOARD_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/tensorboard_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateTensorboard(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateTensorboardRequest const& request)
       override;
 
@@ -52,7 +53,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateTensorboard(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::UpdateTensorboardRequest const& request)
       override;
 
@@ -63,7 +64,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteTensorboard(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTensorboardRequest const& request)
       override;
 
@@ -106,7 +107,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteTensorboardExperiment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTensorboardExperimentRequest const&
           request) override;
 
@@ -139,7 +140,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteTensorboardRun(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTensorboardRunRequest const& request)
       override;
 
@@ -177,7 +178,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteTensorboardTimeSeries(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTensorboardTimeSeriesRequest const&
           request) override;
 
@@ -197,7 +198,7 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::cloud::aiplatform::v1::ReadTensorboardBlobDataResponse>>
   ReadTensorboardBlobData(
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::ReadTensorboardBlobDataRequest const&
           request) override;
 
@@ -223,18 +224,18 @@ class TensorboardServiceMetadata : public TensorboardServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<TensorboardServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

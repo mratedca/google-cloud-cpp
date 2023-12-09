@@ -34,6 +34,7 @@ using ::google::test::admin::database::v1::Request;
 using ::google::test::admin::database::v1::Response;
 using ::testing::_;
 using ::testing::Return;
+using ::testing::VariantWith;
 
 class MockGrpcGoldenKitchenSinkStub : public ::google::test::admin::database::
                                           v1::GoldenKitchenSink::StubInterface {
@@ -457,14 +458,13 @@ TEST_F(GoldenKitchenSinkStubTest, StreamingRead) {
       .WillOnce(Return(success_response.release()))
       .WillOnce(Return(failure_response.release()));
   DefaultGoldenKitchenSinkStub stub(std::move(grpc_stub_));
-  auto success_stream =
-      stub.StreamingRead(std::make_shared<grpc::ClientContext>(), request);
-  auto success_status = absl::get<Status>(success_stream->Read());
-  EXPECT_THAT(success_status, IsOk());
-  auto failure_stream =
-      stub.StreamingRead(std::make_shared<grpc::ClientContext>(), request);
-  auto failure_status = absl::get<Status>(failure_stream->Read());
-  EXPECT_THAT(failure_status, StatusIs(StatusCode::kUnavailable));
+  auto success_stream = stub.StreamingRead(
+      std::make_shared<grpc::ClientContext>(), Options{}, request);
+  EXPECT_THAT(success_stream->Read(), VariantWith<Status>(IsOk()));
+  auto failure_stream = stub.StreamingRead(
+      std::make_shared<grpc::ClientContext>(), Options{}, request);
+  EXPECT_THAT(failure_stream->Read(),
+              VariantWith<Status>(StatusIs(StatusCode::kUnavailable)));
 }
 
 class MockWriteObjectResponse
@@ -488,7 +488,7 @@ TEST_F(GoldenKitchenSinkStubTest, StreamingWrite) {
         return stream.release();
       });
   DefaultGoldenKitchenSinkStub stub(std::move(grpc_stub_));
-  auto stream = stub.StreamingWrite(std::move(context));
+  auto stream = stub.StreamingWrite(std::move(context), Options{});
   EXPECT_TRUE(stream->Write(Request{}, grpc::WriteOptions()));
   EXPECT_THAT(stream->Close(), StatusIs(StatusCode::kOk));
 }

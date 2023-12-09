@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_DOMAINS_V1_INTERNAL_DOMAINS_METADATA_DECORATOR_H
 
 #include "google/cloud/domains/v1/internal/domains_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -50,7 +51,7 @@ class DomainsMetadata : public DomainsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncRegisterDomain(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::RegisterDomainRequest const& request)
       override;
 
@@ -62,7 +63,7 @@ class DomainsMetadata : public DomainsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncTransferDomain(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::TransferDomainRequest const& request)
       override;
 
@@ -78,39 +79,39 @@ class DomainsMetadata : public DomainsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateRegistration(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::UpdateRegistrationRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncConfigureManagementSettings(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::ConfigureManagementSettingsRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncConfigureDnsSettings(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::ConfigureDnsSettingsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncConfigureContactSettings(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::ConfigureContactSettingsRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportRegistration(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::ExportRegistrationRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRegistration(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::domains::v1::DeleteRegistrationRequest const& request)
       override;
 
@@ -128,18 +129,18 @@ class DomainsMetadata : public DomainsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<DomainsStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

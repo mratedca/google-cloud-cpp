@@ -61,10 +61,10 @@ namespace internal {
  *     `google::cloud::Status` that indicates the final error for this request.
  */
 template <typename Functor, typename Request, typename Sleeper,
-          typename std::enable_if<google::cloud::internal::is_invocable<
-                                      Functor, grpc::ClientContext&,
-                                      Options const&, Request const&>::value,
-                                  int>::type = 0>
+          std::enable_if_t<google::cloud::internal::is_invocable<
+                               Functor, grpc::ClientContext&, Options const&,
+                               Request const&>::value,
+                           int> = 0>
 auto RetryLoopImpl(RetryPolicy& retry_policy, BackoffPolicy& backoff_policy,
                    Idempotency idempotency, Functor&& functor,
                    Options const& options, Request const& request,
@@ -94,10 +94,10 @@ auto RetryLoopImpl(RetryPolicy& retry_policy, BackoffPolicy& backoff_policy,
 
 /// @copydoc RetryLoopImpl
 template <typename Functor, typename Request,
-          typename std::enable_if<google::cloud::internal::is_invocable<
-                                      Functor, grpc::ClientContext&,
-                                      Options const&, Request const&>::value,
-                                  int>::type = 0>
+          std::enable_if_t<google::cloud::internal::is_invocable<
+                               Functor, grpc::ClientContext&, Options const&,
+                               Request const&>::value,
+                           int> = 0>
 auto RetryLoop(std::unique_ptr<RetryPolicy> retry_policy,
                std::unique_ptr<BackoffPolicy> backoff_policy,
                Idempotency idempotency, Functor&& functor,
@@ -107,18 +107,18 @@ auto RetryLoop(std::unique_ptr<RetryPolicy> retry_policy,
         Functor, grpc::ClientContext&, Options const&, Request const&> {
   std::function<void(std::chrono::milliseconds)> sleeper =
       [](std::chrono::milliseconds p) { std::this_thread::sleep_for(p); };
-  sleeper = MakeTracedSleeper(options, std::move(sleeper));
+  sleeper = MakeTracedSleeper(options, std::move(sleeper), "Backoff");
   return RetryLoopImpl(*retry_policy, *backoff_policy, idempotency,
                        std::forward<Functor>(functor), options, request,
                        location, std::move(sleeper));
 }
 
 /// @copydoc RetryLoopImpl
-template <typename Functor, typename Request,
-          typename std::enable_if<
-              google::cloud::internal::is_invocable<
-                  Functor, grpc::ClientContext&, Request const&>::value,
-              int>::type = 0>
+template <
+    typename Functor, typename Request,
+    std::enable_if_t<google::cloud::internal::is_invocable<
+                         Functor, grpc::ClientContext&, Request const&>::value,
+                     int> = 0>
 auto RetryLoop(std::unique_ptr<RetryPolicy> retry_policy,
                std::unique_ptr<BackoffPolicy> backoff_policy,
                Idempotency idempotency, Functor&& functor,

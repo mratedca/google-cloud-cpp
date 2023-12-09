@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_CHANNEL_V1_INTERNAL_CLOUD_CHANNEL_METADATA_DECORATOR_H
 
 #include "google/cloud/channel/v1/internal/cloud_channel_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -74,7 +75,7 @@ class CloudChannelServiceMetadata : public CloudChannelServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncProvisionCloudIdentity(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::ProvisionCloudIdentityRequest const& request)
       override;
 
@@ -102,61 +103,61 @@ class CloudChannelServiceMetadata : public CloudChannelServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateEntitlement(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::CreateEntitlementRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncChangeParameters(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::ChangeParametersRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncChangeRenewalSettings(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::ChangeRenewalSettingsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncChangeOffer(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::ChangeOfferRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncStartPaidService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::StartPaidServiceRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncSuspendEntitlement(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::SuspendEntitlementRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCancelEntitlement(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::CancelEntitlementRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncActivateEntitlement(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::ActivateEntitlementRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncTransferEntitlements(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::TransferEntitlementsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncTransferEntitlementsToGoogle(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::channel::v1::TransferEntitlementsToGoogleRequest const&
           request) override;
 
@@ -312,18 +313,18 @@ class CloudChannelServiceMetadata : public CloudChannelServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<CloudChannelServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

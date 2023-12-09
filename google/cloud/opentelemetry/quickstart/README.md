@@ -49,11 +49,6 @@ Google Cloud client libraries depends on Abseil, which also defines these types
 in the same namespace. In order to avoid ambiguous symbols, we must set certain
 flags when compiling `opentelemetry-cpp`.
 
-### Testing
-
-The client library is only tested against the latest version of
-`opentelemetry-cpp`. As of 2023-05, that is [v1.9.0][opentelemetry-cpp-v1-9-0].
-
 ## Using with Bazel
 
 > :warning: If you are using Windows or macOS there are additional instructions
@@ -116,29 +111,6 @@ To enable these features, add the following to your CMake configuration command:
 -DGOOGLE_CLOUD_CPP_ENABLE="storage,opentelemetry"
 ```
 
-#### Fetching `opentelemetry-cpp`
-
-Here is an example command to fetch and install `opentelemetry-cpp` on Fedora
-Linux.
-
-```Dockerfile
-WORKDIR /var/tmp/build/
-RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.9.0.tar.gz | \
-    tar -xzf - --strip-components=1 && \
-    cmake \
-        -DCMAKE_CXX_STANDARD=14 \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE \
-        -DBUILD_SHARED_LIBS=ON \
-        -DWITH_EXAMPLES=OFF \
-        -DWITH_ABSEIL=ON \
-        -DBUILD_TESTING=OFF \
-        -DOPENTELEMETRY_INSTALL=ON \
-        -S . -B cmake-out && \
-    cmake --build cmake-out --target install && \
-    ldconfig && cd /var/tmp && rm -fr build
-```
-
 #### Details
 
 We must supply the `-DWITH_ABSEIL=ON` flag when compiling `opentelemetry-cpp`
@@ -152,10 +124,6 @@ is good practice to explicitly set the language standard.
 
 While OpenTelemetry supports C++>=11, `google-cloud-cpp` requires C++>=14. So
 you can use `-DCMAKE_CXX_STANDARD=14`, `-DCMAKE_CXX_STANDARD=17`, or higher.
-
-OpenTelemetry only works when installed in a location that is on the
-[`find_package()`][find-package] search path. Also, `opentelemetry-cpp` does not
-install `*.pc` files, so it is not yet usable with `make`.
 
 ### Package Managers
 
@@ -225,12 +193,10 @@ set GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=%cd%\roots.pem
 [bazel-install]: https://docs.bazel.build/versions/main/install.html
 [exporter]: https://opentelemetry.io/docs/concepts/signals/traces/#trace-exporters
 [find and view traces]: https://cloud.google.com/trace/docs/trace-overview
-[find-package]: https://cmake.org/cmake/help/latest/command/find_package.html
 [grpc-roots-pem-bug]: https://github.com/grpc/grpc/issues/16571
 [opentelemetry]: https://opentelemetry.io
 [opentelemetry-cpp]: https://github.com/open-telemetry/opentelemetry-cpp
 [opentelemetry-cpp-install]: https://github.com/open-telemetry/opentelemetry-cpp/INSTALL.md
-[opentelemetry-cpp-v1-9-0]: https://github.com/open-telemetry/opentelemetry-cpp/releases/tag/v1.9.0
 [packaging guide]: https://github.com/googleapis/google-cloud-cpp/blob/main/doc/packaging.md
 [quickstart-storage]: https://github.com/googleapis/google-cloud-cpp/blob/main/google/cloud/storage/quickstart
 [quickstart-trace]: https://github.com/googleapis/google-cloud-cpp/blob/main/google/cloud/trace/quickstart

@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_METADATA_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/metadata_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateMetadataStore(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateMetadataStoreRequest const& request)
       override;
 
@@ -58,7 +59,7 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteMetadataStore(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteMetadataStoreRequest const& request)
       override;
 
@@ -84,13 +85,13 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteArtifact(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteArtifactRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncPurgeArtifacts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::PurgeArtifactsRequest const& request)
       override;
 
@@ -115,13 +116,13 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteContext(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteContextRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncPurgeContexts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::PurgeContextsRequest const& request)
       override;
 
@@ -172,13 +173,13 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteExecution(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteExecutionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncPurgeExecutions(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::PurgeExecutionsRequest const& request)
       override;
 
@@ -218,18 +219,18 @@ class MetadataServiceMetadata : public MetadataServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<MetadataServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

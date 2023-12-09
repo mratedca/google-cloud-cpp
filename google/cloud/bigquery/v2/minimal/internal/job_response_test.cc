@@ -253,6 +253,41 @@ TEST(ListJobsResponseTest, InvalidListFormatJob) {
                        HasSubstr("Not a valid Json ListFormatJob object")));
 }
 
+TEST(ListJobsResponseTest, MinimalProjectionJson) {
+  BigQueryHttpResponse http_response;
+  http_response.payload =
+      R"({"etag": "tag-1",
+          "kind": "kind-1",
+          "jobs": [
+              {
+                "id": "1",
+                "kind": "kind-2",
+                "jobReference": {"projectId": "p123", "jobId": "j123"},
+                "state": "DONE",
+                "status": {"state": "DONE"},
+                "user_email": "user-email",
+                "principal_subject": "principal-subj"
+              }
+  ]})";
+  auto const list_jobs_response =
+      ListJobsResponse::BuildFromHttpResponse(http_response);
+  ASSERT_STATUS_OK(list_jobs_response);
+  EXPECT_FALSE(list_jobs_response->http_response.payload.empty());
+  EXPECT_EQ(list_jobs_response->kind, "kind-1");
+  EXPECT_EQ(list_jobs_response->etag, "tag-1");
+  EXPECT_THAT(list_jobs_response->next_page_token, IsEmpty());
+
+  auto const jobs = list_jobs_response->jobs;
+  ASSERT_EQ(jobs.size(), 1);
+  EXPECT_EQ(jobs[0].id, "1");
+  EXPECT_EQ(jobs[0].kind, "kind-2");
+  EXPECT_EQ(jobs[0].status.state, "DONE");
+  EXPECT_EQ(jobs[0].state, "DONE");
+  EXPECT_EQ(jobs[0].user_email, "user-email");
+  EXPECT_EQ(jobs[0].job_reference.project_id, "p123");
+  EXPECT_EQ(jobs[0].job_reference.job_id, "j123");
+}
+
 TEST(GetJobResponseTest, DebugString) {
   BigQueryHttpResponse http_response;
   http_response.http_status_code = HttpStatusCode::kOk;
@@ -960,7 +995,7 @@ TEST(InsertJobResponseTest, Success) {
       R"(,"interval":"range-interval","start":"range-start"}})"
       R"(,"schemaUpdateOptions":["job-update-options"])"
       R"(,"scriptOptions":{"keyResultStatement":"FIRST_SELECT")"
-      R"(,"statementByteBudget":10,"statementTimeoutMs":"10"})"
+      R"(,"statementByteBudget":"10","statementTimeoutMs":"10"})"
       R"(,"systemVariables":{"types":{"sql-struct-type-key-1":{)"
       R"("structType":{"fields":[{"name":"f1-sql-struct-type-int64"}]})"
       R"(,"sub_type_index":2,"typeKind":"INT64"})"
@@ -1442,7 +1477,7 @@ TEST(CancelJobResponseTest, Success) {
       R"(,"interval":"range-interval","start":"range-start"}})"
       R"(,"schemaUpdateOptions":["job-update-options"])"
       R"(,"scriptOptions":{"keyResultStatement":"FIRST_SELECT")"
-      R"(,"statementByteBudget":10,"statementTimeoutMs":"10"})"
+      R"(,"statementByteBudget":"10","statementTimeoutMs":"10"})"
       R"(,"systemVariables":{"types":{"sql-struct-type-key-1":{)"
       R"("structType":{"fields":[{"name":"f1-sql-struct-type-int64"}]})"
       R"(,"sub_type_index":2,"typeKind":"INT64"})"

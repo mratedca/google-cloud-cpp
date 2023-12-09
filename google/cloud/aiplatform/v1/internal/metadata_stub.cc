@@ -33,7 +33,7 @@ MetadataServiceStub::~MetadataServiceStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncCreateMetadataStore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::CreateMetadataStoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::CreateMetadataStoreRequest,
@@ -50,11 +50,10 @@ DefaultMetadataServiceStub::AsyncCreateMetadataStore(
 
 StatusOr<google::cloud::aiplatform::v1::MetadataStore>
 DefaultMetadataServiceStub::GetMetadataStore(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetMetadataStoreRequest const& request) {
   google::cloud::aiplatform::v1::MetadataStore response;
-  auto status =
-      grpc_stub_->GetMetadataStore(&client_context, request, &response);
+  auto status = grpc_stub_->GetMetadataStore(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -63,11 +62,10 @@ DefaultMetadataServiceStub::GetMetadataStore(
 
 StatusOr<google::cloud::aiplatform::v1::ListMetadataStoresResponse>
 DefaultMetadataServiceStub::ListMetadataStores(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListMetadataStoresRequest const& request) {
   google::cloud::aiplatform::v1::ListMetadataStoresResponse response;
-  auto status =
-      grpc_stub_->ListMetadataStores(&client_context, request, &response);
+  auto status = grpc_stub_->ListMetadataStores(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -77,7 +75,7 @@ DefaultMetadataServiceStub::ListMetadataStores(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncDeleteMetadataStore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteMetadataStoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteMetadataStoreRequest,
@@ -94,10 +92,10 @@ DefaultMetadataServiceStub::AsyncDeleteMetadataStore(
 
 StatusOr<google::cloud::aiplatform::v1::Artifact>
 DefaultMetadataServiceStub::CreateArtifact(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::CreateArtifactRequest const& request) {
   google::cloud::aiplatform::v1::Artifact response;
-  auto status = grpc_stub_->CreateArtifact(&client_context, request, &response);
+  auto status = grpc_stub_->CreateArtifact(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -106,10 +104,10 @@ DefaultMetadataServiceStub::CreateArtifact(
 
 StatusOr<google::cloud::aiplatform::v1::Artifact>
 DefaultMetadataServiceStub::GetArtifact(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetArtifactRequest const& request) {
   google::cloud::aiplatform::v1::Artifact response;
-  auto status = grpc_stub_->GetArtifact(&client_context, request, &response);
+  auto status = grpc_stub_->GetArtifact(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -118,10 +116,10 @@ DefaultMetadataServiceStub::GetArtifact(
 
 StatusOr<google::cloud::aiplatform::v1::ListArtifactsResponse>
 DefaultMetadataServiceStub::ListArtifacts(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListArtifactsRequest const& request) {
   google::cloud::aiplatform::v1::ListArtifactsResponse response;
-  auto status = grpc_stub_->ListArtifacts(&client_context, request, &response);
+  auto status = grpc_stub_->ListArtifacts(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -130,10 +128,10 @@ DefaultMetadataServiceStub::ListArtifacts(
 
 StatusOr<google::cloud::aiplatform::v1::Artifact>
 DefaultMetadataServiceStub::UpdateArtifact(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::UpdateArtifactRequest const& request) {
   google::cloud::aiplatform::v1::Artifact response;
-  auto status = grpc_stub_->UpdateArtifact(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateArtifact(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -143,7 +141,7 @@ DefaultMetadataServiceStub::UpdateArtifact(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncDeleteArtifact(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteArtifactRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteArtifactRequest,
@@ -161,7 +159,7 @@ DefaultMetadataServiceStub::AsyncDeleteArtifact(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncPurgeArtifacts(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::PurgeArtifactsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::PurgeArtifactsRequest,
@@ -178,10 +176,10 @@ DefaultMetadataServiceStub::AsyncPurgeArtifacts(
 
 StatusOr<google::cloud::aiplatform::v1::Context>
 DefaultMetadataServiceStub::CreateContext(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::CreateContextRequest const& request) {
   google::cloud::aiplatform::v1::Context response;
-  auto status = grpc_stub_->CreateContext(&client_context, request, &response);
+  auto status = grpc_stub_->CreateContext(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -190,10 +188,10 @@ DefaultMetadataServiceStub::CreateContext(
 
 StatusOr<google::cloud::aiplatform::v1::Context>
 DefaultMetadataServiceStub::GetContext(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetContextRequest const& request) {
   google::cloud::aiplatform::v1::Context response;
-  auto status = grpc_stub_->GetContext(&client_context, request, &response);
+  auto status = grpc_stub_->GetContext(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -202,10 +200,10 @@ DefaultMetadataServiceStub::GetContext(
 
 StatusOr<google::cloud::aiplatform::v1::ListContextsResponse>
 DefaultMetadataServiceStub::ListContexts(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListContextsRequest const& request) {
   google::cloud::aiplatform::v1::ListContextsResponse response;
-  auto status = grpc_stub_->ListContexts(&client_context, request, &response);
+  auto status = grpc_stub_->ListContexts(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -214,10 +212,10 @@ DefaultMetadataServiceStub::ListContexts(
 
 StatusOr<google::cloud::aiplatform::v1::Context>
 DefaultMetadataServiceStub::UpdateContext(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::UpdateContextRequest const& request) {
   google::cloud::aiplatform::v1::Context response;
-  auto status = grpc_stub_->UpdateContext(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateContext(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -227,7 +225,7 @@ DefaultMetadataServiceStub::UpdateContext(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncDeleteContext(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteContextRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteContextRequest,
@@ -244,7 +242,7 @@ DefaultMetadataServiceStub::AsyncDeleteContext(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncPurgeContexts(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::PurgeContextsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::PurgeContextsRequest,
@@ -261,13 +259,13 @@ DefaultMetadataServiceStub::AsyncPurgeContexts(
 StatusOr<
     google::cloud::aiplatform::v1::AddContextArtifactsAndExecutionsResponse>
 DefaultMetadataServiceStub::AddContextArtifactsAndExecutions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::
         AddContextArtifactsAndExecutionsRequest const& request) {
   google::cloud::aiplatform::v1::AddContextArtifactsAndExecutionsResponse
       response;
-  auto status = grpc_stub_->AddContextArtifactsAndExecutions(
-      &client_context, request, &response);
+  auto status = grpc_stub_->AddContextArtifactsAndExecutions(&context, request,
+                                                             &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -276,11 +274,10 @@ DefaultMetadataServiceStub::AddContextArtifactsAndExecutions(
 
 StatusOr<google::cloud::aiplatform::v1::AddContextChildrenResponse>
 DefaultMetadataServiceStub::AddContextChildren(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::AddContextChildrenRequest const& request) {
   google::cloud::aiplatform::v1::AddContextChildrenResponse response;
-  auto status =
-      grpc_stub_->AddContextChildren(&client_context, request, &response);
+  auto status = grpc_stub_->AddContextChildren(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -289,12 +286,11 @@ DefaultMetadataServiceStub::AddContextChildren(
 
 StatusOr<google::cloud::aiplatform::v1::RemoveContextChildrenResponse>
 DefaultMetadataServiceStub::RemoveContextChildren(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::RemoveContextChildrenRequest const&
         request) {
   google::cloud::aiplatform::v1::RemoveContextChildrenResponse response;
-  auto status =
-      grpc_stub_->RemoveContextChildren(&client_context, request, &response);
+  auto status = grpc_stub_->RemoveContextChildren(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -303,12 +299,12 @@ DefaultMetadataServiceStub::RemoveContextChildren(
 
 StatusOr<google::cloud::aiplatform::v1::LineageSubgraph>
 DefaultMetadataServiceStub::QueryContextLineageSubgraph(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::QueryContextLineageSubgraphRequest const&
         request) {
   google::cloud::aiplatform::v1::LineageSubgraph response;
-  auto status = grpc_stub_->QueryContextLineageSubgraph(&client_context,
-                                                        request, &response);
+  auto status =
+      grpc_stub_->QueryContextLineageSubgraph(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -317,11 +313,10 @@ DefaultMetadataServiceStub::QueryContextLineageSubgraph(
 
 StatusOr<google::cloud::aiplatform::v1::Execution>
 DefaultMetadataServiceStub::CreateExecution(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::CreateExecutionRequest const& request) {
   google::cloud::aiplatform::v1::Execution response;
-  auto status =
-      grpc_stub_->CreateExecution(&client_context, request, &response);
+  auto status = grpc_stub_->CreateExecution(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -330,10 +325,10 @@ DefaultMetadataServiceStub::CreateExecution(
 
 StatusOr<google::cloud::aiplatform::v1::Execution>
 DefaultMetadataServiceStub::GetExecution(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetExecutionRequest const& request) {
   google::cloud::aiplatform::v1::Execution response;
-  auto status = grpc_stub_->GetExecution(&client_context, request, &response);
+  auto status = grpc_stub_->GetExecution(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -342,10 +337,10 @@ DefaultMetadataServiceStub::GetExecution(
 
 StatusOr<google::cloud::aiplatform::v1::ListExecutionsResponse>
 DefaultMetadataServiceStub::ListExecutions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListExecutionsRequest const& request) {
   google::cloud::aiplatform::v1::ListExecutionsResponse response;
-  auto status = grpc_stub_->ListExecutions(&client_context, request, &response);
+  auto status = grpc_stub_->ListExecutions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -354,11 +349,10 @@ DefaultMetadataServiceStub::ListExecutions(
 
 StatusOr<google::cloud::aiplatform::v1::Execution>
 DefaultMetadataServiceStub::UpdateExecution(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::UpdateExecutionRequest const& request) {
   google::cloud::aiplatform::v1::Execution response;
-  auto status =
-      grpc_stub_->UpdateExecution(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateExecution(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -368,7 +362,7 @@ DefaultMetadataServiceStub::UpdateExecution(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncDeleteExecution(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteExecutionRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteExecutionRequest,
@@ -386,7 +380,7 @@ DefaultMetadataServiceStub::AsyncDeleteExecution(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncPurgeExecutions(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::PurgeExecutionsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::PurgeExecutionsRequest,
@@ -403,11 +397,10 @@ DefaultMetadataServiceStub::AsyncPurgeExecutions(
 
 StatusOr<google::cloud::aiplatform::v1::AddExecutionEventsResponse>
 DefaultMetadataServiceStub::AddExecutionEvents(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::AddExecutionEventsRequest const& request) {
   google::cloud::aiplatform::v1::AddExecutionEventsResponse response;
-  auto status =
-      grpc_stub_->AddExecutionEvents(&client_context, request, &response);
+  auto status = grpc_stub_->AddExecutionEvents(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -416,12 +409,12 @@ DefaultMetadataServiceStub::AddExecutionEvents(
 
 StatusOr<google::cloud::aiplatform::v1::LineageSubgraph>
 DefaultMetadataServiceStub::QueryExecutionInputsAndOutputs(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::QueryExecutionInputsAndOutputsRequest const&
         request) {
   google::cloud::aiplatform::v1::LineageSubgraph response;
-  auto status = grpc_stub_->QueryExecutionInputsAndOutputs(&client_context,
-                                                           request, &response);
+  auto status =
+      grpc_stub_->QueryExecutionInputsAndOutputs(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -430,11 +423,10 @@ DefaultMetadataServiceStub::QueryExecutionInputsAndOutputs(
 
 StatusOr<google::cloud::aiplatform::v1::MetadataSchema>
 DefaultMetadataServiceStub::CreateMetadataSchema(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::CreateMetadataSchemaRequest const& request) {
   google::cloud::aiplatform::v1::MetadataSchema response;
-  auto status =
-      grpc_stub_->CreateMetadataSchema(&client_context, request, &response);
+  auto status = grpc_stub_->CreateMetadataSchema(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -443,11 +435,10 @@ DefaultMetadataServiceStub::CreateMetadataSchema(
 
 StatusOr<google::cloud::aiplatform::v1::MetadataSchema>
 DefaultMetadataServiceStub::GetMetadataSchema(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetMetadataSchemaRequest const& request) {
   google::cloud::aiplatform::v1::MetadataSchema response;
-  auto status =
-      grpc_stub_->GetMetadataSchema(&client_context, request, &response);
+  auto status = grpc_stub_->GetMetadataSchema(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -456,11 +447,10 @@ DefaultMetadataServiceStub::GetMetadataSchema(
 
 StatusOr<google::cloud::aiplatform::v1::ListMetadataSchemasResponse>
 DefaultMetadataServiceStub::ListMetadataSchemas(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListMetadataSchemasRequest const& request) {
   google::cloud::aiplatform::v1::ListMetadataSchemasResponse response;
-  auto status =
-      grpc_stub_->ListMetadataSchemas(&client_context, request, &response);
+  auto status = grpc_stub_->ListMetadataSchemas(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -469,12 +459,12 @@ DefaultMetadataServiceStub::ListMetadataSchemas(
 
 StatusOr<google::cloud::aiplatform::v1::LineageSubgraph>
 DefaultMetadataServiceStub::QueryArtifactLineageSubgraph(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::QueryArtifactLineageSubgraphRequest const&
         request) {
   google::cloud::aiplatform::v1::LineageSubgraph response;
-  auto status = grpc_stub_->QueryArtifactLineageSubgraph(&client_context,
-                                                         request, &response);
+  auto status =
+      grpc_stub_->QueryArtifactLineageSubgraph(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -484,7 +474,7 @@ DefaultMetadataServiceStub::QueryArtifactLineageSubgraph(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMetadataServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -499,7 +489,7 @@ DefaultMetadataServiceStub::AsyncGetOperation(
 
 future<Status> DefaultMetadataServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

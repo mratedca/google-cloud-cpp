@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_STORAGE_INTERNAL_STORAGE_METADATA_DECORATOR_H
 
 #include "google/cloud/storage/internal/storage_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <map>
 #include <memory>
@@ -119,6 +120,7 @@ class StorageMetadata : public StorageStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::storage::v2::ReadObjectResponse>>
   ReadObject(std::shared_ptr<grpc::ClientContext> context,
+             Options const& options,
              google::storage::v2::ReadObjectRequest const& request) override;
 
   StatusOr<google::storage::v2::Object> UpdateObject(
@@ -128,7 +130,8 @@ class StorageMetadata : public StorageStub {
   std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
       google::storage::v2::WriteObjectRequest,
       google::storage::v2::WriteObjectResponse>>
-  WriteObject(std::shared_ptr<grpc::ClientContext> context) override;
+  WriteObject(std::shared_ptr<grpc::ClientContext> context,
+              Options const& options) override;
 
   std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<
       google::storage::v2::BidiWriteObjectRequest,
@@ -213,9 +216,9 @@ class StorageMetadata : public StorageStub {
       google::storage::v2::QueryWriteStatusRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<StorageStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

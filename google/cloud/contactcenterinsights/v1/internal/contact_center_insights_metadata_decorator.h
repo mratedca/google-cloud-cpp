@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_CONTACTCENTERINSIGHTS_V1_INTERNAL_CONTACT_CENTER_INSIGHTS_METADATA_DECORATOR_H
 
 #include "google/cloud/contactcenterinsights/v1/internal/contact_center_insights_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -47,7 +48,7 @@ class ContactCenterInsightsMetadata : public ContactCenterInsightsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUploadConversation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::UploadConversationRequest const&
           request) override;
 
@@ -76,7 +77,7 @@ class ContactCenterInsightsMetadata : public ContactCenterInsightsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAnalysis(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::CreateAnalysisRequest const&
           request) override;
 
@@ -99,25 +100,31 @@ class ContactCenterInsightsMetadata : public ContactCenterInsightsStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncBulkAnalyzeConversations(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::
           BulkAnalyzeConversationsRequest const& request) override;
 
+  future<StatusOr<google::longrunning::Operation>> AsyncBulkDeleteConversations(
+      google::cloud::CompletionQueue& cq,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
+      google::cloud::contactcenterinsights::v1::
+          BulkDeleteConversationsRequest const& request) override;
+
   future<StatusOr<google::longrunning::Operation>> AsyncIngestConversations(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::
           IngestConversationsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportInsightsData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::ExportInsightsDataRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateIssueModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::CreateIssueModelRequest const&
           request) override;
 
@@ -140,19 +147,19 @@ class ContactCenterInsightsMetadata : public ContactCenterInsightsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteIssueModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::DeleteIssueModelRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeployIssueModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::DeployIssueModelRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeployIssueModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::contactcenterinsights::v1::UndeployIssueModelRequest const&
           request) override;
 
@@ -253,18 +260,18 @@ class ContactCenterInsightsMetadata : public ContactCenterInsightsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ContactCenterInsightsStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

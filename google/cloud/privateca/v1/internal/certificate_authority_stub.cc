@@ -32,12 +32,11 @@ CertificateAuthorityServiceStub::~CertificateAuthorityServiceStub() = default;
 
 StatusOr<google::cloud::security::privateca::v1::Certificate>
 DefaultCertificateAuthorityServiceStub::CreateCertificate(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::CreateCertificateRequest const&
         request) {
   google::cloud::security::privateca::v1::Certificate response;
-  auto status =
-      grpc_stub_->CreateCertificate(&client_context, request, &response);
+  auto status = grpc_stub_->CreateCertificate(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -46,11 +45,11 @@ DefaultCertificateAuthorityServiceStub::CreateCertificate(
 
 StatusOr<google::cloud::security::privateca::v1::Certificate>
 DefaultCertificateAuthorityServiceStub::GetCertificate(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::GetCertificateRequest const&
         request) {
   google::cloud::security::privateca::v1::Certificate response;
-  auto status = grpc_stub_->GetCertificate(&client_context, request, &response);
+  auto status = grpc_stub_->GetCertificate(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -59,12 +58,11 @@ DefaultCertificateAuthorityServiceStub::GetCertificate(
 
 StatusOr<google::cloud::security::privateca::v1::ListCertificatesResponse>
 DefaultCertificateAuthorityServiceStub::ListCertificates(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::ListCertificatesRequest const&
         request) {
   google::cloud::security::privateca::v1::ListCertificatesResponse response;
-  auto status =
-      grpc_stub_->ListCertificates(&client_context, request, &response);
+  auto status = grpc_stub_->ListCertificates(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -73,12 +71,11 @@ DefaultCertificateAuthorityServiceStub::ListCertificates(
 
 StatusOr<google::cloud::security::privateca::v1::Certificate>
 DefaultCertificateAuthorityServiceStub::RevokeCertificate(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::RevokeCertificateRequest const&
         request) {
   google::cloud::security::privateca::v1::Certificate response;
-  auto status =
-      grpc_stub_->RevokeCertificate(&client_context, request, &response);
+  auto status = grpc_stub_->RevokeCertificate(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -87,12 +84,11 @@ DefaultCertificateAuthorityServiceStub::RevokeCertificate(
 
 StatusOr<google::cloud::security::privateca::v1::Certificate>
 DefaultCertificateAuthorityServiceStub::UpdateCertificate(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::UpdateCertificateRequest const&
         request) {
   google::cloud::security::privateca::v1::Certificate response;
-  auto status =
-      grpc_stub_->UpdateCertificate(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateCertificate(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -102,7 +98,7 @@ DefaultCertificateAuthorityServiceStub::UpdateCertificate(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncActivateCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         ActivateCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::security::privateca::v1::
@@ -122,7 +118,7 @@ DefaultCertificateAuthorityServiceStub::AsyncActivateCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncCreateCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         CreateCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -142,7 +138,7 @@ DefaultCertificateAuthorityServiceStub::AsyncCreateCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncDisableCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         DisableCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::security::privateca::v1::
@@ -162,7 +158,7 @@ DefaultCertificateAuthorityServiceStub::AsyncDisableCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncEnableCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         EnableCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -182,13 +178,13 @@ DefaultCertificateAuthorityServiceStub::AsyncEnableCertificateAuthority(
 StatusOr<google::cloud::security::privateca::v1::
              FetchCertificateAuthorityCsrResponse>
 DefaultCertificateAuthorityServiceStub::FetchCertificateAuthorityCsr(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         FetchCertificateAuthorityCsrRequest const& request) {
   google::cloud::security::privateca::v1::FetchCertificateAuthorityCsrResponse
       response;
-  auto status = grpc_stub_->FetchCertificateAuthorityCsr(&client_context,
-                                                         request, &response);
+  auto status =
+      grpc_stub_->FetchCertificateAuthorityCsr(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -197,12 +193,12 @@ DefaultCertificateAuthorityServiceStub::FetchCertificateAuthorityCsr(
 
 StatusOr<google::cloud::security::privateca::v1::CertificateAuthority>
 DefaultCertificateAuthorityServiceStub::GetCertificateAuthority(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         GetCertificateAuthorityRequest const& request) {
   google::cloud::security::privateca::v1::CertificateAuthority response;
   auto status =
-      grpc_stub_->GetCertificateAuthority(&client_context, request, &response);
+      grpc_stub_->GetCertificateAuthority(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -212,13 +208,13 @@ DefaultCertificateAuthorityServiceStub::GetCertificateAuthority(
 StatusOr<
     google::cloud::security::privateca::v1::ListCertificateAuthoritiesResponse>
 DefaultCertificateAuthorityServiceStub::ListCertificateAuthorities(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         ListCertificateAuthoritiesRequest const& request) {
   google::cloud::security::privateca::v1::ListCertificateAuthoritiesResponse
       response;
-  auto status = grpc_stub_->ListCertificateAuthorities(&client_context, request,
-                                                       &response);
+  auto status =
+      grpc_stub_->ListCertificateAuthorities(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -228,7 +224,7 @@ DefaultCertificateAuthorityServiceStub::ListCertificateAuthorities(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncUndeleteCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         UndeleteCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::security::privateca::v1::
@@ -248,7 +244,7 @@ DefaultCertificateAuthorityServiceStub::AsyncUndeleteCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncDeleteCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         DeleteCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -268,7 +264,7 @@ DefaultCertificateAuthorityServiceStub::AsyncDeleteCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateAuthority(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         UpdateCertificateAuthorityRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -288,7 +284,7 @@ DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateAuthority(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncCreateCaPool(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::CreateCaPoolRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -307,7 +303,7 @@ DefaultCertificateAuthorityServiceStub::AsyncCreateCaPool(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncUpdateCaPool(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::UpdateCaPoolRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -325,10 +321,10 @@ DefaultCertificateAuthorityServiceStub::AsyncUpdateCaPool(
 
 StatusOr<google::cloud::security::privateca::v1::CaPool>
 DefaultCertificateAuthorityServiceStub::GetCaPool(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::GetCaPoolRequest const& request) {
   google::cloud::security::privateca::v1::CaPool response;
-  auto status = grpc_stub_->GetCaPool(&client_context, request, &response);
+  auto status = grpc_stub_->GetCaPool(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -337,10 +333,10 @@ DefaultCertificateAuthorityServiceStub::GetCaPool(
 
 StatusOr<google::cloud::security::privateca::v1::ListCaPoolsResponse>
 DefaultCertificateAuthorityServiceStub::ListCaPools(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::ListCaPoolsRequest const& request) {
   google::cloud::security::privateca::v1::ListCaPoolsResponse response;
-  auto status = grpc_stub_->ListCaPools(&client_context, request, &response);
+  auto status = grpc_stub_->ListCaPools(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -350,7 +346,7 @@ DefaultCertificateAuthorityServiceStub::ListCaPools(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncDeleteCaPool(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::DeleteCaPoolRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -368,11 +364,11 @@ DefaultCertificateAuthorityServiceStub::AsyncDeleteCaPool(
 
 StatusOr<google::cloud::security::privateca::v1::FetchCaCertsResponse>
 DefaultCertificateAuthorityServiceStub::FetchCaCerts(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::FetchCaCertsRequest const&
         request) {
   google::cloud::security::privateca::v1::FetchCaCertsResponse response;
-  auto status = grpc_stub_->FetchCaCerts(&client_context, request, &response);
+  auto status = grpc_stub_->FetchCaCerts(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -381,12 +377,12 @@ DefaultCertificateAuthorityServiceStub::FetchCaCerts(
 
 StatusOr<google::cloud::security::privateca::v1::CertificateRevocationList>
 DefaultCertificateAuthorityServiceStub::GetCertificateRevocationList(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         GetCertificateRevocationListRequest const& request) {
   google::cloud::security::privateca::v1::CertificateRevocationList response;
-  auto status = grpc_stub_->GetCertificateRevocationList(&client_context,
-                                                         request, &response);
+  auto status =
+      grpc_stub_->GetCertificateRevocationList(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -396,13 +392,13 @@ DefaultCertificateAuthorityServiceStub::GetCertificateRevocationList(
 StatusOr<google::cloud::security::privateca::v1::
              ListCertificateRevocationListsResponse>
 DefaultCertificateAuthorityServiceStub::ListCertificateRevocationLists(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         ListCertificateRevocationListsRequest const& request) {
   google::cloud::security::privateca::v1::ListCertificateRevocationListsResponse
       response;
-  auto status = grpc_stub_->ListCertificateRevocationLists(&client_context,
-                                                           request, &response);
+  auto status =
+      grpc_stub_->ListCertificateRevocationLists(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -412,7 +408,7 @@ DefaultCertificateAuthorityServiceStub::ListCertificateRevocationLists(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateRevocationList(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         UpdateCertificateRevocationListRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::security::privateca::v1::
@@ -432,7 +428,7 @@ DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateRevocationList(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncCreateCertificateTemplate(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         CreateCertificateTemplateRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -451,7 +447,7 @@ DefaultCertificateAuthorityServiceStub::AsyncCreateCertificateTemplate(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncDeleteCertificateTemplate(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         DeleteCertificateTemplateRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -469,12 +465,12 @@ DefaultCertificateAuthorityServiceStub::AsyncDeleteCertificateTemplate(
 
 StatusOr<google::cloud::security::privateca::v1::CertificateTemplate>
 DefaultCertificateAuthorityServiceStub::GetCertificateTemplate(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::GetCertificateTemplateRequest const&
         request) {
   google::cloud::security::privateca::v1::CertificateTemplate response;
   auto status =
-      grpc_stub_->GetCertificateTemplate(&client_context, request, &response);
+      grpc_stub_->GetCertificateTemplate(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -484,13 +480,13 @@ DefaultCertificateAuthorityServiceStub::GetCertificateTemplate(
 StatusOr<
     google::cloud::security::privateca::v1::ListCertificateTemplatesResponse>
 DefaultCertificateAuthorityServiceStub::ListCertificateTemplates(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::security::privateca::v1::
         ListCertificateTemplatesRequest const& request) {
   google::cloud::security::privateca::v1::ListCertificateTemplatesResponse
       response;
   auto status =
-      grpc_stub_->ListCertificateTemplates(&client_context, request, &response);
+      grpc_stub_->ListCertificateTemplates(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -500,7 +496,7 @@ DefaultCertificateAuthorityServiceStub::ListCertificateTemplates(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateTemplate(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::security::privateca::v1::
         UpdateCertificateTemplateRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -519,7 +515,7 @@ DefaultCertificateAuthorityServiceStub::AsyncUpdateCertificateTemplate(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCertificateAuthorityServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -534,7 +530,7 @@ DefaultCertificateAuthorityServiceStub::AsyncGetOperation(
 
 future<Status> DefaultCertificateAuthorityServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

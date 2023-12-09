@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_BIGTABLE_ADMIN_INTERNAL_BIGTABLE_TABLE_ADMIN_METADATA_DECORATOR_H
 
 #include "google/cloud/bigtable/admin/internal/bigtable_table_admin_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -53,7 +54,7 @@ class BigtableTableAdminMetadata : public BigtableTableAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateTable(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::UpdateTableRequest const& request) override;
 
   Status DeleteTable(
@@ -62,7 +63,7 @@ class BigtableTableAdminMetadata : public BigtableTableAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeleteTable(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::UndeleteTableRequest const& request)
       override;
 
@@ -88,7 +89,7 @@ class BigtableTableAdminMetadata : public BigtableTableAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::CreateBackupRequest const& request) override;
 
   StatusOr<google::bigtable::admin::v2::Backup> GetBackup(
@@ -109,12 +110,12 @@ class BigtableTableAdminMetadata : public BigtableTableAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncRestoreTable(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::RestoreTableRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCopyBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::CopyBackupRequest const& request) override;
 
   StatusOr<google::iam::v1::Policy> GetIamPolicy(
@@ -138,18 +139,18 @@ class BigtableTableAdminMetadata : public BigtableTableAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<BigtableTableAdminStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

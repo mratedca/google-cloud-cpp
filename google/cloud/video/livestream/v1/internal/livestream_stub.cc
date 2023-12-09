@@ -33,7 +33,7 @@ LivestreamServiceStub::~LivestreamServiceStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncCreateChannel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::CreateChannelRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::CreateChannelRequest,
@@ -50,10 +50,10 @@ DefaultLivestreamServiceStub::AsyncCreateChannel(
 
 StatusOr<google::cloud::video::livestream::v1::ListChannelsResponse>
 DefaultLivestreamServiceStub::ListChannels(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::ListChannelsRequest const& request) {
   google::cloud::video::livestream::v1::ListChannelsResponse response;
-  auto status = grpc_stub_->ListChannels(&client_context, request, &response);
+  auto status = grpc_stub_->ListChannels(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -62,10 +62,10 @@ DefaultLivestreamServiceStub::ListChannels(
 
 StatusOr<google::cloud::video::livestream::v1::Channel>
 DefaultLivestreamServiceStub::GetChannel(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::GetChannelRequest const& request) {
   google::cloud::video::livestream::v1::Channel response;
-  auto status = grpc_stub_->GetChannel(&client_context, request, &response);
+  auto status = grpc_stub_->GetChannel(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -75,7 +75,7 @@ DefaultLivestreamServiceStub::GetChannel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncDeleteChannel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::DeleteChannelRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::DeleteChannelRequest,
@@ -93,7 +93,7 @@ DefaultLivestreamServiceStub::AsyncDeleteChannel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncUpdateChannel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::UpdateChannelRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::UpdateChannelRequest,
@@ -111,7 +111,7 @@ DefaultLivestreamServiceStub::AsyncUpdateChannel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncStartChannel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::StartChannelRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::StartChannelRequest,
@@ -129,7 +129,7 @@ DefaultLivestreamServiceStub::AsyncStartChannel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncStopChannel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::StopChannelRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::StopChannelRequest,
@@ -147,7 +147,7 @@ DefaultLivestreamServiceStub::AsyncStopChannel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncCreateInput(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::CreateInputRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::CreateInputRequest,
@@ -164,10 +164,10 @@ DefaultLivestreamServiceStub::AsyncCreateInput(
 
 StatusOr<google::cloud::video::livestream::v1::ListInputsResponse>
 DefaultLivestreamServiceStub::ListInputs(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::ListInputsRequest const& request) {
   google::cloud::video::livestream::v1::ListInputsResponse response;
-  auto status = grpc_stub_->ListInputs(&client_context, request, &response);
+  auto status = grpc_stub_->ListInputs(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -176,10 +176,10 @@ DefaultLivestreamServiceStub::ListInputs(
 
 StatusOr<google::cloud::video::livestream::v1::Input>
 DefaultLivestreamServiceStub::GetInput(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::GetInputRequest const& request) {
   google::cloud::video::livestream::v1::Input response;
-  auto status = grpc_stub_->GetInput(&client_context, request, &response);
+  auto status = grpc_stub_->GetInput(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -189,7 +189,7 @@ DefaultLivestreamServiceStub::GetInput(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncDeleteInput(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::DeleteInputRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::DeleteInputRequest,
@@ -207,7 +207,7 @@ DefaultLivestreamServiceStub::AsyncDeleteInput(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncUpdateInput(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::UpdateInputRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::UpdateInputRequest,
@@ -224,10 +224,10 @@ DefaultLivestreamServiceStub::AsyncUpdateInput(
 
 StatusOr<google::cloud::video::livestream::v1::Event>
 DefaultLivestreamServiceStub::CreateEvent(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::CreateEventRequest const& request) {
   google::cloud::video::livestream::v1::Event response;
-  auto status = grpc_stub_->CreateEvent(&client_context, request, &response);
+  auto status = grpc_stub_->CreateEvent(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -236,10 +236,10 @@ DefaultLivestreamServiceStub::CreateEvent(
 
 StatusOr<google::cloud::video::livestream::v1::ListEventsResponse>
 DefaultLivestreamServiceStub::ListEvents(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::ListEventsRequest const& request) {
   google::cloud::video::livestream::v1::ListEventsResponse response;
-  auto status = grpc_stub_->ListEvents(&client_context, request, &response);
+  auto status = grpc_stub_->ListEvents(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -248,10 +248,10 @@ DefaultLivestreamServiceStub::ListEvents(
 
 StatusOr<google::cloud::video::livestream::v1::Event>
 DefaultLivestreamServiceStub::GetEvent(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::GetEventRequest const& request) {
   google::cloud::video::livestream::v1::Event response;
-  auto status = grpc_stub_->GetEvent(&client_context, request, &response);
+  auto status = grpc_stub_->GetEvent(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -259,10 +259,10 @@ DefaultLivestreamServiceStub::GetEvent(
 }
 
 Status DefaultLivestreamServiceStub::DeleteEvent(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::DeleteEventRequest const& request) {
   google::protobuf::Empty response;
-  auto status = grpc_stub_->DeleteEvent(&client_context, request, &response);
+  auto status = grpc_stub_->DeleteEvent(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -272,7 +272,7 @@ Status DefaultLivestreamServiceStub::DeleteEvent(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncCreateAsset(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::CreateAssetRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::CreateAssetRequest,
@@ -290,7 +290,7 @@ DefaultLivestreamServiceStub::AsyncCreateAsset(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncDeleteAsset(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::DeleteAssetRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::DeleteAssetRequest,
@@ -307,10 +307,10 @@ DefaultLivestreamServiceStub::AsyncDeleteAsset(
 
 StatusOr<google::cloud::video::livestream::v1::Asset>
 DefaultLivestreamServiceStub::GetAsset(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::GetAssetRequest const& request) {
   google::cloud::video::livestream::v1::Asset response;
-  auto status = grpc_stub_->GetAsset(&client_context, request, &response);
+  auto status = grpc_stub_->GetAsset(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -319,10 +319,10 @@ DefaultLivestreamServiceStub::GetAsset(
 
 StatusOr<google::cloud::video::livestream::v1::ListAssetsResponse>
 DefaultLivestreamServiceStub::ListAssets(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::ListAssetsRequest const& request) {
   google::cloud::video::livestream::v1::ListAssetsResponse response;
-  auto status = grpc_stub_->ListAssets(&client_context, request, &response);
+  auto status = grpc_stub_->ListAssets(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -331,10 +331,10 @@ DefaultLivestreamServiceStub::ListAssets(
 
 StatusOr<google::cloud::video::livestream::v1::Pool>
 DefaultLivestreamServiceStub::GetPool(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::video::livestream::v1::GetPoolRequest const& request) {
   google::cloud::video::livestream::v1::Pool response;
-  auto status = grpc_stub_->GetPool(&client_context, request, &response);
+  auto status = grpc_stub_->GetPool(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -344,7 +344,7 @@ DefaultLivestreamServiceStub::GetPool(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncUpdatePool(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::video::livestream::v1::UpdatePoolRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::video::livestream::v1::UpdatePoolRequest,
@@ -362,7 +362,7 @@ DefaultLivestreamServiceStub::AsyncUpdatePool(
 future<StatusOr<google::longrunning::Operation>>
 DefaultLivestreamServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -377,7 +377,7 @@ DefaultLivestreamServiceStub::AsyncGetOperation(
 
 future<Status> DefaultLivestreamServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

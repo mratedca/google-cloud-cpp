@@ -55,6 +55,11 @@ Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::DemoteMaster(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::Demote(
+    google::cloud::sql::v1::SqlInstancesDemoteRequest const&) {
+  return Idempotency::kNonIdempotent;
+}
+
 Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::Export(
     google::cloud::sql::v1::SqlInstancesExportRequest const&) {
   return Idempotency::kNonIdempotent;
@@ -102,6 +107,11 @@ Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::Patch(
 
 Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::PromoteReplica(
     google::cloud::sql::v1::SqlInstancesPromoteReplicaRequest const&) {
+  return Idempotency::kNonIdempotent;
+}
+
+Idempotency SqlInstancesServiceConnectionIdempotencyPolicy::Switchover(
+    google::cloud::sql::v1::SqlInstancesSwitchoverRequest const&) {
   return Idempotency::kNonIdempotent;
 }
 

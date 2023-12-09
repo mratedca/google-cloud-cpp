@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/devtools/cloudbuild/v2/cloudbuild.pb.h>
@@ -40,7 +41,7 @@ class RepositoryManagerStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateConnectionRequest const&
           request) = 0;
 
@@ -58,28 +59,28 @@ class RepositoryManagerStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::UpdateConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateRepositoryRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncBatchCreateRepositories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::BatchCreateRepositoriesRequest const&
           request) = 0;
 
@@ -97,7 +98,7 @@ class RepositoryManagerStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteRepositoryRequest const&
           request) = 0;
 
@@ -127,12 +128,12 @@ class RepositoryManagerStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -148,92 +149,92 @@ class DefaultRepositoryManagerStub : public RepositoryManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateConnectionRequest const& request)
       override;
 
   StatusOr<google::devtools::cloudbuild::v2::Connection> GetConnection(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::GetConnectionRequest const& request)
       override;
 
   StatusOr<google::devtools::cloudbuild::v2::ListConnectionsResponse>
   ListConnections(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::ListConnectionsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::UpdateConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateRepositoryRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateRepositories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::BatchCreateRepositoriesRequest const&
           request) override;
 
   StatusOr<google::devtools::cloudbuild::v2::Repository> GetRepository(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::GetRepositoryRequest const& request)
       override;
 
   StatusOr<google::devtools::cloudbuild::v2::ListRepositoriesResponse>
   ListRepositories(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::ListRepositoriesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteRepositoryRequest const& request)
       override;
 
   StatusOr<google::devtools::cloudbuild::v2::FetchReadWriteTokenResponse>
   FetchReadWriteToken(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::FetchReadWriteTokenRequest const&
           request) override;
 
   StatusOr<google::devtools::cloudbuild::v2::FetchReadTokenResponse>
-  FetchReadToken(grpc::ClientContext& client_context,
+  FetchReadToken(grpc::ClientContext& context,
                  google::devtools::cloudbuild::v2::FetchReadTokenRequest const&
                      request) override;
 
   StatusOr<google::devtools::cloudbuild::v2::FetchLinkableRepositoriesResponse>
   FetchLinkableRepositories(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::FetchLinkableRepositoriesRequest const&
           request) override;
 
   StatusOr<google::devtools::cloudbuild::v2::FetchGitRefsResponse> FetchGitRefs(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::devtools::cloudbuild::v2::FetchGitRefsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

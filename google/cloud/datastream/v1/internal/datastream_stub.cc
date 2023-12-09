@@ -32,12 +32,12 @@ DatastreamStub::~DatastreamStub() = default;
 
 StatusOr<google::cloud::datastream::v1::ListConnectionProfilesResponse>
 DefaultDatastreamStub::ListConnectionProfiles(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::ListConnectionProfilesRequest const&
         request) {
   google::cloud::datastream::v1::ListConnectionProfilesResponse response;
   auto status =
-      grpc_stub_->ListConnectionProfiles(&client_context, request, &response);
+      grpc_stub_->ListConnectionProfiles(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -46,11 +46,10 @@ DefaultDatastreamStub::ListConnectionProfiles(
 
 StatusOr<google::cloud::datastream::v1::ConnectionProfile>
 DefaultDatastreamStub::GetConnectionProfile(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::GetConnectionProfileRequest const& request) {
   google::cloud::datastream::v1::ConnectionProfile response;
-  auto status =
-      grpc_stub_->GetConnectionProfile(&client_context, request, &response);
+  auto status = grpc_stub_->GetConnectionProfile(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -60,7 +59,7 @@ DefaultDatastreamStub::GetConnectionProfile(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncCreateConnectionProfile(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::CreateConnectionProfileRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -80,7 +79,7 @@ DefaultDatastreamStub::AsyncCreateConnectionProfile(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncUpdateConnectionProfile(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::UpdateConnectionProfileRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -100,7 +99,7 @@ DefaultDatastreamStub::AsyncUpdateConnectionProfile(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncDeleteConnectionProfile(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::DeleteConnectionProfileRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -119,12 +118,12 @@ DefaultDatastreamStub::AsyncDeleteConnectionProfile(
 
 StatusOr<google::cloud::datastream::v1::DiscoverConnectionProfileResponse>
 DefaultDatastreamStub::DiscoverConnectionProfile(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::DiscoverConnectionProfileRequest const&
         request) {
   google::cloud::datastream::v1::DiscoverConnectionProfileResponse response;
-  auto status = grpc_stub_->DiscoverConnectionProfile(&client_context, request,
-                                                      &response);
+  auto status =
+      grpc_stub_->DiscoverConnectionProfile(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -133,10 +132,10 @@ DefaultDatastreamStub::DiscoverConnectionProfile(
 
 StatusOr<google::cloud::datastream::v1::ListStreamsResponse>
 DefaultDatastreamStub::ListStreams(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::ListStreamsRequest const& request) {
   google::cloud::datastream::v1::ListStreamsResponse response;
-  auto status = grpc_stub_->ListStreams(&client_context, request, &response);
+  auto status = grpc_stub_->ListStreams(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -145,10 +144,10 @@ DefaultDatastreamStub::ListStreams(
 
 StatusOr<google::cloud::datastream::v1::Stream>
 DefaultDatastreamStub::GetStream(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::GetStreamRequest const& request) {
   google::cloud::datastream::v1::Stream response;
-  auto status = grpc_stub_->GetStream(&client_context, request, &response);
+  auto status = grpc_stub_->GetStream(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -158,7 +157,7 @@ DefaultDatastreamStub::GetStream(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncCreateStream(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::CreateStreamRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::datastream::v1::CreateStreamRequest,
@@ -175,7 +174,7 @@ DefaultDatastreamStub::AsyncCreateStream(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncUpdateStream(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::UpdateStreamRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::datastream::v1::UpdateStreamRequest,
@@ -192,7 +191,7 @@ DefaultDatastreamStub::AsyncUpdateStream(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncDeleteStream(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::DeleteStreamRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::datastream::v1::DeleteStreamRequest,
@@ -208,11 +207,10 @@ DefaultDatastreamStub::AsyncDeleteStream(
 
 StatusOr<google::cloud::datastream::v1::StreamObject>
 DefaultDatastreamStub::GetStreamObject(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::GetStreamObjectRequest const& request) {
   google::cloud::datastream::v1::StreamObject response;
-  auto status =
-      grpc_stub_->GetStreamObject(&client_context, request, &response);
+  auto status = grpc_stub_->GetStreamObject(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -221,11 +219,10 @@ DefaultDatastreamStub::GetStreamObject(
 
 StatusOr<google::cloud::datastream::v1::StreamObject>
 DefaultDatastreamStub::LookupStreamObject(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::LookupStreamObjectRequest const& request) {
   google::cloud::datastream::v1::StreamObject response;
-  auto status =
-      grpc_stub_->LookupStreamObject(&client_context, request, &response);
+  auto status = grpc_stub_->LookupStreamObject(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -234,11 +231,10 @@ DefaultDatastreamStub::LookupStreamObject(
 
 StatusOr<google::cloud::datastream::v1::ListStreamObjectsResponse>
 DefaultDatastreamStub::ListStreamObjects(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::ListStreamObjectsRequest const& request) {
   google::cloud::datastream::v1::ListStreamObjectsResponse response;
-  auto status =
-      grpc_stub_->ListStreamObjects(&client_context, request, &response);
+  auto status = grpc_stub_->ListStreamObjects(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -247,11 +243,10 @@ DefaultDatastreamStub::ListStreamObjects(
 
 StatusOr<google::cloud::datastream::v1::StartBackfillJobResponse>
 DefaultDatastreamStub::StartBackfillJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::StartBackfillJobRequest const& request) {
   google::cloud::datastream::v1::StartBackfillJobResponse response;
-  auto status =
-      grpc_stub_->StartBackfillJob(&client_context, request, &response);
+  auto status = grpc_stub_->StartBackfillJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -260,11 +255,10 @@ DefaultDatastreamStub::StartBackfillJob(
 
 StatusOr<google::cloud::datastream::v1::StopBackfillJobResponse>
 DefaultDatastreamStub::StopBackfillJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::StopBackfillJobRequest const& request) {
   google::cloud::datastream::v1::StopBackfillJobResponse response;
-  auto status =
-      grpc_stub_->StopBackfillJob(&client_context, request, &response);
+  auto status = grpc_stub_->StopBackfillJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -273,10 +267,10 @@ DefaultDatastreamStub::StopBackfillJob(
 
 StatusOr<google::cloud::datastream::v1::FetchStaticIpsResponse>
 DefaultDatastreamStub::FetchStaticIps(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::FetchStaticIpsRequest const& request) {
   google::cloud::datastream::v1::FetchStaticIpsResponse response;
-  auto status = grpc_stub_->FetchStaticIps(&client_context, request, &response);
+  auto status = grpc_stub_->FetchStaticIps(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -286,7 +280,7 @@ DefaultDatastreamStub::FetchStaticIps(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncCreatePrivateConnection(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::CreatePrivateConnectionRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -305,11 +299,10 @@ DefaultDatastreamStub::AsyncCreatePrivateConnection(
 
 StatusOr<google::cloud::datastream::v1::PrivateConnection>
 DefaultDatastreamStub::GetPrivateConnection(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::GetPrivateConnectionRequest const& request) {
   google::cloud::datastream::v1::PrivateConnection response;
-  auto status =
-      grpc_stub_->GetPrivateConnection(&client_context, request, &response);
+  auto status = grpc_stub_->GetPrivateConnection(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -318,12 +311,12 @@ DefaultDatastreamStub::GetPrivateConnection(
 
 StatusOr<google::cloud::datastream::v1::ListPrivateConnectionsResponse>
 DefaultDatastreamStub::ListPrivateConnections(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::ListPrivateConnectionsRequest const&
         request) {
   google::cloud::datastream::v1::ListPrivateConnectionsResponse response;
   auto status =
-      grpc_stub_->ListPrivateConnections(&client_context, request, &response);
+      grpc_stub_->ListPrivateConnections(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -333,7 +326,7 @@ DefaultDatastreamStub::ListPrivateConnections(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncDeletePrivateConnection(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::DeletePrivateConnectionRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -353,7 +346,7 @@ DefaultDatastreamStub::AsyncDeletePrivateConnection(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncCreateRoute(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::CreateRouteRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::datastream::v1::CreateRouteRequest,
@@ -368,10 +361,10 @@ DefaultDatastreamStub::AsyncCreateRoute(
 }
 
 StatusOr<google::cloud::datastream::v1::Route> DefaultDatastreamStub::GetRoute(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::GetRouteRequest const& request) {
   google::cloud::datastream::v1::Route response;
-  auto status = grpc_stub_->GetRoute(&client_context, request, &response);
+  auto status = grpc_stub_->GetRoute(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -380,10 +373,10 @@ StatusOr<google::cloud::datastream::v1::Route> DefaultDatastreamStub::GetRoute(
 
 StatusOr<google::cloud::datastream::v1::ListRoutesResponse>
 DefaultDatastreamStub::ListRoutes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::datastream::v1::ListRoutesRequest const& request) {
   google::cloud::datastream::v1::ListRoutesResponse response;
-  auto status = grpc_stub_->ListRoutes(&client_context, request, &response);
+  auto status = grpc_stub_->ListRoutes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -393,7 +386,7 @@ DefaultDatastreamStub::ListRoutes(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncDeleteRoute(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::datastream::v1::DeleteRouteRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::datastream::v1::DeleteRouteRequest,
@@ -410,7 +403,7 @@ DefaultDatastreamStub::AsyncDeleteRoute(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDatastreamStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -425,7 +418,7 @@ DefaultDatastreamStub::AsyncGetOperation(
 
 future<Status> DefaultDatastreamStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

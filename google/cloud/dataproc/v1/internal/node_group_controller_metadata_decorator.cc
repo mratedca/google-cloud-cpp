@@ -45,28 +45,28 @@ NodeGroupControllerMetadata::NodeGroupControllerMetadata(
 future<StatusOr<google::longrunning::Operation>>
 NodeGroupControllerMetadata::AsyncCreateNodeGroup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::dataproc::v1::CreateNodeGroupRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
-  return child_->AsyncCreateNodeGroup(cq, std::move(context), request);
+  return child_->AsyncCreateNodeGroup(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 NodeGroupControllerMetadata::AsyncResizeNodeGroup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::dataproc::v1::ResizeNodeGroupRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncResizeNodeGroup(cq, std::move(context), request);
+  return child_->AsyncResizeNodeGroup(cq, std::move(context), options, request);
 }
 
 StatusOr<google::cloud::dataproc::v1::NodeGroup>
 NodeGroupControllerMetadata::GetNodeGroup(
     grpc::ClientContext& context,
     google::cloud::dataproc::v1::GetNodeGroupRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("name=", internal::UrlEncode(request.name())));
   return child_->GetNodeGroup(context, request);
 }
@@ -74,34 +74,35 @@ NodeGroupControllerMetadata::GetNodeGroup(
 future<StatusOr<google::longrunning::Operation>>
 NodeGroupControllerMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncGetOperation(cq, std::move(context), request);
+  return child_->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status> NodeGroupControllerMetadata::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncCancelOperation(cq, std::move(context), request);
+  return child_->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 
 void NodeGroupControllerMetadata::SetMetadata(
-    grpc::ClientContext& context, std::string const& request_params) {
+    grpc::ClientContext& context, Options const& options,
+    std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void NodeGroupControllerMetadata::SetMetadata(grpc::ClientContext& context) {
+void NodeGroupControllerMetadata::SetMetadata(grpc::ClientContext& context,
+                                              Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

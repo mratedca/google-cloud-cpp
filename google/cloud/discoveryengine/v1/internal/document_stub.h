@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/discoveryengine/v1/document_service.grpc.pb.h>
@@ -63,24 +64,24 @@ class DocumentServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncImportDocuments(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::discoveryengine::v1::ImportDocumentsRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncPurgeDocuments(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::discoveryengine::v1::PurgeDocumentsRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -95,50 +96,50 @@ class DefaultDocumentServiceStub : public DocumentServiceStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::discoveryengine::v1::Document> GetDocument(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::discoveryengine::v1::GetDocumentRequest const& request)
       override;
 
   StatusOr<google::cloud::discoveryengine::v1::ListDocumentsResponse>
-  ListDocuments(grpc::ClientContext& client_context,
+  ListDocuments(grpc::ClientContext& context,
                 google::cloud::discoveryengine::v1::ListDocumentsRequest const&
                     request) override;
 
   StatusOr<google::cloud::discoveryengine::v1::Document> CreateDocument(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::discoveryengine::v1::CreateDocumentRequest const& request)
       override;
 
   StatusOr<google::cloud::discoveryengine::v1::Document> UpdateDocument(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::discoveryengine::v1::UpdateDocumentRequest const& request)
       override;
 
   Status DeleteDocument(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::discoveryengine::v1::DeleteDocumentRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportDocuments(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::discoveryengine::v1::ImportDocumentsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncPurgeDocuments(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::discoveryengine::v1::PurgeDocumentsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

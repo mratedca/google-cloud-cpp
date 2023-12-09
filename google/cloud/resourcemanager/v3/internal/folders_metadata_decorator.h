@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_RESOURCEMANAGER_V3_INTERNAL_FOLDERS_METADATA_DECORATOR_H
 
 #include "google/cloud/resourcemanager/v3/internal/folders_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -55,31 +56,31 @@ class FoldersMetadata : public FoldersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateFolder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::resourcemanager::v3::CreateFolderRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateFolder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::resourcemanager::v3::UpdateFolderRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncMoveFolder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::resourcemanager::v3::MoveFolderRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteFolder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::resourcemanager::v3::DeleteFolderRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeleteFolder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::resourcemanager::v3::UndeleteFolderRequest const& request)
       override;
 
@@ -97,18 +98,18 @@ class FoldersMetadata : public FoldersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<FoldersStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

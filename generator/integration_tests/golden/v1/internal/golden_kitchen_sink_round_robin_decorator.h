@@ -67,12 +67,15 @@ class GoldenKitchenSinkRoundRobin : public GoldenKitchenSinkStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<google::test::admin::database::v1::Response>>
   StreamingRead(
       std::shared_ptr<grpc::ClientContext> context,
+      Options const& options,
       google::test::admin::database::v1::Request const& request) override;
 
   std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
       google::test::admin::database::v1::Request,
-      google::test::admin::database::v1::Response>> StreamingWrite(
-      std::shared_ptr<grpc::ClientContext> context) override;
+      google::test::admin::database::v1::Response>>
+  StreamingWrite(
+      std::shared_ptr<grpc::ClientContext> context,
+      Options const& options) override;
 
   std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<
       google::test::admin::database::v1::Request,

@@ -32,11 +32,11 @@ SecureSourceManagerStub::~SecureSourceManagerStub() = default;
 
 StatusOr<google::cloud::securesourcemanager::v1::ListInstancesResponse>
 DefaultSecureSourceManagerStub::ListInstances(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::securesourcemanager::v1::ListInstancesRequest const&
         request) {
   google::cloud::securesourcemanager::v1::ListInstancesResponse response;
-  auto status = grpc_stub_->ListInstances(&client_context, request, &response);
+  auto status = grpc_stub_->ListInstances(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -45,10 +45,10 @@ DefaultSecureSourceManagerStub::ListInstances(
 
 StatusOr<google::cloud::securesourcemanager::v1::Instance>
 DefaultSecureSourceManagerStub::GetInstance(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::securesourcemanager::v1::GetInstanceRequest const& request) {
   google::cloud::securesourcemanager::v1::Instance response;
-  auto status = grpc_stub_->GetInstance(&client_context, request, &response);
+  auto status = grpc_stub_->GetInstance(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -58,7 +58,7 @@ DefaultSecureSourceManagerStub::GetInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSecureSourceManagerStub::AsyncCreateInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::securesourcemanager::v1::CreateInstanceRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -78,7 +78,7 @@ DefaultSecureSourceManagerStub::AsyncCreateInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSecureSourceManagerStub::AsyncDeleteInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::securesourcemanager::v1::DeleteInstanceRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -97,12 +97,11 @@ DefaultSecureSourceManagerStub::AsyncDeleteInstance(
 
 StatusOr<google::cloud::securesourcemanager::v1::ListRepositoriesResponse>
 DefaultSecureSourceManagerStub::ListRepositories(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::securesourcemanager::v1::ListRepositoriesRequest const&
         request) {
   google::cloud::securesourcemanager::v1::ListRepositoriesResponse response;
-  auto status =
-      grpc_stub_->ListRepositories(&client_context, request, &response);
+  auto status = grpc_stub_->ListRepositories(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -111,11 +110,11 @@ DefaultSecureSourceManagerStub::ListRepositories(
 
 StatusOr<google::cloud::securesourcemanager::v1::Repository>
 DefaultSecureSourceManagerStub::GetRepository(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::securesourcemanager::v1::GetRepositoryRequest const&
         request) {
   google::cloud::securesourcemanager::v1::Repository response;
-  auto status = grpc_stub_->GetRepository(&client_context, request, &response);
+  auto status = grpc_stub_->GetRepository(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -125,7 +124,7 @@ DefaultSecureSourceManagerStub::GetRepository(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSecureSourceManagerStub::AsyncCreateRepository(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::securesourcemanager::v1::CreateRepositoryRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -145,7 +144,7 @@ DefaultSecureSourceManagerStub::AsyncCreateRepository(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSecureSourceManagerStub::AsyncDeleteRepository(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::securesourcemanager::v1::DeleteRepositoryRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -164,11 +163,10 @@ DefaultSecureSourceManagerStub::AsyncDeleteRepository(
 
 StatusOr<google::iam::v1::Policy>
 DefaultSecureSourceManagerStub::GetIamPolicyRepo(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::GetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status =
-      grpc_stub_->GetIamPolicyRepo(&client_context, request, &response);
+  auto status = grpc_stub_->GetIamPolicyRepo(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -177,11 +175,10 @@ DefaultSecureSourceManagerStub::GetIamPolicyRepo(
 
 StatusOr<google::iam::v1::Policy>
 DefaultSecureSourceManagerStub::SetIamPolicyRepo(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::SetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status =
-      grpc_stub_->SetIamPolicyRepo(&client_context, request, &response);
+  auto status = grpc_stub_->SetIamPolicyRepo(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -190,11 +187,11 @@ DefaultSecureSourceManagerStub::SetIamPolicyRepo(
 
 StatusOr<google::iam::v1::TestIamPermissionsResponse>
 DefaultSecureSourceManagerStub::TestIamPermissionsRepo(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::TestIamPermissionsRequest const& request) {
   google::iam::v1::TestIamPermissionsResponse response;
   auto status =
-      grpc_stub_->TestIamPermissionsRepo(&client_context, request, &response);
+      grpc_stub_->TestIamPermissionsRepo(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -204,7 +201,7 @@ DefaultSecureSourceManagerStub::TestIamPermissionsRepo(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSecureSourceManagerStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -219,7 +216,7 @@ DefaultSecureSourceManagerStub::AsyncGetOperation(
 
 future<Status> DefaultSecureSourceManagerStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

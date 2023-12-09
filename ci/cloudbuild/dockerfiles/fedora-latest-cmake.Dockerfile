@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM fedora:38
+FROM fedora:39
 ARG NCPU=4
 ARG ARCH=amd64
 
-# Fedora includes packages for gRPC, libcurl, and OpenSSL that are recent enough
+# Fedora includes packages for libcurl and OpenSSL that are recent enough
 # for `google-cloud-cpp`. Install these packages and additional development
 # tools to compile the dependencies:
 RUN dnf makecache && \
     dnf install -y abi-compliance-checker autoconf automake \
         clang clang-analyzer clang-tools-extra \
-        cmake diffutils doxygen findutils gcc-c++ git \
+        cmake diffutils findutils gcc-c++ git \
         libcurl-devel llvm make ninja-build \
         openssl-devel patch python python3 \
         python-pip tar unzip w3m wget which zip zlib-devel
@@ -41,9 +41,6 @@ RUN dnf makecache && dnf debuginfo-install -y libstdc++
 
 # These are used by the docfx tool.
 RUN dnf makecache && dnf install -y pugixml-devel yaml-cpp-devel
-
-# This is used in the `publish-docs` build
-RUN dnf makecache && dnf install -y libxslt
 
 # Sets root's password to the empty string to enable users to get a root shell
 # inside the container with `su -` and no password. Sudo would not work because
@@ -116,7 +113,7 @@ RUN curl -fsSL https://github.com/google/crc32c/archive/1.1.2.tar.gz | \
     ldconfig && cd /var/tmp && rm -fr build
 
 WORKDIR /var/tmp/build
-RUN curl -fsSL https://github.com/nlohmann/json/archive/v3.11.2.tar.gz | \
+RUN curl -fsSL https://github.com/nlohmann/json/archive/v3.11.3.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
       -DCMAKE_BUILD_TYPE=Release \
@@ -128,7 +125,7 @@ RUN curl -fsSL https://github.com/nlohmann/json/archive/v3.11.2.tar.gz | \
     ldconfig && cd /var/tmp && rm -fr build
 
 WORKDIR /var/tmp/build/protobuf
-RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v24.4.tar.gz | \
+RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v25.1.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
@@ -141,7 +138,7 @@ RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v24.4.tar.gz 
 
 WORKDIR /var/tmp/build/grpc
 RUN dnf makecache && dnf install -y c-ares-devel re2-devel
-RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.59.1.tar.gz | \
+RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.60.0.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
       -DCMAKE_BUILD_TYPE=Release \
@@ -160,7 +157,7 @@ RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.59.1.tar.gz | \
     ldconfig && cd /var/tmp && rm -fr build
 
 WORKDIR /var/tmp/build/
-RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.12.0.tar.gz | \
+RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.13.0.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
         -DCMAKE_CXX_STANDARD=14 \
@@ -206,20 +203,23 @@ RUN curl -fsSL https://github.com/matus-chochlik/ctcache/archive/62631eb1c05688f
     cd /var/tmp && rm -fr build
 
 WORKDIR /var/tmp/sccache
-RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.5.4/sccache-v0.5.4-x86_64-unknown-linux-musl.tar.gz | \
+RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.4/sccache-v0.7.4-x86_64-unknown-linux-musl.tar.gz | \
     tar -zxf - --strip-components=1 && \
     mkdir -p /usr/local/bin && \
     mv sccache /usr/local/bin/sccache && \
     chmod +x /usr/local/bin/sccache
 
 # Update the ld.conf cache in case any libraries were installed in /usr/local/lib*
+RUN (echo /usr/local/lib; echo /usr/local/lib64) | tee /etc/ld.so.conf.d/local.conf
 RUN ldconfig /usr/local/lib*
 
 # Install the Cloud SDK and some of the emulators. We use the emulators to run
 # integration tests for the client libraries.
 COPY . /var/tmp/ci
 WORKDIR /var/tmp/downloads
-ENV CLOUDSDK_PYTHON=python3
+# The Google Cloud CLI requires Python <= 3.10, Fedora defaults to 3.12.
+RUN dnf makecache && dnf install -y python3.10
+ENV CLOUDSDK_PYTHON=python3.10
 RUN /var/tmp/ci/install-cloud-sdk.sh
 ENV CLOUD_SDK_LOCATION=/usr/local/google-cloud-sdk
 ENV PATH=${CLOUD_SDK_LOCATION}/bin:${PATH}

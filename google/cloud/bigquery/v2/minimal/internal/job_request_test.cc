@@ -36,15 +36,19 @@ using ::google::cloud::bigquery_v2_minimal_testing::MakePostQueryRequest;
 using ::google::cloud::testing_util::StatusIs;
 using ::testing::HasSubstr;
 
+auto static const kMinCreationTimeMs = 1111111111111;
+auto static const kMaxCreationTimeMs = 1111111111211;
+auto static const kMinTime = std::chrono::system_clock::from_time_t(0) +
+                             std::chrono::milliseconds{kMinCreationTimeMs};
+auto static const kMaxTime = std::chrono::system_clock::from_time_t(0) +
+                             std::chrono::milliseconds{kMaxCreationTimeMs};
+
 ListJobsRequest GetListJobsRequest() {
   ListJobsRequest request("1");
-  auto const min = std::chrono::system_clock::now();
-  auto const duration = std::chrono::milliseconds(100);
-  auto const max = min + duration;
   request.set_all_users(true)
       .set_max_results(10)
-      .set_min_creation_time(min)
-      .set_max_creation_time(max)
+      .set_min_creation_time(kMinTime)
+      .set_max_creation_time(kMaxTime)
       .set_parent_job_id("1")
       .set_page_token("123")
       .set_projection(Projection::Full())
@@ -159,12 +163,10 @@ TEST(ListJobsRequestTest, Success) {
       "https://bigquery.googleapis.com/bigquery/v2/projects/1/jobs");
   expected.AddQueryParameter("allUsers", "true");
   expected.AddQueryParameter("maxResults", "10");
-  expected.AddQueryParameter(
-      "minCreationTime",
-      internal::FormatRfc3339(request.min_creation_time().value()));
-  expected.AddQueryParameter(
-      "maxCreationTime",
-      internal::FormatRfc3339(request.max_creation_time().value()));
+  expected.AddQueryParameter("minCreationTime",
+                             std::to_string(kMinCreationTimeMs));
+  expected.AddQueryParameter("maxCreationTime",
+                             std::to_string(kMaxCreationTimeMs));
   expected.AddQueryParameter("pageToken", "123");
   expected.AddQueryParameter("projection", "FULL");
   expected.AddQueryParameter("stateFilter", "RUNNING");

@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/talent/v4/job_service.grpc.pb.h>
@@ -42,7 +43,7 @@ class JobServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchCreateJobsRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::talent::v4::Job> GetJob(
@@ -55,7 +56,7 @@ class JobServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncBatchUpdateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchUpdateJobsRequest const& request) = 0;
 
   virtual Status DeleteJob(
@@ -64,7 +65,7 @@ class JobServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchDeleteJobsRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::talent::v4::ListJobsResponse> ListJobs(
@@ -82,12 +83,12 @@ class JobServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -101,59 +102,59 @@ class DefaultJobServiceStub : public JobServiceStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::talent::v4::Job> CreateJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::CreateJobRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchCreateJobsRequest const& request)
       override;
 
   StatusOr<google::cloud::talent::v4::Job> GetJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::GetJobRequest const& request) override;
 
   StatusOr<google::cloud::talent::v4::Job> UpdateJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::UpdateJobRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchUpdateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchUpdateJobsRequest const& request)
       override;
 
   Status DeleteJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::DeleteJobRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchDeleteJobsRequest const& request)
       override;
 
   StatusOr<google::cloud::talent::v4::ListJobsResponse> ListJobs(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::ListJobsRequest const& request) override;
 
   StatusOr<google::cloud::talent::v4::SearchJobsResponse> SearchJobs(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::SearchJobsRequest const& request) override;
 
   StatusOr<google::cloud::talent::v4::SearchJobsResponse> SearchJobsForAlert(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::talent::v4::SearchJobsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

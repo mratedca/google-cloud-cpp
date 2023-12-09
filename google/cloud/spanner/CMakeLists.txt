@@ -113,6 +113,7 @@ add_library(
     database_admin_connection.cc
     database_admin_connection.h
     date.h
+    directed_read_replicas.h
     encryption_config.h
     iam_updater.h
     instance.cc
@@ -122,7 +123,6 @@ add_library(
     instance_admin_connection.cc
     instance_admin_connection.h
     internal/channel.h
-    internal/clock.h
     internal/connection_impl.cc
     internal/connection_impl.h
     internal/database_admin_logging.cc
@@ -178,6 +178,7 @@ add_library(
     mutations.h
     numeric.cc
     numeric.h
+    oid.h
     options.h
     partition_options.cc
     partition_options.h
@@ -342,7 +343,6 @@ function (spanner_client_define_tests)
         testing/database_integration_test.h
         testing/debug_log.cc
         testing/debug_log.h
-        testing/fake_clock.h
         testing/instance_location.cc
         testing/instance_location.h
         testing/matchers.h
@@ -393,7 +393,6 @@ function (spanner_client_define_tests)
         instance_admin_client_test.cc
         instance_admin_connection_test.cc
         instance_test.cc
-        internal/clock_test.cc
         internal/connection_impl_test.cc
         internal/database_admin_logging_test.cc
         internal/database_admin_metadata_test.cc

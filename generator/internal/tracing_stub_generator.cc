@@ -138,11 +138,12 @@ $tracing_stub_class_name$::$tracing_stub_class_name$(
       CcPrintMethod(method, __FILE__, __LINE__, R"""(
 std::unique_ptr<internal::StreamingWriteRpc<$request_type$, $response_type$>>
 $tracing_stub_class_name$::$method_name$(
-    std::shared_ptr<grpc::ClientContext> context) {
+    std::shared_ptr<grpc::ClientContext> context,
+    Options const& options) {
   auto span = internal::MakeSpanGrpc("$grpc_service$", "$method_name$");
   auto scope = opentelemetry::trace::Scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto stream = child_->$method_name$(context);
+  auto stream = child_->$method_name$(context, options);
   return std::make_unique<
       internal::StreamingWriteRpcTracing<$request_type$, $response_type$>>(
       std::move(context), std::move(stream), std::move(span));
@@ -169,6 +170,40 @@ $tracing_stub_class_name$::Async$method_name$(
 )""");
       continue;
     }
+    if (IsLongrunningOperation(method)) {
+      CcPrintMethod(method, __FILE__, __LINE__, R"""(
+future<StatusOr<google::longrunning::Operation>>
+$tracing_stub_class_name$::Async$method_name$(
+      google::cloud::CompletionQueue& cq,
+      std::shared_ptr<grpc::ClientContext> context,
+      Options const& options,
+      $request_type$ const& request) {
+  auto span = internal::MakeSpanGrpc("$grpc_service$", "$method_name$");
+  internal::OTelScope scope(span);
+  internal::InjectTraceContext(*context, *propagator_);
+  auto f = child_->Async$method_name$(cq, context, options, request);
+  return internal::EndSpan(std::move(context), std::move(span), std::move(f));
+}
+)""");
+      continue;
+    }
+    if (IsStreamingRead(method)) {
+      CcPrintMethod(method, __FILE__, __LINE__, R"""(
+std::unique_ptr<google::cloud::internal::StreamingReadRpc<$response_type$>>
+$tracing_stub_class_name$::$method_name$(
+    std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
+    $request_type$ const& request) {
+  auto span = internal::MakeSpanGrpc("$grpc_service$", "$method_name$");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(*context, *propagator_);
+  auto stream = child_->$method_name$(context, options, request);
+  return std::make_unique<internal::StreamingReadRpcTracing<$response_type$>>(
+      std::move(context), std::move(stream), std::move(span));
+}
+)""");
+      continue;
+    }
     CcPrintMethod(
         method,
         {MethodPattern({{IsResponseTypeEmpty,
@@ -186,35 +221,7 @@ StatusOr<$response_type$> $tracing_stub_class_name$::$method_name$()"""},
                            child_->$method_name$(context, request));
 }
 )"""}},
-                       And(IsNonStreaming, Not(IsLongrunningOperation))),
-         MethodPattern({{R"""(
-future<StatusOr<google::longrunning::Operation>>
-$tracing_stub_class_name$::Async$method_name$(
-      google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
-      $request_type$ const& request) {
-  auto span = internal::MakeSpanGrpc("$grpc_service$", "$method_name$");
-  internal::OTelScope scope(span);
-  internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->Async$method_name$(cq, context, request);
-  return internal::EndSpan(std::move(context), std::move(span), std::move(f));
-}
-)"""}},
-                       IsLongrunningOperation),
-         MethodPattern({{R"""(
-std::unique_ptr<google::cloud::internal::StreamingReadRpc<$response_type$>>
-$tracing_stub_class_name$::$method_name$(
-    std::shared_ptr<grpc::ClientContext> context,
-    $request_type$ const& request) {
-  auto span = internal::MakeSpanGrpc("$grpc_service$", "$method_name$");
-  auto scope = opentelemetry::trace::Scope(span);
-  internal::InjectTraceContext(*context, *propagator_);
-  auto stream = child_->$method_name$(context, request);
-  return std::make_unique<internal::StreamingReadRpcTracing<$response_type$>>(
-      std::move(context), std::move(stream), std::move(span));
-}
-)"""}},
-                       IsStreamingRead)},
+                       And(IsNonStreaming, Not(IsLongrunningOperation)))},
         __FILE__, __LINE__);
   }
 
@@ -287,24 +294,26 @@ future<StatusOr<google::longrunning::Operation>>
 $tracing_stub_class_name$::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     google::longrunning::GetOperationRequest const& request) {
   auto span =
       internal::MakeSpanGrpc("google.longrunning.Operations", "GetOperation");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncGetOperation(cq, context, request);
+  auto f = child_->AsyncGetOperation(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 
 future<Status> $tracing_stub_class_name$::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
   auto span = internal::MakeSpanGrpc("google.longrunning.Operations",
                                      "CancelOperation");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncCancelOperation(cq, context, request);
+  auto f = child_->AsyncCancelOperation(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 )""");

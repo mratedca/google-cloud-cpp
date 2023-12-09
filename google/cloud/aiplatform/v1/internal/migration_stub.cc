@@ -32,12 +32,12 @@ MigrationServiceStub::~MigrationServiceStub() = default;
 
 StatusOr<google::cloud::aiplatform::v1::SearchMigratableResourcesResponse>
 DefaultMigrationServiceStub::SearchMigratableResources(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::SearchMigratableResourcesRequest const&
         request) {
   google::cloud::aiplatform::v1::SearchMigratableResourcesResponse response;
-  auto status = grpc_stub_->SearchMigratableResources(&client_context, request,
-                                                      &response);
+  auto status =
+      grpc_stub_->SearchMigratableResources(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -47,7 +47,7 @@ DefaultMigrationServiceStub::SearchMigratableResources(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMigrationServiceStub::AsyncBatchMigrateResources(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::BatchMigrateResourcesRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -66,7 +66,7 @@ DefaultMigrationServiceStub::AsyncBatchMigrateResources(
 future<StatusOr<google::longrunning::Operation>>
 DefaultMigrationServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -81,7 +81,7 @@ DefaultMigrationServiceStub::AsyncGetOperation(
 
 future<Status> DefaultMigrationServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

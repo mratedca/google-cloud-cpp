@@ -45,6 +45,7 @@ using ::testing::Contains;
 using ::testing::Not;
 using ::testing::Pair;
 using ::testing::Return;
+using ::testing::VariantWith;
 
 class MetadataDecoratorTest : public ::testing::Test {
  protected:
@@ -235,7 +236,7 @@ TEST_F(MetadataDecoratorTest, ListServiceAccountKeys) {
 
 TEST_F(MetadataDecoratorTest, StreamingRead) {
   EXPECT_CALL(*mock_, StreamingRead)
-      .WillOnce([this](auto context, Request const& request) {
+      .WillOnce([this](auto context, Options const&, Request const& request) {
         auto mock_response = std::make_unique<MockStreamingReadRpc>();
         EXPECT_CALL(*mock_response, Read)
             .WillOnce(Return(Status(StatusCode::kPermissionDenied, "uh-oh")));
@@ -246,28 +247,32 @@ TEST_F(MetadataDecoratorTest, StreamingRead) {
         return mock_response;
       });
   GoldenKitchenSinkMetadata stub(mock_, {});
-  auto response =
-      stub.StreamingRead(std::make_shared<grpc::ClientContext>(), Request{});
-  EXPECT_THAT(absl::get<Status>(response->Read()), Not(IsOk()));
+  auto response = stub.StreamingRead(std::make_shared<grpc::ClientContext>(),
+                                     Options{}, Request{});
+  EXPECT_THAT(response->Read(), VariantWith<Status>(Not(IsOk())));
 }
 
 TEST_F(MetadataDecoratorTest, StreamingWrite) {
-  EXPECT_CALL(*mock_, StreamingWrite).WillOnce([this](auto context) {
-    IsContextMDValid(
-        *context,
-        "google.test.admin.database.v1.GoldenKitchenSink.StreamingWrite",
-        Request{});
+  EXPECT_CALL(*mock_, StreamingWrite)
+      .WillOnce([this](auto context, Options const&) {
+        IsContextMDValid(
+            *context,
+            "google.test.admin.database.v1.GoldenKitchenSink.StreamingWrite",
+            Request{});
 
-    auto stream = std::make_unique<MockStreamingWriteRpc>();
-    EXPECT_CALL(*stream, Write).WillOnce(Return(true)).WillOnce(Return(false));
-    auto response = Response{};
-    response.set_response("test-only");
-    EXPECT_CALL(*stream, Close).WillOnce(Return(make_status_or(response)));
-    return stream;
-  });
+        auto stream = std::make_unique<MockStreamingWriteRpc>();
+        EXPECT_CALL(*stream, Write)
+            .WillOnce(Return(true))
+            .WillOnce(Return(false));
+        auto response = Response{};
+        response.set_response("test-only");
+        EXPECT_CALL(*stream, Close).WillOnce(Return(make_status_or(response)));
+        return stream;
+      });
 
   GoldenKitchenSinkMetadata stub(mock_, {});
-  auto stream = stub.StreamingWrite(std::make_shared<grpc::ClientContext>());
+  auto stream =
+      stub.StreamingWrite(std::make_shared<grpc::ClientContext>(), Options{});
   EXPECT_TRUE(stream->Write(Request{}, grpc::WriteOptions()));
   EXPECT_FALSE(stream->Write(Request{}, grpc::WriteOptions()));
   auto response = stream->Close();

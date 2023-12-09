@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_DIALOGFLOW_ES_INTERNAL_ENTITY_TYPES_METADATA_DECORATOR_H
 
 #include "google/cloud/dialogflow_es/internal/entity_types_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -65,48 +66,48 @@ class EntityTypesMetadata : public EntityTypesStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchUpdateEntityTypes(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dialogflow::v2::BatchUpdateEntityTypesRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteEntityTypes(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dialogflow::v2::BatchDeleteEntityTypesRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateEntities(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dialogflow::v2::BatchCreateEntitiesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchUpdateEntities(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dialogflow::v2::BatchUpdateEntitiesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteEntities(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dialogflow::v2::BatchDeleteEntitiesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<EntityTypesStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

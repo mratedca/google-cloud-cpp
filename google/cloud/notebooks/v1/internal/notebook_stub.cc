@@ -32,10 +32,10 @@ NotebookServiceStub::~NotebookServiceStub() = default;
 
 StatusOr<google::cloud::notebooks::v1::ListInstancesResponse>
 DefaultNotebookServiceStub::ListInstances(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::ListInstancesRequest const& request) {
   google::cloud::notebooks::v1::ListInstancesResponse response;
-  auto status = grpc_stub_->ListInstances(&client_context, request, &response);
+  auto status = grpc_stub_->ListInstances(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultNotebookServiceStub::ListInstances(
 
 StatusOr<google::cloud::notebooks::v1::Instance>
 DefaultNotebookServiceStub::GetInstance(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::GetInstanceRequest const& request) {
   google::cloud::notebooks::v1::Instance response;
-  auto status = grpc_stub_->GetInstance(&client_context, request, &response);
+  auto status = grpc_stub_->GetInstance(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,7 +57,7 @@ DefaultNotebookServiceStub::GetInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncCreateInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::CreateInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::CreateInstanceRequest,
@@ -74,7 +74,7 @@ DefaultNotebookServiceStub::AsyncCreateInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncRegisterInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::RegisterInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::RegisterInstanceRequest,
@@ -92,7 +92,7 @@ DefaultNotebookServiceStub::AsyncRegisterInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncSetInstanceAccelerator(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::SetInstanceAcceleratorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -111,7 +111,7 @@ DefaultNotebookServiceStub::AsyncSetInstanceAccelerator(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncSetInstanceMachineType(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::SetInstanceMachineTypeRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -130,7 +130,7 @@ DefaultNotebookServiceStub::AsyncSetInstanceMachineType(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncUpdateInstanceConfig(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::UpdateInstanceConfigRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::UpdateInstanceConfigRequest,
@@ -148,7 +148,7 @@ DefaultNotebookServiceStub::AsyncUpdateInstanceConfig(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncUpdateShieldedInstanceConfig(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::UpdateShieldedInstanceConfigRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -168,7 +168,7 @@ DefaultNotebookServiceStub::AsyncUpdateShieldedInstanceConfig(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncSetInstanceLabels(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::SetInstanceLabelsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::SetInstanceLabelsRequest,
@@ -185,12 +185,12 @@ DefaultNotebookServiceStub::AsyncSetInstanceLabels(
 
 StatusOr<google::cloud::notebooks::v1::UpdateInstanceMetadataItemsResponse>
 DefaultNotebookServiceStub::UpdateInstanceMetadataItems(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::UpdateInstanceMetadataItemsRequest const&
         request) {
   google::cloud::notebooks::v1::UpdateInstanceMetadataItemsResponse response;
-  auto status = grpc_stub_->UpdateInstanceMetadataItems(&client_context,
-                                                        request, &response);
+  auto status =
+      grpc_stub_->UpdateInstanceMetadataItems(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -200,7 +200,7 @@ DefaultNotebookServiceStub::UpdateInstanceMetadataItems(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncDeleteInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::DeleteInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::DeleteInstanceRequest,
@@ -217,7 +217,7 @@ DefaultNotebookServiceStub::AsyncDeleteInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncStartInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::StartInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::StartInstanceRequest,
@@ -234,7 +234,7 @@ DefaultNotebookServiceStub::AsyncStartInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncStopInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::StopInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::StopInstanceRequest,
@@ -251,7 +251,7 @@ DefaultNotebookServiceStub::AsyncStopInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncResetInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::ResetInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::ResetInstanceRequest,
@@ -268,7 +268,7 @@ DefaultNotebookServiceStub::AsyncResetInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncReportInstanceInfo(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::ReportInstanceInfoRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::ReportInstanceInfoRequest,
@@ -285,11 +285,10 @@ DefaultNotebookServiceStub::AsyncReportInstanceInfo(
 
 StatusOr<google::cloud::notebooks::v1::IsInstanceUpgradeableResponse>
 DefaultNotebookServiceStub::IsInstanceUpgradeable(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::IsInstanceUpgradeableRequest const& request) {
   google::cloud::notebooks::v1::IsInstanceUpgradeableResponse response;
-  auto status =
-      grpc_stub_->IsInstanceUpgradeable(&client_context, request, &response);
+  auto status = grpc_stub_->IsInstanceUpgradeable(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -298,11 +297,10 @@ DefaultNotebookServiceStub::IsInstanceUpgradeable(
 
 StatusOr<google::cloud::notebooks::v1::GetInstanceHealthResponse>
 DefaultNotebookServiceStub::GetInstanceHealth(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::GetInstanceHealthRequest const& request) {
   google::cloud::notebooks::v1::GetInstanceHealthResponse response;
-  auto status =
-      grpc_stub_->GetInstanceHealth(&client_context, request, &response);
+  auto status = grpc_stub_->GetInstanceHealth(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -312,7 +310,7 @@ DefaultNotebookServiceStub::GetInstanceHealth(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncUpgradeInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::UpgradeInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::UpgradeInstanceRequest,
@@ -330,7 +328,7 @@ DefaultNotebookServiceStub::AsyncUpgradeInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncRollbackInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::RollbackInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::RollbackInstanceRequest,
@@ -348,7 +346,7 @@ DefaultNotebookServiceStub::AsyncRollbackInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncDiagnoseInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::DiagnoseInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::DiagnoseInstanceRequest,
@@ -366,7 +364,7 @@ DefaultNotebookServiceStub::AsyncDiagnoseInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncUpgradeInstanceInternal(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::UpgradeInstanceInternalRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -384,11 +382,10 @@ DefaultNotebookServiceStub::AsyncUpgradeInstanceInternal(
 
 StatusOr<google::cloud::notebooks::v1::ListEnvironmentsResponse>
 DefaultNotebookServiceStub::ListEnvironments(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::ListEnvironmentsRequest const& request) {
   google::cloud::notebooks::v1::ListEnvironmentsResponse response;
-  auto status =
-      grpc_stub_->ListEnvironments(&client_context, request, &response);
+  auto status = grpc_stub_->ListEnvironments(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -397,10 +394,10 @@ DefaultNotebookServiceStub::ListEnvironments(
 
 StatusOr<google::cloud::notebooks::v1::Environment>
 DefaultNotebookServiceStub::GetEnvironment(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::GetEnvironmentRequest const& request) {
   google::cloud::notebooks::v1::Environment response;
-  auto status = grpc_stub_->GetEnvironment(&client_context, request, &response);
+  auto status = grpc_stub_->GetEnvironment(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -410,7 +407,7 @@ DefaultNotebookServiceStub::GetEnvironment(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncCreateEnvironment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::CreateEnvironmentRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::CreateEnvironmentRequest,
@@ -428,7 +425,7 @@ DefaultNotebookServiceStub::AsyncCreateEnvironment(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncDeleteEnvironment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::DeleteEnvironmentRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::DeleteEnvironmentRequest,
@@ -445,10 +442,10 @@ DefaultNotebookServiceStub::AsyncDeleteEnvironment(
 
 StatusOr<google::cloud::notebooks::v1::ListSchedulesResponse>
 DefaultNotebookServiceStub::ListSchedules(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::ListSchedulesRequest const& request) {
   google::cloud::notebooks::v1::ListSchedulesResponse response;
-  auto status = grpc_stub_->ListSchedules(&client_context, request, &response);
+  auto status = grpc_stub_->ListSchedules(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -457,10 +454,10 @@ DefaultNotebookServiceStub::ListSchedules(
 
 StatusOr<google::cloud::notebooks::v1::Schedule>
 DefaultNotebookServiceStub::GetSchedule(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::GetScheduleRequest const& request) {
   google::cloud::notebooks::v1::Schedule response;
-  auto status = grpc_stub_->GetSchedule(&client_context, request, &response);
+  auto status = grpc_stub_->GetSchedule(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -470,7 +467,7 @@ DefaultNotebookServiceStub::GetSchedule(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncDeleteSchedule(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::DeleteScheduleRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::DeleteScheduleRequest,
@@ -487,7 +484,7 @@ DefaultNotebookServiceStub::AsyncDeleteSchedule(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncCreateSchedule(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::CreateScheduleRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::CreateScheduleRequest,
@@ -504,7 +501,7 @@ DefaultNotebookServiceStub::AsyncCreateSchedule(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncTriggerSchedule(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::TriggerScheduleRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::TriggerScheduleRequest,
@@ -521,10 +518,10 @@ DefaultNotebookServiceStub::AsyncTriggerSchedule(
 
 StatusOr<google::cloud::notebooks::v1::ListExecutionsResponse>
 DefaultNotebookServiceStub::ListExecutions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::ListExecutionsRequest const& request) {
   google::cloud::notebooks::v1::ListExecutionsResponse response;
-  auto status = grpc_stub_->ListExecutions(&client_context, request, &response);
+  auto status = grpc_stub_->ListExecutions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -533,10 +530,10 @@ DefaultNotebookServiceStub::ListExecutions(
 
 StatusOr<google::cloud::notebooks::v1::Execution>
 DefaultNotebookServiceStub::GetExecution(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::notebooks::v1::GetExecutionRequest const& request) {
   google::cloud::notebooks::v1::Execution response;
-  auto status = grpc_stub_->GetExecution(&client_context, request, &response);
+  auto status = grpc_stub_->GetExecution(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -546,7 +543,7 @@ DefaultNotebookServiceStub::GetExecution(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncDeleteExecution(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::DeleteExecutionRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::DeleteExecutionRequest,
@@ -564,7 +561,7 @@ DefaultNotebookServiceStub::AsyncDeleteExecution(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncCreateExecution(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::notebooks::v1::CreateExecutionRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::notebooks::v1::CreateExecutionRequest,
@@ -582,7 +579,7 @@ DefaultNotebookServiceStub::AsyncCreateExecution(
 future<StatusOr<google::longrunning::Operation>>
 DefaultNotebookServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -597,7 +594,7 @@ DefaultNotebookServiceStub::AsyncGetOperation(
 
 future<Status> DefaultNotebookServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

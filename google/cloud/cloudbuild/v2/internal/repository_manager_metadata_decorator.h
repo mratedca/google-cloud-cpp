@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_CLOUDBUILD_V2_INTERNAL_REPOSITORY_MANAGER_METADATA_DECORATOR_H
 
 #include "google/cloud/cloudbuild/v2/internal/repository_manager_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class RepositoryManagerMetadata : public RepositoryManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateConnectionRequest const& request)
       override;
 
@@ -58,25 +59,25 @@ class RepositoryManagerMetadata : public RepositoryManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::UpdateConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::CreateRepositoryRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateRepositories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::BatchCreateRepositoriesRequest const&
           request) override;
 
@@ -93,7 +94,7 @@ class RepositoryManagerMetadata : public RepositoryManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v2::DeleteRepositoryRequest const& request)
       override;
 
@@ -121,18 +122,18 @@ class RepositoryManagerMetadata : public RepositoryManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<RepositoryManagerStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

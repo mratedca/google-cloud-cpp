@@ -32,10 +32,10 @@ FleetRoutingStub::~FleetRoutingStub() = default;
 
 StatusOr<google::cloud::optimization::v1::OptimizeToursResponse>
 DefaultFleetRoutingStub::OptimizeTours(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::optimization::v1::OptimizeToursRequest const& request) {
   google::cloud::optimization::v1::OptimizeToursResponse response;
-  auto status = grpc_stub_->OptimizeTours(&client_context, request, &response);
+  auto status = grpc_stub_->OptimizeTours(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -45,7 +45,7 @@ DefaultFleetRoutingStub::OptimizeTours(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFleetRoutingStub::AsyncBatchOptimizeTours(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::optimization::v1::BatchOptimizeToursRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::optimization::v1::BatchOptimizeToursRequest,
@@ -63,7 +63,7 @@ DefaultFleetRoutingStub::AsyncBatchOptimizeTours(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFleetRoutingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -78,7 +78,7 @@ DefaultFleetRoutingStub::AsyncGetOperation(
 
 future<Status> DefaultFleetRoutingStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

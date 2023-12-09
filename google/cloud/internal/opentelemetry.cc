@@ -18,6 +18,9 @@
 #ifdef GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 #include <opentelemetry/trace/provider.h>
 #include <opentelemetry/trace/span_startoptions.h>
+#include <sstream>
+#include <string>
+#include <thread>
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 namespace google {
@@ -136,6 +139,12 @@ std::string ToString(opentelemetry::trace::SpanId const& span_id) {
   return std::string(span_id_array, kSize);
 }
 
+std::string CurrentThreadId() {
+  std::ostringstream os;
+  os << std::this_thread::get_id();
+  return std::move(os).str();
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 #ifdef GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
@@ -146,31 +155,15 @@ bool TracingEnabled(Options const& options) {
 bool TracingEnabled(Options const&) { return false; }
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
-std::function<void(std::chrono::milliseconds)> MakeTracedSleeper(
-    Options const& options,
-    std::function<void(std::chrono::milliseconds)> const& sleeper) {
 #ifdef GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
-  if (TracingEnabled(options)) {
-    return [=](std::chrono::milliseconds p) {
-      auto span = MakeSpan("Backoff");
-      sleeper(p);
-      span->End();
-    };
-  }
-#endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
-  (void)options;
-  return sleeper;
-}
-
-#ifdef GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
-void AddSpanAttribute(std::string const& key, std::string const& value) {
-  if (TracingEnabled(CurrentOptions())) {
-    auto span = opentelemetry::trace::Tracer::GetCurrentSpan();
-    span->SetAttribute(key, value);
-  }
+void AddSpanAttribute(Options const& options, std::string const& key,
+                      std::string const& value) {
+  if (!TracingEnabled(options)) return;
+  auto span = opentelemetry::trace::Tracer::GetCurrentSpan();
+  span->SetAttribute(key, value);
 }
 #else
-void AddSpanAttribute(std::string const&, std::string const&) {}
+void AddSpanAttribute(Options const&, std::string const&, std::string const&) {}
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 }  // namespace internal

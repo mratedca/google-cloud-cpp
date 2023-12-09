@@ -16,7 +16,6 @@
 // If you make any local changes, they will be lost.
 // source: generator/integration_tests/test2.proto
 
-
 #include "generator/integration_tests/golden/v1/internal/golden_rest_only_rest_metadata_decorator.h"
 #include "absl/strings/str_format.h"
 #include "google/cloud/common_options.h"
@@ -44,19 +43,18 @@ GoldenRestOnlyRestMetadata::GoldenRestOnlyRestMetadata(
 Status
 GoldenRestOnlyRestMetadata::Noop(
     rest_internal::RestContext& rest_context,
-    google::protobuf::Empty const& request) {
-  SetMetadata(rest_context);
-  return child_->Noop(rest_context, request);
+    Options const& options, google::protobuf::Empty const& request) {
+  SetMetadata(rest_context, options);
+  return child_->Noop(rest_context, options, request);
 }
 
 void GoldenRestOnlyRestMetadata::SetMetadata(
       rest_internal::RestContext& rest_context,
-      std::vector<std::string> const& params) {
+      Options const& options, std::vector<std::string> const& params) {
   rest_context.AddHeader("x-goog-api-client", api_client_header_);
   if (!params.empty()) {
     rest_context.AddHeader("x-goog-request-params", absl::StrJoin(params, "&"));
   }
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     rest_context.AddHeader(
         "x-goog-user-project", options.get<UserProjectOption>());

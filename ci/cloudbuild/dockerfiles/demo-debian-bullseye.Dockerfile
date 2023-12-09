@@ -96,7 +96,7 @@ RUN apt-get update && \
 
 # ```bash
 WORKDIR /var/tmp/build/protobuf
-RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v24.4.tar.gz | \
+RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v25.1.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
@@ -116,7 +116,7 @@ RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v24.4.tar.gz 
 
 # ```bash
 WORKDIR /var/tmp/build/re2
-RUN curl -fsSL https://github.com/google/re2/archive/2023-09-01.tar.gz | \
+RUN curl -fsSL https://github.com/google/re2/archive/2023-11-01.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_SHARED_LIBS=ON \
@@ -133,7 +133,7 @@ RUN curl -fsSL https://github.com/google/re2/archive/2023-09-01.tar.gz | \
 
 # ```bash
 WORKDIR /var/tmp/build/grpc
-RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.59.1.tar.gz | \
+RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.60.0.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
@@ -151,10 +151,33 @@ RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.59.1.tar.gz | \
     ldconfig
 # ```
 
+# #### opentelemetry-cpp
+
+# The project has an **optional** dependency on the OpenTelemetry library.
+# We recommend installing this library because:
+# - the dependency will become required in the google-cloud-cpp v3.x series.
+# - it is needed to produce distributed traces of the library.
+
+# ```bash
+WORKDIR /var/tmp/build/opentelemetry-cpp
+RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.13.0.tar.gz | \
+    tar -xzf - --strip-components=1 && \
+    cmake \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=yes \
+        -DWITH_EXAMPLES=OFF \
+        -DWITH_ABSEIL=ON \
+        -DBUILD_TESTING=OFF \
+        -DOPENTELEMETRY_INSTALL=ON \
+        -S . -B cmake-out && \
+    cmake --build cmake-out --target install -- -j ${NCPU:-4} && \
+    ldconfig
+# ```
+
 ## [DONE packaging.md]
 
 WORKDIR /var/tmp/sccache
-RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.5.4/sccache-v0.5.4-x86_64-unknown-linux-musl.tar.gz | \
+RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.4/sccache-v0.7.4-x86_64-unknown-linux-musl.tar.gz | \
     tar -zxf - --strip-components=1 && \
     mkdir -p /usr/local/bin && \
     mv sccache /usr/local/bin/sccache && \

@@ -15,7 +15,7 @@
 #ifndef GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_STORAGE_INTERNAL_GRPC_CONFIGURE_CLIENT_CONTEXT_H
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_STORAGE_INTERNAL_GRPC_CONFIGURE_CLIENT_CONTEXT_H
 
-#include "google/cloud/storage/async_object_requests.h"
+#include "google/cloud/storage/async/object_requests.h"
 #include "google/cloud/storage/internal/generic_request.h"
 #include "google/cloud/storage/internal/object_requests.h"
 #include "google/cloud/storage/version.h"
@@ -43,8 +43,7 @@ void AddIdempotencyToken(grpc::ClientContext& ctx,
  */
 template <typename Request>
 void ApplyQueryParameters(grpc::ClientContext& ctx, Options const& options,
-                          Request const& request,
-                          std::string const& prefix = std::string{}) {
+                          Request const& request) {
   // The gRPC API has a single field for the `QuotaUser` parameter, while the
   // JSON API has two:
   //    https://cloud.google.com/storage/docs/json_api/v1/parameters#quotaUser
@@ -61,9 +60,8 @@ void ApplyQueryParameters(grpc::ClientContext& ctx, Options const& options,
   }
 
   if (request.template HasOption<storage::Fields>()) {
-    auto field_mask = request.template GetOption<storage::Fields>().value();
-    if (!prefix.empty()) field_mask = prefix + "(" + field_mask + ")";
-    ctx.AddMetadata("x-goog-fieldmask", std::move(field_mask));
+    ctx.AddMetadata("x-goog-fieldmask",
+                    request.template GetOption<storage::Fields>().value());
   }
   google::cloud::internal::ConfigureContext(ctx, options);
 }
@@ -89,6 +87,14 @@ void ApplyRoutingHeaders(
  */
 void ApplyRoutingHeaders(grpc::ClientContext& context,
                          storage::internal::UploadChunkRequest const& request);
+
+/**
+ * The generated `StorageMetadata` stub can not handle dynamic routing headers
+ * for bi-directional streaming. So we manually match and extract the headers in
+ * this function.
+ */
+void ApplyResumableUploadRoutingHeader(grpc::ClientContext& context,
+                                       std::string const& upload_id);
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace storage_internal

@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/notebooks/v1/managed_service.grpc.pb.h>
@@ -48,48 +49,48 @@ class ManagedNotebookServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::CreateRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::UpdateRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::DeleteRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncStartRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::StartRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncStopRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::StopRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncSwitchRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::SwitchRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncResetRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::ResetRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpgradeRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::UpgradeRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncReportRuntimeEvent(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::ReportRuntimeEventRequest const&
           request) = 0;
 
@@ -102,17 +103,17 @@ class ManagedNotebookServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDiagnoseRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::DiagnoseRuntimeRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -127,87 +128,87 @@ class DefaultManagedNotebookServiceStub : public ManagedNotebookServiceStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::notebooks::v1::ListRuntimesResponse> ListRuntimes(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::notebooks::v1::ListRuntimesRequest const& request)
       override;
 
   StatusOr<google::cloud::notebooks::v1::Runtime> GetRuntime(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::notebooks::v1::GetRuntimeRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::CreateRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::UpdateRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::DeleteRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncStartRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::StartRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncStopRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::StopRuntimeRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncSwitchRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::SwitchRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncResetRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::ResetRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpgradeRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::UpgradeRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncReportRuntimeEvent(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::ReportRuntimeEventRequest const& request)
       override;
 
   StatusOr<google::cloud::notebooks::v1::RefreshRuntimeTokenInternalResponse>
   RefreshRuntimeTokenInternal(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::notebooks::v1::RefreshRuntimeTokenInternalRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDiagnoseRuntime(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::notebooks::v1::DiagnoseRuntimeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

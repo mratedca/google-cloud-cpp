@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_ASSET_V1_INTERNAL_ASSET_METADATA_DECORATOR_H
 
 #include "google/cloud/asset/v1/internal/asset_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -40,7 +41,7 @@ class AssetServiceMetadata : public AssetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportAssets(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::asset::v1::ExportAssetsRequest const& request) override;
 
   StatusOr<google::cloud::asset::v1::ListAssetsResponse> ListAssets(
@@ -92,7 +93,7 @@ class AssetServiceMetadata : public AssetServiceStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncAnalyzeIamPolicyLongrunning(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::asset::v1::AnalyzeIamPolicyLongrunningRequest const&
           request) override;
 
@@ -153,18 +154,18 @@ class AssetServiceMetadata : public AssetServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<AssetServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

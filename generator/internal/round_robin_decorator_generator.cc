@@ -114,8 +114,9 @@ $round_robin_class_name$::$round_robin_class_name$(
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<$response_type$>>
 $round_robin_class_name$::$method_name$(
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     $request_type$ const& request) {
-  return Child()->$method_name$(std::move(context), request);
+  return Child()->$method_name$(std::move(context), options, request);
 }
 )""");
       continue;
@@ -125,8 +126,9 @@ $round_robin_class_name$::$method_name$(
 std::unique_ptr<google::cloud::internal::StreamingWriteRpc<
     $request_type$, $response_type$>>
 $round_robin_class_name$::$method_name$(
-    std::shared_ptr<grpc::ClientContext> context) {
-  return Child()->$method_name$(std::move(context));
+    std::shared_ptr<grpc::ClientContext> context,
+    Options const& options) {
+  return Child()->$method_name$(std::move(context), options);
 }
 )""");
       continue;
@@ -150,8 +152,9 @@ future<StatusOr<google::longrunning::Operation>>
 $round_robin_class_name$::Async$method_name$(
     google::cloud::CompletionQueue& cq,
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     $request_type$ const& request) {
-  return Child()->Async$method_name$(cq, std::move(context), request);
+  return Child()->Async$method_name$(cq, std::move(context), options, request);
 }
 )""");
       continue;
@@ -240,16 +243,18 @@ future<StatusOr<google::longrunning::Operation>>
 $round_robin_class_name$::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  return Child()->AsyncGetOperation(cq, std::move(context), request);
+  return Child()->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status>
 $round_robin_class_name$::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  return Child()->AsyncCancelOperation(cq, std::move(context), request);
+  return Child()->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 )""");
   }

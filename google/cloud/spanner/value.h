@@ -20,6 +20,7 @@
 #include "google/cloud/spanner/internal/tuple_utils.h"
 #include "google/cloud/spanner/json.h"
 #include "google/cloud/spanner/numeric.h"
+#include "google/cloud/spanner/oid.h"
 #include "google/cloud/spanner/timestamp.h"
 #include "google/cloud/spanner/version.h"
 #include "google/cloud/internal/throw_delegate.h"
@@ -68,6 +69,7 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
  * JSONB        | `google::cloud::spanner::JsonB`
  * NUMERIC      | `google::cloud::spanner::Numeric`
  * NUMERIC(PG)  | `google::cloud::spanner::PgNumeric`
+ * OID(PG)      | `google::cloud::spanner::PgOid`
  * TIMESTAMP    | `google::cloud::spanner::Timestamp`
  * DATE         | `absl::CivilDay`
  * ARRAY        | `std::vector<T>`  // [1]
@@ -201,6 +203,8 @@ class Value {
   /// @copydoc Value(bool)
   explicit Value(PgNumeric v) : Value(PrivateConstructor{}, std::move(v)) {}
   /// @copydoc Value(bool)
+  explicit Value(PgOid v) : Value(PrivateConstructor{}, std::move(v)) {}
+  /// @copydoc Value(bool)
   explicit Value(Timestamp v) : Value(PrivateConstructor{}, std::move(v)) {}
   /// @copydoc Value(bool)
   explicit Value(CommitTimestamp v)
@@ -252,7 +256,7 @@ class Value {
    */
   template <typename T>
   explicit Value(std::vector<T> v) : Value(PrivateConstructor{}, std::move(v)) {
-    static_assert(!IsVector<typename std::decay<T>::type>::value,
+    static_assert(!IsVector<std::decay_t<T>>::value,
                   "vector of vector not allowed. See value.h documentation.");
   }
 
@@ -372,6 +376,7 @@ class Value {
   static bool TypeProtoIs(JsonB const&, google::spanner::v1::Type const&);
   static bool TypeProtoIs(Numeric const&, google::spanner::v1::Type const&);
   static bool TypeProtoIs(PgNumeric const&, google::spanner::v1::Type const&);
+  static bool TypeProtoIs(PgOid const&, google::spanner::v1::Type const&);
   template <typename T>
   static bool TypeProtoIs(absl::optional<T>,
                           google::spanner::v1::Type const& type) {
@@ -421,6 +426,7 @@ class Value {
   static google::spanner::v1::Type MakeTypeProto(JsonB const&);
   static google::spanner::v1::Type MakeTypeProto(Numeric const&);
   static google::spanner::v1::Type MakeTypeProto(PgNumeric const&);
+  static google::spanner::v1::Type MakeTypeProto(PgOid const&);
   static google::spanner::v1::Type MakeTypeProto(Timestamp);
   static google::spanner::v1::Type MakeTypeProto(CommitTimestamp);
   static google::spanner::v1::Type MakeTypeProto(absl::CivilDay);
@@ -462,9 +468,9 @@ class Value {
       auto* field = struct_type.add_fields();
       *field->mutable_type() = MakeTypeProto(t);
     }
-    template <typename S, typename T,
-              typename std::enable_if<
-                  std::is_convertible<S, std::string>::value, int>::type = 0>
+    template <
+        typename S, typename T,
+        std::enable_if_t<std::is_convertible<S, std::string>::value, int> = 0>
     void operator()(std::pair<S, T> const& p,
                     google::spanner::v1::StructType& struct_type) const {
       auto* field = struct_type.add_fields();
@@ -484,6 +490,7 @@ class Value {
   static google::protobuf::Value MakeValueProto(JsonB j);
   static google::protobuf::Value MakeValueProto(Numeric n);
   static google::protobuf::Value MakeValueProto(PgNumeric n);
+  static google::protobuf::Value MakeValueProto(PgOid n);
   static google::protobuf::Value MakeValueProto(Timestamp ts);
   static google::protobuf::Value MakeValueProto(CommitTimestamp ts);
   static google::protobuf::Value MakeValueProto(absl::CivilDay d);
@@ -519,9 +526,9 @@ class Value {
     void operator()(T& t, google::protobuf::ListValue& list_value) const {
       *list_value.add_values() = MakeValueProto(std::move(t));
     }
-    template <typename S, typename T,
-              typename std::enable_if<
-                  std::is_convertible<S, std::string>::value, int>::type = 0>
+    template <
+        typename S, typename T,
+        std::enable_if_t<std::is_convertible<S, std::string>::value, int> = 0>
     void operator()(std::pair<S, T> p,
                     google::protobuf::ListValue& list_value) const {
       *list_value.add_values() = MakeValueProto(std::move(p.second));
@@ -555,6 +562,8 @@ class Value {
   static StatusOr<PgNumeric> GetValue(PgNumeric const&,
                                       google::protobuf::Value const&,
                                       google::spanner::v1::Type const&);
+  static StatusOr<PgOid> GetValue(PgOid const&, google::protobuf::Value const&,
+                                  google::spanner::v1::Type const&);
   static StatusOr<Timestamp> GetValue(Timestamp, google::protobuf::Value const&,
                                       google::spanner::v1::Type const&);
   static StatusOr<CommitTimestamp> GetValue(CommitTimestamp,

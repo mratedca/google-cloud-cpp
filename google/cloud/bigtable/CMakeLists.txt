@@ -1,5 +1,5 @@
 # ~~~
-# Copyright 2018 Google Inc.
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -193,8 +193,12 @@ add_library(
     internal/legacy_row_reader.h
     internal/logging_data_client.cc
     internal/logging_data_client.h
+    internal/mutate_rows_limiter.cc
+    internal/mutate_rows_limiter.h
     internal/prefix_range_end.cc
     internal/prefix_range_end.h
+    internal/rate_limiter.cc
+    internal/rate_limiter.h
     internal/readrowsparser.cc
     internal/readrowsparser.h
     internal/retry_traits.h
@@ -307,6 +311,7 @@ if (BUILD_TESTING)
         testing/mock_async_failing_rpc_factory.h
         testing/mock_bigtable_stub.h
         testing/mock_data_client.h
+        testing/mock_mutate_rows_limiter.h
         testing/mock_mutate_rows_reader.h
         testing/mock_policies.h
         testing/mock_read_rows_reader.h
@@ -384,7 +389,9 @@ if (BUILD_TESTING)
         internal/legacy_bulk_mutator_test.cc
         internal/legacy_row_reader_test.cc
         internal/logging_data_client_test.cc
+        internal/mutate_rows_limiter_test.cc
         internal/prefix_range_end_test.cc
+        internal/rate_limiter_test.cc
         internal/retry_traits_test.cc
         internal/traced_row_reader_test.cc
         legacy_table_test.cc

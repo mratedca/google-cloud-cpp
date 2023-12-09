@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/vpcaccess/v1/vpc_access.grpc.pb.h>
@@ -38,7 +39,7 @@ class VpcAccessServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateConnector(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::vpcaccess::v1::CreateConnectorRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::vpcaccess::v1::Connector> GetConnector(
@@ -52,17 +53,17 @@ class VpcAccessServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnector(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::vpcaccess::v1::DeleteConnectorRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -78,34 +79,34 @@ class DefaultVpcAccessServiceStub : public VpcAccessServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnector(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::vpcaccess::v1::CreateConnectorRequest const& request)
       override;
 
   StatusOr<google::cloud::vpcaccess::v1::Connector> GetConnector(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::vpcaccess::v1::GetConnectorRequest const& request)
       override;
 
   StatusOr<google::cloud::vpcaccess::v1::ListConnectorsResponse> ListConnectors(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::vpcaccess::v1::ListConnectorsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnector(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::vpcaccess::v1::DeleteConnectorRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

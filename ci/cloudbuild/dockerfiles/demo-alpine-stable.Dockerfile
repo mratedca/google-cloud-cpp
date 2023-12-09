@@ -74,10 +74,32 @@ RUN curl -fsSL https://github.com/google/crc32c/archive/1.1.2.tar.gz | \
     cmake --build cmake-out --target install -- -j ${NCPU:-4}
 # ```
 
+# #### opentelemetry-cpp
+
+# The project has an **optional** dependency on the OpenTelemetry library.
+# We recommend installing this library because:
+# - the dependency will become required in the google-cloud-cpp v3.x series.
+# - it is needed to produce distributed traces of the library.
+
+# ```bash
+WORKDIR /var/tmp/build/opentelemetry-cpp
+RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.13.0.tar.gz | \
+    tar -xzf - --strip-components=1 && \
+    cmake \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=yes \
+        -DWITH_EXAMPLES=OFF \
+        -DWITH_ABSEIL=ON \
+        -DBUILD_TESTING=OFF \
+        -DOPENTELEMETRY_INSTALL=ON \
+        -S . -B cmake-out && \
+    cmake --build cmake-out --target install -- -j ${NCPU:-4}
+# ```
+
 ## [DONE packaging.md]
 
 WORKDIR /var/tmp/sccache
-RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.5.4/sccache-v0.5.4-x86_64-unknown-linux-musl.tar.gz | \
+RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.4/sccache-v0.7.4-x86_64-unknown-linux-musl.tar.gz | \
     tar -zxf - --strip-components=1 && \
     mkdir -p /usr/local/bin && \
     mv sccache /usr/local/bin/sccache && \

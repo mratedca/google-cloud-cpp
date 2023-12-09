@@ -13,7 +13,9 @@
 // limitations under the License.
 
 #include "google/cloud/storage/internal/async/connection_tracing.h"
+#include "google/cloud/storage/async/writer_connection.h"
 #include "google/cloud/storage/internal/async/reader_connection_tracing.h"
+#include "google/cloud/storage/internal/async/writer_connection_tracing.h"
 #include "google/cloud/internal/opentelemetry.h"
 #include "google/cloud/version.h"
 #include <memory>
@@ -60,8 +62,8 @@ class AsyncConnectionTracing : public storage_experimental::AsyncConnection {
     return impl_->AsyncReadObject(std::move(p)).then(std::move(wrap));
   }
 
-  future<storage_experimental::AsyncReadObjectRangeResponse>
-  AsyncReadObjectRange(ReadObjectParams p) override {
+  future<StatusOr<storage_experimental::ReadPayload>> AsyncReadObjectRange(
+      ReadObjectParams p) override {
     auto span =
         internal::MakeSpan("storage::AsyncConnection::AsyncReadObjectRange");
     internal::OTelScope scope(span);
@@ -70,8 +72,24 @@ class AsyncConnectionTracing : public storage_experimental::AsyncConnection {
                span = std::move(span)](auto f) {
           auto result = f.get();
           internal::DetachOTelContext(oc);
-          internal::EndSpan(*span, result.status);
-          return result;
+          return internal::EndSpan(*span, std::move(result));
+        });
+  }
+
+  future<StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+  AsyncWriteObject(WriteObjectParams p) override {
+    auto span =
+        internal::MakeSpan("storage::AsyncConnection::AsyncWriteObject");
+    internal::OTelScope scope(span);
+    return impl_->AsyncWriteObject(std::move(p))
+        .then([oc = opentelemetry::context::RuntimeContext::GetCurrent(),
+               span = std::move(span)](auto f)
+                  -> StatusOr<std::unique_ptr<
+                      storage_experimental::AsyncWriterConnection>> {
+          auto w = f.get();
+          internal::DetachOTelContext(oc);
+          if (!w) return internal::EndSpan(*span, std::move(w).status());
+          return MakeTracingWriterConnection(span, *std::move(w));
         });
   }
 

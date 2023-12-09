@@ -47,7 +47,7 @@ BigtableMetadata::BigtableMetadata(
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<
     google::bigtable::v2::ReadRowsResponse>>
 BigtableMetadata::ReadRows(
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::bigtable::v2::ReadRowsRequest const& request) {
   std::vector<std::string> params;
   params.reserve(2);
@@ -71,17 +71,17 @@ BigtableMetadata::ReadRows(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->ReadRows(std::move(context), request);
+  return child_->ReadRows(std::move(context), options, request);
 }
 
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<
     google::bigtable::v2::SampleRowKeysResponse>>
 BigtableMetadata::SampleRowKeys(
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::bigtable::v2::SampleRowKeysRequest const& request) {
   std::vector<std::string> params;
   params.reserve(2);
@@ -105,11 +105,11 @@ BigtableMetadata::SampleRowKeys(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->SampleRowKeys(std::move(context), request);
+  return child_->SampleRowKeys(std::move(context), options, request);
 }
 
 StatusOr<google::bigtable::v2::MutateRowResponse> BigtableMetadata::MutateRow(
@@ -137,9 +137,10 @@ StatusOr<google::bigtable::v2::MutateRowResponse> BigtableMetadata::MutateRow(
   }
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->MutateRow(context, request);
 }
@@ -147,7 +148,7 @@ StatusOr<google::bigtable::v2::MutateRowResponse> BigtableMetadata::MutateRow(
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<
     google::bigtable::v2::MutateRowsResponse>>
 BigtableMetadata::MutateRows(
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::bigtable::v2::MutateRowsRequest const& request) {
   std::vector<std::string> params;
   params.reserve(2);
@@ -171,11 +172,11 @@ BigtableMetadata::MutateRows(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->MutateRows(std::move(context), request);
+  return child_->MutateRows(std::move(context), options, request);
 }
 
 StatusOr<google::bigtable::v2::CheckAndMutateRowResponse>
@@ -204,9 +205,10 @@ BigtableMetadata::CheckAndMutateRow(
   }
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->CheckAndMutateRow(context, request);
 }
@@ -237,9 +239,10 @@ BigtableMetadata::PingAndWarm(
   }
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->PingAndWarm(context, request);
 }
@@ -270,9 +273,10 @@ BigtableMetadata::ReadModifyWriteRow(
   }
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->ReadModifyWriteRow(context, request);
 }
@@ -305,9 +309,10 @@ BigtableMetadata::AsyncReadRows(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncReadRows(cq, std::move(context), request);
 }
@@ -340,9 +345,10 @@ BigtableMetadata::AsyncSampleRowKeys(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncSampleRowKeys(cq, std::move(context), request);
 }
@@ -374,9 +380,10 @@ BigtableMetadata::AsyncMutateRow(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncMutateRow(cq, std::move(context), request);
 }
@@ -409,9 +416,10 @@ BigtableMetadata::AsyncMutateRows(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncMutateRows(cq, std::move(context), request);
 }
@@ -443,9 +451,10 @@ BigtableMetadata::AsyncCheckAndMutateRow(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncCheckAndMutateRow(cq, std::move(context), request);
 }
@@ -477,25 +486,27 @@ BigtableMetadata::AsyncReadModifyWriteRow(
   }
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, internal::CurrentOptions());
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->AsyncReadModifyWriteRow(cq, std::move(context), request);
 }
 
 void BigtableMetadata::SetMetadata(grpc::ClientContext& context,
+                                   Options const& options,
                                    std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void BigtableMetadata::SetMetadata(grpc::ClientContext& context) {
+void BigtableMetadata::SetMetadata(grpc::ClientContext& context,
+                                   Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

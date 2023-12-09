@@ -20,7 +20,6 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_SQL_V1_SQL_SSL_CERTS_CLIENT_H
 
 #include "google/cloud/sql/v1/sql_ssl_certs_rest_connection.h"
-#include "google/cloud/experimental_tag.h"
 #include "google/cloud/future.h"
 #include "google/cloud/options.h"
 #include "google/cloud/polling_policy.h"
@@ -62,7 +61,7 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 class SqlSslCertsServiceClient {
  public:
   explicit SqlSslCertsServiceClient(
-      ExperimentalTag, std::shared_ptr<SqlSslCertsServiceConnection> connection,
+      std::shared_ptr<SqlSslCertsServiceConnection> connection,
       Options opts = {});
   ~SqlSslCertsServiceClient();
 
@@ -111,7 +110,7 @@ class SqlSslCertsServiceClient {
   /// [`future`]: @ref google::cloud::future
   /// [`StatusOr`]: @ref google::cloud::StatusOr
   /// [`Status`]: @ref google::cloud::Status
-  /// [google.cloud.sql.v1.Operation]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_resources.proto#L717}
+  /// [google.cloud.sql.v1.Operation]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_resources.proto#L777}
   /// [google.cloud.sql.v1.SqlSslCertsDeleteRequest]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_ssl_certs.proto#L72}
   ///
   // clang-format on
@@ -145,7 +144,7 @@ class SqlSslCertsServiceClient {
   /// [`StatusOr`]: @ref google::cloud::StatusOr
   /// [`Status`]: @ref google::cloud::Status
   /// [google.cloud.sql.v1.SqlSslCertsGetRequest]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_ssl_certs.proto#L83}
-  /// [google.cloud.sql.v1.SslCert]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_resources.proto#L1175}
+  /// [google.cloud.sql.v1.SslCert]: @googleapis_reference_link{google/cloud/sql/v1/cloud_sql_resources.proto#L1242}
   ///
   // clang-format on
   StatusOr<google::cloud::sql::v1::SslCert> Get(

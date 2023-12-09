@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_DATACATALOG_LINEAGE_V1_INTERNAL_LINEAGE_METADATA_DECORATOR_H
 
 #include "google/cloud/datacatalog/lineage/v1/internal/lineage_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -37,6 +38,13 @@ class LineageMetadata : public LineageStub {
   LineageMetadata(std::shared_ptr<LineageStub> child,
                   std::multimap<std::string, std::string> fixed_metadata,
                   std::string api_client_header = "");
+
+  StatusOr<google::cloud::datacatalog::lineage::v1::
+               ProcessOpenLineageRunEventResponse>
+  ProcessOpenLineageRunEvent(
+      grpc::ClientContext& context,
+      google::cloud::datacatalog::lineage::v1::
+          ProcessOpenLineageRunEventRequest const& request) override;
 
   StatusOr<google::cloud::datacatalog::lineage::v1::Process> CreateProcess(
       grpc::ClientContext& context,
@@ -61,7 +69,7 @@ class LineageMetadata : public LineageStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteProcess(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datacatalog::lineage::v1::DeleteProcessRequest const&
           request) override;
 
@@ -87,7 +95,7 @@ class LineageMetadata : public LineageStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRun(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datacatalog::lineage::v1::DeleteRunRequest const& request)
       override;
 
@@ -128,18 +136,18 @@ class LineageMetadata : public LineageStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<LineageStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

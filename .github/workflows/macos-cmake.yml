@@ -41,7 +41,7 @@ jobs:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       with:
         ref: ${{ inputs.checkout-ref }}
-    - uses: google-github-actions/auth@v1
+    - uses: google-github-actions/auth@v2
       with:
         create_credentials_file: true
         credentials_json: ${{ secrets.BUILD_CACHE_KEY }}
@@ -122,7 +122,6 @@ jobs:
         export VCPKG_ROOT="${{ runner.temp }}/vcpkg"
         /opt/homebrew/bin/bash ci/gha/builds/macos-cmake.sh ${{ steps.dynamic.outputs.features }}
     env:
-      USE_BAZEL_VERSION: 6.2.1
       BAZEL_REMOTE_CACHE: https://storage.googleapis.com/cloud-cpp-gha-cache/bazel-cache/${{ matrix.os }}
       SCCACHE_GCS_BUCKET: cloud-cpp-gha-cache
       SCCACHE_GCS_KEY_PREFIX: sccache/${{ matrix.os }}

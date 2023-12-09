@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "google/cloud/internal/async_read_write_stream_auth.h"
+#include "google/cloud/mocks/mock_async_streaming_read_write_rpc.h"
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/testing_util/mock_grpc_authentication_strategy.h"
 #include "google/cloud/testing_util/status_matchers.h"
@@ -28,7 +29,9 @@ namespace {
 
 using ::google::cloud::testing_util::IsOk;
 using ::google::cloud::testing_util::MockAuthenticationStrategy;
+using ::testing::Pair;
 using ::testing::StrictMock;
+using ::testing::UnorderedElementsAre;
 
 struct FakeRequest {
   std::string key;
@@ -41,17 +44,9 @@ struct FakeResponse {
 
 using BaseStream = AsyncStreamingReadWriteRpc<FakeRequest, FakeResponse>;
 using AuthStream = AsyncStreamingReadWriteRpcAuth<FakeRequest, FakeResponse>;
-
-class MockStream : public BaseStream {
- public:
-  MOCK_METHOD(void, Cancel, (), (override));
-  MOCK_METHOD(future<bool>, Start, (), (override));
-  MOCK_METHOD(future<absl::optional<FakeResponse>>, Read, (), (override));
-  MOCK_METHOD(future<bool>, Write, (FakeRequest const&, grpc::WriteOptions),
-              (override));
-  MOCK_METHOD(future<bool>, WritesDone, (), (override));
-  MOCK_METHOD(future<Status>, Finish, (), (override));
-};
+using MockStream =
+    ::google::cloud::mocks::MockAsyncStreamingReadWriteRpc<FakeRequest,
+                                                           FakeResponse>;
 
 TEST(AsyncStreamReadWriteAuth, Start) {
   auto factory = AuthStream::StreamFactory([](auto) {
@@ -70,6 +65,10 @@ TEST(AsyncStreamReadWriteAuth, Start) {
     EXPECT_CALL(*mock, Finish).WillOnce([] {
       return make_ready_future(Status{});
     });
+    EXPECT_CALL(*mock, GetRequestMetadata).WillOnce([] {
+      return RpcMetadata{{{"hk0", "v0"}, {"hk1", "v1"}},
+                         {{"tk0", "v0"}, {"tk1", "v1"}}};
+    });
     return std::unique_ptr<BaseStream>(std::move(mock));
   });
   auto strategy = std::make_shared<StrictMock<MockAuthenticationStrategy>>();
@@ -86,6 +85,11 @@ TEST(AsyncStreamReadWriteAuth, Start) {
   EXPECT_EQ(response->value, "v0");
   EXPECT_TRUE(uut->WritesDone().get());
   EXPECT_THAT(uut->Finish().get(), IsOk());
+  auto const metadata = uut->GetRequestMetadata();
+  EXPECT_THAT(metadata.headers,
+              UnorderedElementsAre(Pair("hk0", "v0"), Pair("hk1", "v1")));
+  EXPECT_THAT(metadata.trailers,
+              UnorderedElementsAre(Pair("tk0", "v0"), Pair("tk1", "v1")));
 }
 
 }  // namespace

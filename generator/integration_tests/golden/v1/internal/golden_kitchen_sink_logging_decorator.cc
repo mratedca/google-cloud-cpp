@@ -123,38 +123,43 @@ GoldenKitchenSinkLogging::Deprecated2(
       context, request, __func__, tracing_options_);
 }
 
-std::unique_ptr<google::cloud::internal::StreamingReadRpc<google::test::admin::database::v1::Response>>
+std::unique_ptr<google::cloud::internal::StreamingReadRpc<
+    google::test::admin::database::v1::Response>>
 GoldenKitchenSinkLogging::StreamingRead(
     std::shared_ptr<grpc::ClientContext> context,
+    Options const& options,
     google::test::admin::database::v1::Request const& request) {
   return google::cloud::internal::LogWrapper(
       [this](std::shared_ptr<grpc::ClientContext> context,
-             google::test::admin::database::v1::Request const& request) ->
-      std::unique_ptr<google::cloud::internal::StreamingReadRpc<
-          google::test::admin::database::v1::Response>> {
-        auto stream = child_->StreamingRead(std::move(context), request);
+             Options const& options,
+             google::test::admin::database::v1::Request const& request)
+          -> std::unique_ptr<google::cloud::internal::StreamingReadRpc<
+              google::test::admin::database::v1::Response>> {
+        auto stream = child_->StreamingRead(std::move(context), options, request);
         if (stream_logging_) {
-          stream = std::make_unique<google::cloud::internal::StreamingReadRpcLogging<
-             google::test::admin::database::v1::Response>>(
-               std::move(stream), tracing_options_,
-               google::cloud::internal::RequestIdForLogging());
+          stream =
+              std::make_unique<google::cloud::internal::StreamingReadRpcLogging<
+                  google::test::admin::database::v1::Response>>(
+                  std::move(stream), tracing_options_,
+                  google::cloud::internal::RequestIdForLogging());
         }
         return stream;
       },
-      std::move(context), request, __func__, tracing_options_);
+      std::move(context), options, request, __func__, tracing_options_);
 }
 
 std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
     google::test::admin::database::v1::Request,
     google::test::admin::database::v1::Response>>
 GoldenKitchenSinkLogging::StreamingWrite(
-    std::shared_ptr<grpc::ClientContext> context) {
+    std::shared_ptr<grpc::ClientContext> context,
+    Options const& options) {
   using LoggingStream = ::google::cloud::internal::StreamingWriteRpcLogging<
       google::test::admin::database::v1::Request, google::test::admin::database::v1::Response>;
 
   auto request_id = google::cloud::internal::RequestIdForLogging();
   GCP_LOG(DEBUG) << __func__ << "(" << request_id << ")";
-  auto stream = child_->StreamingWrite(std::move(context));
+  auto stream = child_->StreamingWrite(std::move(context), options);
   if (stream_logging_) {
     stream = std::make_unique<LoggingStream>(
         std::move(stream), tracing_options_, std::move(request_id));

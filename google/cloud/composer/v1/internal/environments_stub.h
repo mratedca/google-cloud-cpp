@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/orchestration/airflow/service/v1/environments.grpc.pb.h>
@@ -40,6 +41,7 @@ class EnvironmentsStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateEnvironment(google::cloud::CompletionQueue& cq,
                          std::shared_ptr<grpc::ClientContext> context,
+                         Options const& options,
                          google::cloud::orchestration::airflow::service::v1::
                              CreateEnvironmentRequest const& request) = 0;
 
@@ -58,12 +60,14 @@ class EnvironmentsStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateEnvironment(google::cloud::CompletionQueue& cq,
                          std::shared_ptr<grpc::ClientContext> context,
+                         Options const& options,
                          google::cloud::orchestration::airflow::service::v1::
                              UpdateEnvironmentRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteEnvironment(google::cloud::CompletionQueue& cq,
                          std::shared_ptr<grpc::ClientContext> context,
+                         Options const& options,
                          google::cloud::orchestration::airflow::service::v1::
                              DeleteEnvironmentRequest const& request) = 0;
 
@@ -87,19 +91,20 @@ class EnvironmentsStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncSaveSnapshot(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           SaveSnapshotRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncLoadSnapshot(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           LoadSnapshotRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDatabaseFailover(google::cloud::CompletionQueue& cq,
                         std::shared_ptr<grpc::ClientContext> context,
+                        Options const& options,
                         google::cloud::orchestration::airflow::service::v1::
                             DatabaseFailoverRequest const& request) = 0;
 
@@ -112,12 +117,12 @@ class EnvironmentsStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -133,85 +138,85 @@ class DefaultEnvironmentsStub : public EnvironmentsStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           CreateEnvironmentRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::Environment>
-  GetEnvironment(grpc::ClientContext& client_context,
+  GetEnvironment(grpc::ClientContext& context,
                  google::cloud::orchestration::airflow::service::v1::
                      GetEnvironmentRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::
                ListEnvironmentsResponse>
-  ListEnvironments(grpc::ClientContext& client_context,
+  ListEnvironments(grpc::ClientContext& context,
                    google::cloud::orchestration::airflow::service::v1::
                        ListEnvironmentsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           UpdateEnvironmentRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           DeleteEnvironmentRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::
                ExecuteAirflowCommandResponse>
   ExecuteAirflowCommand(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::orchestration::airflow::service::v1::
           ExecuteAirflowCommandRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::
                StopAirflowCommandResponse>
-  StopAirflowCommand(grpc::ClientContext& client_context,
+  StopAirflowCommand(grpc::ClientContext& context,
                      google::cloud::orchestration::airflow::service::v1::
                          StopAirflowCommandRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::
                PollAirflowCommandResponse>
-  PollAirflowCommand(grpc::ClientContext& client_context,
+  PollAirflowCommand(grpc::ClientContext& context,
                      google::cloud::orchestration::airflow::service::v1::
                          PollAirflowCommandRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncSaveSnapshot(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           SaveSnapshotRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncLoadSnapshot(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           LoadSnapshotRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDatabaseFailover(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::orchestration::airflow::service::v1::
           DatabaseFailoverRequest const& request) override;
 
   StatusOr<google::cloud::orchestration::airflow::service::v1::
                FetchDatabasePropertiesResponse>
   FetchDatabaseProperties(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::orchestration::airflow::service::v1::
           FetchDatabasePropertiesRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

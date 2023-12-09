@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_TRANSLATE_V3_INTERNAL_TRANSLATION_METADATA_DECORATOR_H
 
 #include "google/cloud/translate/v3/internal/translation_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -63,19 +64,19 @@ class TranslationServiceMetadata : public TranslationServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchTranslateText(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::translation::v3::BatchTranslateTextRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchTranslateDocument(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::translation::v3::BatchTranslateDocumentRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateGlossary(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::translation::v3::CreateGlossaryRequest const& request)
       override;
 
@@ -91,24 +92,24 @@ class TranslationServiceMetadata : public TranslationServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteGlossary(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::translation::v3::DeleteGlossaryRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<TranslationServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

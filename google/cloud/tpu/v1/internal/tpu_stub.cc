@@ -31,10 +31,10 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 TpuStub::~TpuStub() = default;
 
 StatusOr<google::cloud::tpu::v1::ListNodesResponse> DefaultTpuStub::ListNodes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::ListNodesRequest const& request) {
   google::cloud::tpu::v1::ListNodesResponse response;
-  auto status = grpc_stub_->ListNodes(&client_context, request, &response);
+  auto status = grpc_stub_->ListNodes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -42,10 +42,10 @@ StatusOr<google::cloud::tpu::v1::ListNodesResponse> DefaultTpuStub::ListNodes(
 }
 
 StatusOr<google::cloud::tpu::v1::Node> DefaultTpuStub::GetNode(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::GetNodeRequest const& request) {
   google::cloud::tpu::v1::Node response;
-  auto status = grpc_stub_->GetNode(&client_context, request, &response);
+  auto status = grpc_stub_->GetNode(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -55,7 +55,7 @@ StatusOr<google::cloud::tpu::v1::Node> DefaultTpuStub::GetNode(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTpuStub::AsyncCreateNode(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::tpu::v1::CreateNodeRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::tpu::v1::CreateNodeRequest,
                                     google::longrunning::Operation>(
@@ -71,7 +71,7 @@ DefaultTpuStub::AsyncCreateNode(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTpuStub::AsyncDeleteNode(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::tpu::v1::DeleteNodeRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::tpu::v1::DeleteNodeRequest,
                                     google::longrunning::Operation>(
@@ -87,7 +87,7 @@ DefaultTpuStub::AsyncDeleteNode(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTpuStub::AsyncReimageNode(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::tpu::v1::ReimageNodeRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::tpu::v1::ReimageNodeRequest,
                                     google::longrunning::Operation>(
@@ -102,7 +102,7 @@ DefaultTpuStub::AsyncReimageNode(
 
 future<StatusOr<google::longrunning::Operation>> DefaultTpuStub::AsyncStopNode(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::tpu::v1::StopNodeRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::tpu::v1::StopNodeRequest,
                                     google::longrunning::Operation>(
@@ -117,7 +117,7 @@ future<StatusOr<google::longrunning::Operation>> DefaultTpuStub::AsyncStopNode(
 
 future<StatusOr<google::longrunning::Operation>> DefaultTpuStub::AsyncStartNode(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::tpu::v1::StartNodeRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::tpu::v1::StartNodeRequest,
                                     google::longrunning::Operation>(
@@ -132,11 +132,11 @@ future<StatusOr<google::longrunning::Operation>> DefaultTpuStub::AsyncStartNode(
 
 StatusOr<google::cloud::tpu::v1::ListTensorFlowVersionsResponse>
 DefaultTpuStub::ListTensorFlowVersions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::ListTensorFlowVersionsRequest const& request) {
   google::cloud::tpu::v1::ListTensorFlowVersionsResponse response;
   auto status =
-      grpc_stub_->ListTensorFlowVersions(&client_context, request, &response);
+      grpc_stub_->ListTensorFlowVersions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -145,11 +145,10 @@ DefaultTpuStub::ListTensorFlowVersions(
 
 StatusOr<google::cloud::tpu::v1::TensorFlowVersion>
 DefaultTpuStub::GetTensorFlowVersion(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::GetTensorFlowVersionRequest const& request) {
   google::cloud::tpu::v1::TensorFlowVersion response;
-  auto status =
-      grpc_stub_->GetTensorFlowVersion(&client_context, request, &response);
+  auto status = grpc_stub_->GetTensorFlowVersion(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -158,11 +157,10 @@ DefaultTpuStub::GetTensorFlowVersion(
 
 StatusOr<google::cloud::tpu::v1::ListAcceleratorTypesResponse>
 DefaultTpuStub::ListAcceleratorTypes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::ListAcceleratorTypesRequest const& request) {
   google::cloud::tpu::v1::ListAcceleratorTypesResponse response;
-  auto status =
-      grpc_stub_->ListAcceleratorTypes(&client_context, request, &response);
+  auto status = grpc_stub_->ListAcceleratorTypes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -171,11 +169,10 @@ DefaultTpuStub::ListAcceleratorTypes(
 
 StatusOr<google::cloud::tpu::v1::AcceleratorType>
 DefaultTpuStub::GetAcceleratorType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::tpu::v1::GetAcceleratorTypeRequest const& request) {
   google::cloud::tpu::v1::AcceleratorType response;
-  auto status =
-      grpc_stub_->GetAcceleratorType(&client_context, request, &response);
+  auto status = grpc_stub_->GetAcceleratorType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -185,7 +182,7 @@ DefaultTpuStub::GetAcceleratorType(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTpuStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -200,7 +197,7 @@ DefaultTpuStub::AsyncGetOperation(
 
 future<Status> DefaultTpuStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

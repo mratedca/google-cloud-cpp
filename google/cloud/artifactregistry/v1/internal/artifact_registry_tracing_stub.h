@@ -86,13 +86,13 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportAptArtifacts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::ImportAptArtifactsRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportYumArtifacts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::ImportYumArtifactsRequest const&
           request) override;
 
@@ -109,7 +109,7 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::CreateRepositoryRequest const&
           request) override;
 
@@ -120,7 +120,7 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeleteRepositoryRequest const&
           request) override;
 
@@ -137,7 +137,7 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeletePackage(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeletePackageRequest const&
           request) override;
 
@@ -154,8 +154,14 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteVersion(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeleteVersionRequest const&
+          request) override;
+
+  future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteVersions(
+      google::cloud::CompletionQueue& cq,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
+      google::devtools::artifactregistry::v1::BatchDeleteVersionsRequest const&
           request) override;
 
   StatusOr<google::devtools::artifactregistry::v1::ListFilesResponse> ListFiles(
@@ -230,12 +236,12 @@ class ArtifactRegistryTracingStub : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

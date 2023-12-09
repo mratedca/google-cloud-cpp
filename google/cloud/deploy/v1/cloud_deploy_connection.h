@@ -207,6 +207,10 @@ class CloudDeployConnection {
   virtual StreamRange<google::cloud::deploy::v1::Target> ListTargets(
       google::cloud::deploy::v1::ListTargetsRequest request);
 
+  virtual StatusOr<google::cloud::deploy::v1::RollbackTargetResponse>
+  RollbackTarget(
+      google::cloud::deploy::v1::RollbackTargetRequest const& request);
+
   virtual StatusOr<google::cloud::deploy::v1::Target> GetTarget(
       google::cloud::deploy::v1::GetTargetRequest const& request);
 
@@ -218,6 +222,26 @@ class CloudDeployConnection {
 
   virtual future<StatusOr<google::cloud::deploy::v1::OperationMetadata>>
   DeleteTarget(google::cloud::deploy::v1::DeleteTargetRequest const& request);
+
+  virtual StreamRange<google::cloud::deploy::v1::CustomTargetType>
+  ListCustomTargetTypes(
+      google::cloud::deploy::v1::ListCustomTargetTypesRequest request);
+
+  virtual StatusOr<google::cloud::deploy::v1::CustomTargetType>
+  GetCustomTargetType(
+      google::cloud::deploy::v1::GetCustomTargetTypeRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::CustomTargetType>>
+  CreateCustomTargetType(
+      google::cloud::deploy::v1::CreateCustomTargetTypeRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::CustomTargetType>>
+  UpdateCustomTargetType(
+      google::cloud::deploy::v1::UpdateCustomTargetTypeRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::OperationMetadata>>
+  DeleteCustomTargetType(
+      google::cloud::deploy::v1::DeleteCustomTargetTypeRequest const& request);
 
   virtual StreamRange<google::cloud::deploy::v1::Release> ListReleases(
       google::cloud::deploy::v1::ListReleasesRequest request);
@@ -270,6 +294,35 @@ class CloudDeployConnection {
 
   virtual StatusOr<google::cloud::deploy::v1::Config> GetConfig(
       google::cloud::deploy::v1::GetConfigRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::Automation>>
+  CreateAutomation(
+      google::cloud::deploy::v1::CreateAutomationRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::Automation>>
+  UpdateAutomation(
+      google::cloud::deploy::v1::UpdateAutomationRequest const& request);
+
+  virtual future<StatusOr<google::cloud::deploy::v1::OperationMetadata>>
+  DeleteAutomation(
+      google::cloud::deploy::v1::DeleteAutomationRequest const& request);
+
+  virtual StatusOr<google::cloud::deploy::v1::Automation> GetAutomation(
+      google::cloud::deploy::v1::GetAutomationRequest const& request);
+
+  virtual StreamRange<google::cloud::deploy::v1::Automation> ListAutomations(
+      google::cloud::deploy::v1::ListAutomationsRequest request);
+
+  virtual StatusOr<google::cloud::deploy::v1::AutomationRun> GetAutomationRun(
+      google::cloud::deploy::v1::GetAutomationRunRequest const& request);
+
+  virtual StreamRange<google::cloud::deploy::v1::AutomationRun>
+  ListAutomationRuns(
+      google::cloud::deploy::v1::ListAutomationRunsRequest request);
+
+  virtual StatusOr<google::cloud::deploy::v1::CancelAutomationRunResponse>
+  CancelAutomationRun(
+      google::cloud::deploy::v1::CancelAutomationRunRequest const& request);
 };
 
 /**

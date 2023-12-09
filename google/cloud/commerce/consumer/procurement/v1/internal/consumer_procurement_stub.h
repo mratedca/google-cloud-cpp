@@ -22,6 +22,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/commerce/consumer/procurement/v1/procurement_service.grpc.pb.h>
@@ -39,7 +40,7 @@ class ConsumerProcurementServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncPlaceOrder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::commerce::consumer::procurement::v1::
           PlaceOrderRequest const& request) = 0;
 
@@ -57,12 +58,12 @@ class ConsumerProcurementServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -79,29 +80,29 @@ class DefaultConsumerProcurementServiceStub
 
   future<StatusOr<google::longrunning::Operation>> AsyncPlaceOrder(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::commerce::consumer::procurement::v1::
           PlaceOrderRequest const& request) override;
 
   StatusOr<google::cloud::commerce::consumer::procurement::v1::Order> GetOrder(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::commerce::consumer::procurement::v1::GetOrderRequest const&
           request) override;
 
   StatusOr<
       google::cloud::commerce::consumer::procurement::v1::ListOrdersResponse>
-  ListOrders(grpc::ClientContext& client_context,
+  ListOrders(grpc::ClientContext& context,
              google::cloud::commerce::consumer::procurement::v1::
                  ListOrdersRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

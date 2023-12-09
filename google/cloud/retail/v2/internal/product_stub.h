@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/retail/v2/product_service.grpc.pb.h>
@@ -59,49 +60,49 @@ class ProductServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncImportProducts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::ImportProductsRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncSetInventory(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::SetInventoryRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncAddFulfillmentPlaces(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::AddFulfillmentPlacesRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncRemoveFulfillmentPlaces(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::RemoveFulfillmentPlacesRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncAddLocalInventories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::AddLocalInventoriesRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncRemoveLocalInventories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::RemoveLocalInventoriesRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -115,67 +116,67 @@ class DefaultProductServiceStub : public ProductServiceStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::retail::v2::Product> CreateProduct(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::retail::v2::CreateProductRequest const& request) override;
 
   StatusOr<google::cloud::retail::v2::Product> GetProduct(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::retail::v2::GetProductRequest const& request) override;
 
   StatusOr<google::cloud::retail::v2::ListProductsResponse> ListProducts(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::retail::v2::ListProductsRequest const& request) override;
 
   StatusOr<google::cloud::retail::v2::Product> UpdateProduct(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::retail::v2::UpdateProductRequest const& request) override;
 
   Status DeleteProduct(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::retail::v2::DeleteProductRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportProducts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::ImportProductsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncSetInventory(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::SetInventoryRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncAddFulfillmentPlaces(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::AddFulfillmentPlacesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRemoveFulfillmentPlaces(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::RemoveFulfillmentPlacesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncAddLocalInventories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::AddLocalInventoriesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRemoveLocalInventories(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::retail::v2::RemoveLocalInventoriesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

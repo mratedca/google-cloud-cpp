@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_TALENT_V4_INTERNAL_JOB_METADATA_DECORATOR_H
 
 #include "google/cloud/talent/v4/internal/job_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -44,7 +45,7 @@ class JobServiceMetadata : public JobServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchCreateJobsRequest const& request)
       override;
 
@@ -58,7 +59,7 @@ class JobServiceMetadata : public JobServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchUpdateJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchUpdateJobsRequest const& request)
       override;
 
@@ -68,7 +69,7 @@ class JobServiceMetadata : public JobServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteJobs(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::talent::v4::BatchDeleteJobsRequest const& request)
       override;
 
@@ -86,18 +87,18 @@ class JobServiceMetadata : public JobServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<JobServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

@@ -15,9 +15,10 @@
 #ifdef GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 #include "google/cloud/storage/internal/async/connection_tracing.h"
-#include "google/cloud/storage/async_reader_connection.h"
+#include "google/cloud/storage/async/reader_connection.h"
 #include "google/cloud/storage/mocks/mock_async_connection.h"
 #include "google/cloud/storage/mocks/mock_async_reader_connection.h"
+#include "google/cloud/storage/mocks/mock_async_writer_connection.h"
 #include "google/cloud/storage/testing/canonical_errors.h"
 #include "google/cloud/opentelemetry_options.h"
 #include "google/cloud/testing_util/opentelemetry_matchers.h"
@@ -34,7 +35,9 @@ using ::google::cloud::storage::testing::canonical_errors::PermanentError;
 using ::google::cloud::storage_experimental::AsyncConnection;
 using ::google::cloud::storage_mocks::MockAsyncConnection;
 using ::google::cloud::storage_mocks::MockAsyncReaderConnection;
+using ::google::cloud::storage_mocks::MockAsyncWriterConnection;
 using ::google::cloud::testing_util::InstallSpanCatcher;
+using ::google::cloud::testing_util::IsOk;
 using ::google::cloud::testing_util::OTelContextCaptured;
 using ::google::cloud::testing_util::PromiseWithOTelContext;
 using ::google::cloud::testing_util::SpanHasInstrumentationScope;
@@ -47,6 +50,7 @@ using ::testing::AllOf;
 using ::testing::ByMove;
 using ::testing::ElementsAre;
 using ::testing::Return;
+using ::testing::VariantWith;
 
 Options TracingEnabled() {
   return Options{}.set<OpenTelemetryTracingOption>(true);
@@ -155,8 +159,7 @@ TEST(ConnectionTracing, AsyncReadObjectSuccess) {
   auto result = f.get();
   ASSERT_STATUS_OK(result);
   auto reader = *std::move(result);
-  auto r = reader->Read().get();
-  ASSERT_TRUE(absl::holds_alternative<Status>(r));
+  EXPECT_THAT(reader->Read().get(), VariantWith<Status>(IsOk()));
 
   auto spans = span_catcher->GetSpans();
   EXPECT_THAT(spans, ElementsAre(AllOf(
@@ -167,7 +170,7 @@ TEST(ConnectionTracing, AsyncReadObjectSuccess) {
 
 TEST(ConnectionTracing, AsyncReadObjectRange) {
   auto span_catcher = InstallSpanCatcher();
-  PromiseWithOTelContext<storage_experimental::AsyncReadObjectRangeResponse> p;
+  PromiseWithOTelContext<StatusOr<storage_experimental::ReadPayload>> p;
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
@@ -176,8 +179,8 @@ TEST(ConnectionTracing, AsyncReadObjectRange) {
   auto result =
       actual->AsyncReadObjectRange(AsyncConnection::ReadObjectParams{})
           .then(expect_no_context);
-  p.set_value(storage_experimental::AsyncReadObjectRangeResponse{});
-  ASSERT_STATUS_OK(result.get().status);
+  p.set_value(storage_experimental::ReadPayload{});
+  ASSERT_STATUS_OK(result.get());
 
   auto spans = span_catcher->GetSpans();
   EXPECT_THAT(spans,
@@ -185,6 +188,68 @@ TEST(ConnectionTracing, AsyncReadObjectRange) {
                   SpanNamed("storage::AsyncConnection::AsyncReadObjectRange"),
                   SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
                   SpanHasInstrumentationScope(), SpanKindIsClient())));
+}
+
+TEST(ConnectionTracing, AsyncWriteObjectError) {
+  auto span_catcher = InstallSpanCatcher();
+  PromiseWithOTelContext<
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+      p;
+
+  auto mock = std::make_unique<MockAsyncConnection>();
+  EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
+  EXPECT_CALL(*mock, AsyncWriteObject).WillOnce(expect_context(p));
+  auto actual = MakeTracingAsyncConnection(std::move(mock));
+  auto result = actual->AsyncWriteObject(AsyncConnection::WriteObjectParams{})
+                    .then(expect_no_context);
+
+  p.set_value(
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>(
+          PermanentError()));
+  EXPECT_THAT(result.get(), StatusIs(PermanentError().code()));
+
+  auto spans = span_catcher->GetSpans();
+  EXPECT_THAT(
+      spans, ElementsAre(
+                 AllOf(SpanNamed("storage::AsyncConnection::AsyncWriteObject"),
+                       SpanWithStatus(opentelemetry::trace::StatusCode::kError),
+                       SpanHasInstrumentationScope(), SpanKindIsClient())));
+}
+
+TEST(ConnectionTracing, AsyncWriteObjectSuccess) {
+  auto span_catcher = InstallSpanCatcher();
+  PromiseWithOTelContext<
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+      p;
+
+  auto mock = std::make_unique<MockAsyncConnection>();
+  EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
+
+  EXPECT_CALL(*mock, AsyncWriteObject).WillOnce(expect_context(p));
+  auto actual = MakeTracingAsyncConnection(std::move(mock));
+  auto f = actual->AsyncWriteObject(AsyncConnection::WriteObjectParams{})
+               .then(expect_no_context);
+
+  auto mock_reader = std::make_unique<MockAsyncWriterConnection>();
+  EXPECT_CALL(*mock_reader, Finalize)
+      .WillOnce(Return(ByMove(
+          make_ready_future(make_status_or(storage::ObjectMetadata{})))));
+  p.set_value(
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>(
+          std::move(mock_reader)));
+
+  auto result = f.get();
+  ASSERT_STATUS_OK(result);
+  auto reader = *std::move(result);
+  auto r = reader->Finalize(storage_experimental::WritePayload{}).get();
+  EXPECT_STATUS_OK(r);
+
+  auto spans = span_catcher->GetSpans();
+  EXPECT_THAT(
+      spans,
+      ElementsAre(AllOf(SpanNamed("storage::AsyncConnection::AsyncWriteObject"),
+                        SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                        SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
 TEST(ConnectionTracing, AsyncComposeObject) {

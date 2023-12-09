@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_LOGGING_V2_INTERNAL_CONFIG_SERVICE_V2_METADATA_DECORATOR_H
 
 #include "google/cloud/logging/v2/internal/config_service_v2_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -49,12 +50,12 @@ class ConfigServiceV2Metadata : public ConfigServiceV2Stub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBucketAsync(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::logging::v2::CreateBucketRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateBucketAsync(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::logging::v2::UpdateBucketRequest const& request) override;
 
   StatusOr<google::logging::v2::LogBucket> CreateBucket(
@@ -115,12 +116,12 @@ class ConfigServiceV2Metadata : public ConfigServiceV2Stub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateLink(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::logging::v2::CreateLinkRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteLink(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::logging::v2::DeleteLinkRequest const& request) override;
 
   StatusOr<google::logging::v2::ListLinksResponse> ListLinks(
@@ -169,23 +170,23 @@ class ConfigServiceV2Metadata : public ConfigServiceV2Stub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCopyLogEntries(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::logging::v2::CopyLogEntriesRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ConfigServiceV2Stub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

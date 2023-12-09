@@ -46,7 +46,7 @@ JobsMetadata::JobsMetadata(
 
 future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncCreateJob(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::run::v2::CreateJobRequest const& request) {
   std::vector<std::string> params;
   params.reserve(1);
@@ -65,11 +65,11 @@ future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncCreateJob(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->AsyncCreateJob(cq, std::move(context), request);
+  return child_->AsyncCreateJob(cq, std::move(context), options, request);
 }
 
 StatusOr<google::cloud::run::v2::Job> JobsMetadata::GetJob(
@@ -92,9 +92,10 @@ StatusOr<google::cloud::run::v2::Job> JobsMetadata::GetJob(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->GetJob(context, request);
 }
@@ -119,16 +120,17 @@ StatusOr<google::cloud::run::v2::ListJobsResponse> JobsMetadata::ListJobs(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(context);
+    SetMetadata(context, internal::CurrentOptions());
   } else {
-    SetMetadata(context, absl::StrJoin(params, "&"));
+    SetMetadata(context, internal::CurrentOptions(),
+                absl::StrJoin(params, "&"));
   }
   return child_->ListJobs(context, request);
 }
 
 future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncUpdateJob(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::run::v2::UpdateJobRequest const& request) {
   std::vector<std::string> params;
   params.reserve(1);
@@ -147,16 +149,16 @@ future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncUpdateJob(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->AsyncUpdateJob(cq, std::move(context), request);
+  return child_->AsyncUpdateJob(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncDeleteJob(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::run::v2::DeleteJobRequest const& request) {
   std::vector<std::string> params;
   params.reserve(1);
@@ -175,16 +177,16 @@ future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncDeleteJob(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->AsyncDeleteJob(cq, std::move(context), request);
+  return child_->AsyncDeleteJob(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncRunJob(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::run::v2::RunJobRequest const& request) {
   std::vector<std::string> params;
   params.reserve(1);
@@ -203,26 +205,28 @@ future<StatusOr<google::longrunning::Operation>> JobsMetadata::AsyncRunJob(
   location_matcher->AppendParam(request, params);
 
   if (params.empty()) {
-    SetMetadata(*context);
+    SetMetadata(*context, options);
   } else {
-    SetMetadata(*context, absl::StrJoin(params, "&"));
+    SetMetadata(*context, options, absl::StrJoin(params, "&"));
   }
-  return child_->AsyncRunJob(cq, std::move(context), request);
+  return child_->AsyncRunJob(cq, std::move(context), options, request);
 }
 
 StatusOr<google::iam::v1::Policy> JobsMetadata::GetIamPolicy(
     grpc::ClientContext& context,
     google::iam::v1::GetIamPolicyRequest const& request) {
-  SetMetadata(context, absl::StrCat("resource=",
-                                    internal::UrlEncode(request.resource())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("resource=", internal::UrlEncode(request.resource())));
   return child_->GetIamPolicy(context, request);
 }
 
 StatusOr<google::iam::v1::Policy> JobsMetadata::SetIamPolicy(
     grpc::ClientContext& context,
     google::iam::v1::SetIamPolicyRequest const& request) {
-  SetMetadata(context, absl::StrCat("resource=",
-                                    internal::UrlEncode(request.resource())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("resource=", internal::UrlEncode(request.resource())));
   return child_->SetIamPolicy(context, request);
 }
 
@@ -230,42 +234,44 @@ StatusOr<google::iam::v1::TestIamPermissionsResponse>
 JobsMetadata::TestIamPermissions(
     grpc::ClientContext& context,
     google::iam::v1::TestIamPermissionsRequest const& request) {
-  SetMetadata(context, absl::StrCat("resource=",
-                                    internal::UrlEncode(request.resource())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("resource=", internal::UrlEncode(request.resource())));
   return child_->TestIamPermissions(context, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 JobsMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncGetOperation(cq, std::move(context), request);
+  return child_->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status> JobsMetadata::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncCancelOperation(cq, std::move(context), request);
+  return child_->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 
 void JobsMetadata::SetMetadata(grpc::ClientContext& context,
+                               Options const& options,
                                std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void JobsMetadata::SetMetadata(grpc::ClientContext& context) {
+void JobsMetadata::SetMetadata(grpc::ClientContext& context,
+                               Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

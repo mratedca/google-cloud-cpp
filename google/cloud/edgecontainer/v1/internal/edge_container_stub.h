@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/edgecontainer/v1/service.grpc.pb.h>
@@ -47,19 +48,19 @@ class EdgeContainerStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateClusterRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::UpdateClusterRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteClusterRequest const&
           request) = 0;
 
@@ -81,19 +82,19 @@ class EdgeContainerStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateNodePoolRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::UpdateNodePoolRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteNodePoolRequest const&
           request) = 0;
 
@@ -121,25 +122,25 @@ class EdgeContainerStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateVpnConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateVpnConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteVpnConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteVpnConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -154,108 +155,108 @@ class DefaultEdgeContainerStub : public EdgeContainerStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::edgecontainer::v1::ListClustersResponse> ListClusters(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::ListClustersRequest const& request)
       override;
 
   StatusOr<google::cloud::edgecontainer::v1::Cluster> GetCluster(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::GetClusterRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateClusterRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::UpdateClusterRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteClusterRequest const& request)
       override;
 
   StatusOr<google::cloud::edgecontainer::v1::GenerateAccessTokenResponse>
   GenerateAccessToken(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::GenerateAccessTokenRequest const&
           request) override;
 
   StatusOr<google::cloud::edgecontainer::v1::ListNodePoolsResponse>
-  ListNodePools(grpc::ClientContext& client_context,
+  ListNodePools(grpc::ClientContext& context,
                 google::cloud::edgecontainer::v1::ListNodePoolsRequest const&
                     request) override;
 
   StatusOr<google::cloud::edgecontainer::v1::NodePool> GetNodePool(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::GetNodePoolRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateNodePoolRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::UpdateNodePoolRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteNodePoolRequest const& request)
       override;
 
   StatusOr<google::cloud::edgecontainer::v1::ListMachinesResponse> ListMachines(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::ListMachinesRequest const& request)
       override;
 
   StatusOr<google::cloud::edgecontainer::v1::Machine> GetMachine(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::GetMachineRequest const& request)
       override;
 
   StatusOr<google::cloud::edgecontainer::v1::ListVpnConnectionsResponse>
   ListVpnConnections(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::ListVpnConnectionsRequest const&
           request) override;
 
   StatusOr<google::cloud::edgecontainer::v1::VpnConnection> GetVpnConnection(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::edgecontainer::v1::GetVpnConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateVpnConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::CreateVpnConnectionRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteVpnConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::edgecontainer::v1::DeleteVpnConnectionRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

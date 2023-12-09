@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_METASTORE_V1_INTERNAL_DATAPROC_METASTORE_METADATA_DECORATOR_H
 
 #include "google/cloud/metastore/v1/internal/dataproc_metastore_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -50,19 +51,19 @@ class DataprocMetastoreMetadata : public DataprocMetastoreStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::CreateServiceRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::UpdateServiceRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::DeleteServiceRequest const& request)
       override;
 
@@ -79,25 +80,25 @@ class DataprocMetastoreMetadata : public DataprocMetastoreStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateMetadataImport(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::CreateMetadataImportRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateMetadataImport(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::UpdateMetadataImportRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportMetadata(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::ExportMetadataRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRestoreService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::RestoreServiceRequest const& request)
       override;
 
@@ -111,49 +112,49 @@ class DataprocMetastoreMetadata : public DataprocMetastoreStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::CreateBackupRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::DeleteBackupRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncQueryMetadata(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::QueryMetadataRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncMoveTableToDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::MoveTableToDatabaseRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncAlterMetadataResourceLocation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::metastore::v1::AlterMetadataResourceLocationRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<DataprocMetastoreStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

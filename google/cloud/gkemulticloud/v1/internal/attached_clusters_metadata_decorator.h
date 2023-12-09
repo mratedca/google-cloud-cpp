@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_GKEMULTICLOUD_V1_INTERNAL_ATTACHED_CLUSTERS_METADATA_DECORATOR_H
 
 #include "google/cloud/gkemulticloud/v1/internal/attached_clusters_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,19 +42,19 @@ class AttachedClustersMetadata : public AttachedClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAttachedCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::CreateAttachedClusterRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAttachedCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::UpdateAttachedClusterRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportAttachedCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::ImportAttachedClusterRequest const&
           request) override;
 
@@ -71,7 +72,7 @@ class AttachedClustersMetadata : public AttachedClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAttachedCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::DeleteAttachedClusterRequest const&
           request) override;
 
@@ -91,18 +92,18 @@ class AttachedClustersMetadata : public AttachedClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<AttachedClustersStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

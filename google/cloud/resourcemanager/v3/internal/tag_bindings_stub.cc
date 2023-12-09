@@ -32,11 +32,10 @@ TagBindingsStub::~TagBindingsStub() = default;
 
 StatusOr<google::cloud::resourcemanager::v3::ListTagBindingsResponse>
 DefaultTagBindingsStub::ListTagBindings(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::resourcemanager::v3::ListTagBindingsRequest const& request) {
   google::cloud::resourcemanager::v3::ListTagBindingsResponse response;
-  auto status =
-      grpc_stub_->ListTagBindings(&client_context, request, &response);
+  auto status = grpc_stub_->ListTagBindings(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -46,7 +45,7 @@ DefaultTagBindingsStub::ListTagBindings(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagBindingsStub::AsyncCreateTagBinding(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::resourcemanager::v3::CreateTagBindingRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -65,7 +64,7 @@ DefaultTagBindingsStub::AsyncCreateTagBinding(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagBindingsStub::AsyncDeleteTagBinding(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::resourcemanager::v3::DeleteTagBindingRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -83,12 +82,11 @@ DefaultTagBindingsStub::AsyncDeleteTagBinding(
 
 StatusOr<google::cloud::resourcemanager::v3::ListEffectiveTagsResponse>
 DefaultTagBindingsStub::ListEffectiveTags(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::resourcemanager::v3::ListEffectiveTagsRequest const&
         request) {
   google::cloud::resourcemanager::v3::ListEffectiveTagsResponse response;
-  auto status =
-      grpc_stub_->ListEffectiveTags(&client_context, request, &response);
+  auto status = grpc_stub_->ListEffectiveTags(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -98,7 +96,7 @@ DefaultTagBindingsStub::ListEffectiveTags(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagBindingsStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -113,7 +111,7 @@ DefaultTagBindingsStub::AsyncGetOperation(
 
 future<Status> DefaultTagBindingsStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

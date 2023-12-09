@@ -32,11 +32,10 @@ GkeHubStub::~GkeHubStub() = default;
 
 StatusOr<google::cloud::gkehub::v1::ListMembershipsResponse>
 DefaultGkeHubStub::ListMemberships(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkehub::v1::ListMembershipsRequest const& request) {
   google::cloud::gkehub::v1::ListMembershipsResponse response;
-  auto status =
-      grpc_stub_->ListMemberships(&client_context, request, &response);
+  auto status = grpc_stub_->ListMemberships(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -45,10 +44,10 @@ DefaultGkeHubStub::ListMemberships(
 
 StatusOr<google::cloud::gkehub::v1::ListFeaturesResponse>
 DefaultGkeHubStub::ListFeatures(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkehub::v1::ListFeaturesRequest const& request) {
   google::cloud::gkehub::v1::ListFeaturesResponse response;
-  auto status = grpc_stub_->ListFeatures(&client_context, request, &response);
+  auto status = grpc_stub_->ListFeatures(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,10 +56,10 @@ DefaultGkeHubStub::ListFeatures(
 
 StatusOr<google::cloud::gkehub::v1::Membership>
 DefaultGkeHubStub::GetMembership(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkehub::v1::GetMembershipRequest const& request) {
   google::cloud::gkehub::v1::Membership response;
-  auto status = grpc_stub_->GetMembership(&client_context, request, &response);
+  auto status = grpc_stub_->GetMembership(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -68,10 +67,10 @@ DefaultGkeHubStub::GetMembership(
 }
 
 StatusOr<google::cloud::gkehub::v1::Feature> DefaultGkeHubStub::GetFeature(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkehub::v1::GetFeatureRequest const& request) {
   google::cloud::gkehub::v1::Feature response;
-  auto status = grpc_stub_->GetFeature(&client_context, request, &response);
+  auto status = grpc_stub_->GetFeature(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -81,7 +80,7 @@ StatusOr<google::cloud::gkehub::v1::Feature> DefaultGkeHubStub::GetFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncCreateMembership(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::CreateMembershipRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::CreateMembershipRequest,
@@ -98,7 +97,7 @@ DefaultGkeHubStub::AsyncCreateMembership(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncCreateFeature(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::CreateFeatureRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::CreateFeatureRequest,
@@ -115,7 +114,7 @@ DefaultGkeHubStub::AsyncCreateFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncDeleteMembership(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::DeleteMembershipRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::DeleteMembershipRequest,
@@ -132,7 +131,7 @@ DefaultGkeHubStub::AsyncDeleteMembership(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncDeleteFeature(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::DeleteFeatureRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::DeleteFeatureRequest,
@@ -149,7 +148,7 @@ DefaultGkeHubStub::AsyncDeleteFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncUpdateMembership(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::UpdateMembershipRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::UpdateMembershipRequest,
@@ -166,7 +165,7 @@ DefaultGkeHubStub::AsyncUpdateMembership(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncUpdateFeature(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkehub::v1::UpdateFeatureRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkehub::v1::UpdateFeatureRequest,
@@ -182,11 +181,11 @@ DefaultGkeHubStub::AsyncUpdateFeature(
 
 StatusOr<google::cloud::gkehub::v1::GenerateConnectManifestResponse>
 DefaultGkeHubStub::GenerateConnectManifest(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkehub::v1::GenerateConnectManifestRequest const& request) {
   google::cloud::gkehub::v1::GenerateConnectManifestResponse response;
   auto status =
-      grpc_stub_->GenerateConnectManifest(&client_context, request, &response);
+      grpc_stub_->GenerateConnectManifest(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -196,7 +195,7 @@ DefaultGkeHubStub::GenerateConnectManifest(
 future<StatusOr<google::longrunning::Operation>>
 DefaultGkeHubStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -211,7 +210,7 @@ DefaultGkeHubStub::AsyncGetOperation(
 
 future<Status> DefaultGkeHubStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

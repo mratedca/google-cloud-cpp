@@ -32,12 +32,11 @@ AppGatewaysServiceStub::~AppGatewaysServiceStub() = default;
 
 StatusOr<google::cloud::beyondcorp::appgateways::v1::ListAppGatewaysResponse>
 DefaultAppGatewaysServiceStub::ListAppGateways(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::beyondcorp::appgateways::v1::ListAppGatewaysRequest const&
         request) {
   google::cloud::beyondcorp::appgateways::v1::ListAppGatewaysResponse response;
-  auto status =
-      grpc_stub_->ListAppGateways(&client_context, request, &response);
+  auto status = grpc_stub_->ListAppGateways(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -46,11 +45,11 @@ DefaultAppGatewaysServiceStub::ListAppGateways(
 
 StatusOr<google::cloud::beyondcorp::appgateways::v1::AppGateway>
 DefaultAppGatewaysServiceStub::GetAppGateway(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::beyondcorp::appgateways::v1::GetAppGatewayRequest const&
         request) {
   google::cloud::beyondcorp::appgateways::v1::AppGateway response;
-  auto status = grpc_stub_->GetAppGateway(&client_context, request, &response);
+  auto status = grpc_stub_->GetAppGateway(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -60,7 +59,7 @@ DefaultAppGatewaysServiceStub::GetAppGateway(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAppGatewaysServiceStub::AsyncCreateAppGateway(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::beyondcorp::appgateways::v1::CreateAppGatewayRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -79,7 +78,7 @@ DefaultAppGatewaysServiceStub::AsyncCreateAppGateway(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAppGatewaysServiceStub::AsyncDeleteAppGateway(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::beyondcorp::appgateways::v1::DeleteAppGatewayRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -98,7 +97,7 @@ DefaultAppGatewaysServiceStub::AsyncDeleteAppGateway(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAppGatewaysServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -113,7 +112,7 @@ DefaultAppGatewaysServiceStub::AsyncGetOperation(
 
 future<Status> DefaultAppGatewaysServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

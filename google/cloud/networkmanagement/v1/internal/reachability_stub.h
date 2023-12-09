@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/networkmanagement/v1/reachability.grpc.pb.h>
@@ -52,39 +53,39 @@ class ReachabilityServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::CreateConnectivityTestRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::UpdateConnectivityTestRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncRerunConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::RerunConnectivityTestRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::DeleteConnectivityTestRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -100,48 +101,48 @@ class DefaultReachabilityServiceStub : public ReachabilityServiceStub {
 
   StatusOr<google::cloud::networkmanagement::v1::ListConnectivityTestsResponse>
   ListConnectivityTests(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::networkmanagement::v1::ListConnectivityTestsRequest const&
           request) override;
 
   StatusOr<google::cloud::networkmanagement::v1::ConnectivityTest>
   GetConnectivityTest(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::networkmanagement::v1::GetConnectivityTestRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::CreateConnectivityTestRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::UpdateConnectivityTestRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRerunConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::RerunConnectivityTestRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnectivityTest(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkmanagement::v1::DeleteConnectivityTestRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

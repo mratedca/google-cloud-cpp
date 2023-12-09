@@ -115,6 +115,7 @@ expected_dirs+=(
   ./include/google/cloud/secretmanager/logging
   ./include/google/cloud/secretmanager/logging/v1
   ./include/google/cloud/spanner/mocks
+  ./include/google/cloud/storage/async
   ./include/google/cloud/storage/internal/async
   ./include/google/cloud/storage/internal/curl
   ./include/google/cloud/storage/internal/grpc
@@ -203,7 +204,7 @@ env -C "${out_dir}" ctest "${ctest_args[@]}"
 # Tests the installed artifacts by building and running the quickstarts.
 # shellcheck disable=SC2046
 feature_list="$(printf "%s;" $(features::libraries))"
-# GCS+gRPC, OAuth2, and OpenTelemetry also have quickstarts.
+# GCS+gRPC and OpenTelemetry also have quickstarts.
 feature_list="${feature_list}experimental-storage_grpc;opentelemetry"
 cmake -G Ninja \
   -S "${PROJECT_ROOT}/ci/verify_quickstart" \

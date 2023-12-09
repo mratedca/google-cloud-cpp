@@ -32,11 +32,10 @@ ImageAnnotatorStub::~ImageAnnotatorStub() = default;
 
 StatusOr<google::cloud::vision::v1::BatchAnnotateImagesResponse>
 DefaultImageAnnotatorStub::BatchAnnotateImages(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::vision::v1::BatchAnnotateImagesRequest const& request) {
   google::cloud::vision::v1::BatchAnnotateImagesResponse response;
-  auto status =
-      grpc_stub_->BatchAnnotateImages(&client_context, request, &response);
+  auto status = grpc_stub_->BatchAnnotateImages(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -45,11 +44,10 @@ DefaultImageAnnotatorStub::BatchAnnotateImages(
 
 StatusOr<google::cloud::vision::v1::BatchAnnotateFilesResponse>
 DefaultImageAnnotatorStub::BatchAnnotateFiles(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::vision::v1::BatchAnnotateFilesRequest const& request) {
   google::cloud::vision::v1::BatchAnnotateFilesResponse response;
-  auto status =
-      grpc_stub_->BatchAnnotateFiles(&client_context, request, &response);
+  auto status = grpc_stub_->BatchAnnotateFiles(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -59,7 +57,7 @@ DefaultImageAnnotatorStub::BatchAnnotateFiles(
 future<StatusOr<google::longrunning::Operation>>
 DefaultImageAnnotatorStub::AsyncAsyncBatchAnnotateImages(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::vision::v1::AsyncBatchAnnotateImagesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::vision::v1::AsyncBatchAnnotateImagesRequest,
@@ -77,7 +75,7 @@ DefaultImageAnnotatorStub::AsyncAsyncBatchAnnotateImages(
 future<StatusOr<google::longrunning::Operation>>
 DefaultImageAnnotatorStub::AsyncAsyncBatchAnnotateFiles(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::vision::v1::AsyncBatchAnnotateFilesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::vision::v1::AsyncBatchAnnotateFilesRequest,
@@ -95,7 +93,7 @@ DefaultImageAnnotatorStub::AsyncAsyncBatchAnnotateFiles(
 future<StatusOr<google::longrunning::Operation>>
 DefaultImageAnnotatorStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -110,7 +108,7 @@ DefaultImageAnnotatorStub::AsyncGetOperation(
 
 future<Status> DefaultImageAnnotatorStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

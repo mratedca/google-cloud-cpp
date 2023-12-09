@@ -32,10 +32,10 @@ InstancesStub::~InstancesStub() = default;
 
 StatusOr<google::appengine::v1::ListInstancesResponse>
 DefaultInstancesStub::ListInstances(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::appengine::v1::ListInstancesRequest const& request) {
   google::appengine::v1::ListInstancesResponse response;
-  auto status = grpc_stub_->ListInstances(&client_context, request, &response);
+  auto status = grpc_stub_->ListInstances(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -43,10 +43,10 @@ DefaultInstancesStub::ListInstances(
 }
 
 StatusOr<google::appengine::v1::Instance> DefaultInstancesStub::GetInstance(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::appengine::v1::GetInstanceRequest const& request) {
   google::appengine::v1::Instance response;
-  auto status = grpc_stub_->GetInstance(&client_context, request, &response);
+  auto status = grpc_stub_->GetInstance(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -56,7 +56,7 @@ StatusOr<google::appengine::v1::Instance> DefaultInstancesStub::GetInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultInstancesStub::AsyncDeleteInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::appengine::v1::DeleteInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::appengine::v1::DeleteInstanceRequest,
@@ -73,7 +73,7 @@ DefaultInstancesStub::AsyncDeleteInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultInstancesStub::AsyncDebugInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::appengine::v1::DebugInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::appengine::v1::DebugInstanceRequest,
                                     google::longrunning::Operation>(
@@ -89,7 +89,7 @@ DefaultInstancesStub::AsyncDebugInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultInstancesStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -104,7 +104,7 @@ DefaultInstancesStub::AsyncGetOperation(
 
 future<Status> DefaultInstancesStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

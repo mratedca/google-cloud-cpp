@@ -32,10 +32,10 @@ CloudMemcacheStub::~CloudMemcacheStub() = default;
 
 StatusOr<google::cloud::memcache::v1::ListInstancesResponse>
 DefaultCloudMemcacheStub::ListInstances(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::memcache::v1::ListInstancesRequest const& request) {
   google::cloud::memcache::v1::ListInstancesResponse response;
-  auto status = grpc_stub_->ListInstances(&client_context, request, &response);
+  auto status = grpc_stub_->ListInstances(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultCloudMemcacheStub::ListInstances(
 
 StatusOr<google::cloud::memcache::v1::Instance>
 DefaultCloudMemcacheStub::GetInstance(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::memcache::v1::GetInstanceRequest const& request) {
   google::cloud::memcache::v1::Instance response;
-  auto status = grpc_stub_->GetInstance(&client_context, request, &response);
+  auto status = grpc_stub_->GetInstance(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,7 +57,7 @@ DefaultCloudMemcacheStub::GetInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncCreateInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::CreateInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::CreateInstanceRequest,
@@ -74,7 +74,7 @@ DefaultCloudMemcacheStub::AsyncCreateInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncUpdateInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::UpdateInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::UpdateInstanceRequest,
@@ -91,7 +91,7 @@ DefaultCloudMemcacheStub::AsyncUpdateInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncUpdateParameters(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::UpdateParametersRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::UpdateParametersRequest,
@@ -109,7 +109,7 @@ DefaultCloudMemcacheStub::AsyncUpdateParameters(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncDeleteInstance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::DeleteInstanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::DeleteInstanceRequest,
@@ -126,7 +126,7 @@ DefaultCloudMemcacheStub::AsyncDeleteInstance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncApplyParameters(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::ApplyParametersRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::ApplyParametersRequest,
@@ -143,7 +143,7 @@ DefaultCloudMemcacheStub::AsyncApplyParameters(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncRescheduleMaintenance(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::memcache::v1::RescheduleMaintenanceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::memcache::v1::RescheduleMaintenanceRequest,
@@ -161,7 +161,7 @@ DefaultCloudMemcacheStub::AsyncRescheduleMaintenance(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudMemcacheStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -176,7 +176,7 @@ DefaultCloudMemcacheStub::AsyncGetOperation(
 
 future<Status> DefaultCloudMemcacheStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

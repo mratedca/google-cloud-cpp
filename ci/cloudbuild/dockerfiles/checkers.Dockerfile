@@ -17,7 +17,7 @@
 # than to the extent that certain distros offer certain versions of software
 # that the build needs. It's fine to add more deps that are needed by the
 # `checkers.sh` build.
-FROM fedora:38
+FROM fedora:39
 ARG NCPU=4
 ARG ARCH=amd64
 
@@ -50,6 +50,6 @@ RUN pip3 install mdformat-gfm==0.3.5 \
                  mdformat-frontmatter==0.4.1 \
                  mdformat-footnote==0.1.1
 
-RUN curl -o /usr/bin/bazelisk -sSL "https://github.com/bazelbuild/bazelisk/releases/download/v1.18.0/bazelisk-linux-${ARCH}" && \
+RUN curl -o /usr/bin/bazelisk -sSL "https://github.com/bazelbuild/bazelisk/releases/download/v1.19.0/bazelisk-linux-${ARCH}" && \
     chmod +x /usr/bin/bazelisk && \
     ln -s /usr/bin/bazelisk /usr/bin/bazel

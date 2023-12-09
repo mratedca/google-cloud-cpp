@@ -33,10 +33,10 @@ SpeechStub::~SpeechStub() = default;
 
 StatusOr<google::cloud::speech::v1::RecognizeResponse>
 DefaultSpeechStub::Recognize(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::speech::v1::RecognizeRequest const& request) {
   google::cloud::speech::v1::RecognizeResponse response;
-  auto status = grpc_stub_->Recognize(&client_context, request, &response);
+  auto status = grpc_stub_->Recognize(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -46,7 +46,7 @@ DefaultSpeechStub::Recognize(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSpeechStub::AsyncLongRunningRecognize(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::speech::v1::LongRunningRecognizeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::speech::v1::LongRunningRecognizeRequest,
@@ -79,7 +79,7 @@ DefaultSpeechStub::AsyncStreamingRecognize(
 future<StatusOr<google::longrunning::Operation>>
 DefaultSpeechStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -94,7 +94,7 @@ DefaultSpeechStub::AsyncGetOperation(
 
 future<Status> DefaultSpeechStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

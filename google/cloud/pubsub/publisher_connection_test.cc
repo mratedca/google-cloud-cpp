@@ -16,6 +16,7 @@
 #include "google/cloud/pubsub/internal/defaults.h"
 #include "google/cloud/pubsub/message.h"
 #include "google/cloud/pubsub/options.h"
+#include "google/cloud/pubsub/testing/mock_batch_sink.h"
 #include "google/cloud/pubsub/testing/mock_publisher_stub.h"
 #include "google/cloud/pubsub/testing/test_retry_policies.h"
 #include "google/cloud/internal/api_client_header.h"
@@ -350,6 +351,7 @@ TEST(MakePublisherConnectionTest, TracingEnabled) {
   auto span_catcher = InstallSpanCatcher();
   auto mock = std::make_shared<pubsub_testing::MockPublisherStub>();
   Topic const topic("test-project", "test-topic");
+
   EXPECT_CALL(*mock, AsyncPublish)
       .WillOnce([&](google::cloud::CompletionQueue&, auto,
                     google::pubsub::v1::PublishRequest const&) {
@@ -363,13 +365,18 @@ TEST(MakePublisherConnectionTest, TracingEnabled) {
   auto response =
       publisher->Publish({MessageBuilder{}.SetData("test-data-0").Build()})
           .get();
+  publisher->Flush({});
 
+  auto spans = span_catcher->GetSpans();
   EXPECT_THAT(
-      span_catcher->GetSpans(),
+      spans,
       UnorderedElementsAre(
-          SpanNamed("projects/test-project/topics/test-topic send"),
-          SpanNamed("publisher flow control"), SpanNamed("publish scheduler"),
-          SpanNamed("google.pubsub.v1.Publisher/Publish")));
+          SpanNamed("test-topic create"), SpanNamed("publisher flow control"),
+          SpanNamed("publish scheduler"), SpanNamed("test-topic publish"),
+          SpanNamed("google.pubsub.v1.Publisher/Publish"),
+          SpanNamed("pubsub::BatchingPublisherConnection::Flush"),
+          SpanNamed("pubsub::FlowControlledPublisherConnection::Flush"),
+          SpanNamed("pubsub::Publisher::Flush")));
 }
 
 TEST(MakePublisherConnectionTest, TracingDisabled) {

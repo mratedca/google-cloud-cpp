@@ -32,10 +32,10 @@ TagValuesStub::~TagValuesStub() = default;
 
 StatusOr<google::cloud::resourcemanager::v3::ListTagValuesResponse>
 DefaultTagValuesStub::ListTagValues(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::resourcemanager::v3::ListTagValuesRequest const& request) {
   google::cloud::resourcemanager::v3::ListTagValuesResponse response;
-  auto status = grpc_stub_->ListTagValues(&client_context, request, &response);
+  auto status = grpc_stub_->ListTagValues(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultTagValuesStub::ListTagValues(
 
 StatusOr<google::cloud::resourcemanager::v3::TagValue>
 DefaultTagValuesStub::GetTagValue(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::resourcemanager::v3::GetTagValueRequest const& request) {
   google::cloud::resourcemanager::v3::TagValue response;
-  auto status = grpc_stub_->GetTagValue(&client_context, request, &response);
+  auto status = grpc_stub_->GetTagValue(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -56,12 +56,11 @@ DefaultTagValuesStub::GetTagValue(
 
 StatusOr<google::cloud::resourcemanager::v3::TagValue>
 DefaultTagValuesStub::GetNamespacedTagValue(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::resourcemanager::v3::GetNamespacedTagValueRequest const&
         request) {
   google::cloud::resourcemanager::v3::TagValue response;
-  auto status =
-      grpc_stub_->GetNamespacedTagValue(&client_context, request, &response);
+  auto status = grpc_stub_->GetNamespacedTagValue(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -71,7 +70,7 @@ DefaultTagValuesStub::GetNamespacedTagValue(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagValuesStub::AsyncCreateTagValue(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::resourcemanager::v3::CreateTagValueRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::resourcemanager::v3::CreateTagValueRequest,
@@ -89,7 +88,7 @@ DefaultTagValuesStub::AsyncCreateTagValue(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagValuesStub::AsyncUpdateTagValue(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::resourcemanager::v3::UpdateTagValueRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::resourcemanager::v3::UpdateTagValueRequest,
@@ -107,7 +106,7 @@ DefaultTagValuesStub::AsyncUpdateTagValue(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagValuesStub::AsyncDeleteTagValue(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::resourcemanager::v3::DeleteTagValueRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::resourcemanager::v3::DeleteTagValueRequest,
@@ -123,10 +122,10 @@ DefaultTagValuesStub::AsyncDeleteTagValue(
 }
 
 StatusOr<google::iam::v1::Policy> DefaultTagValuesStub::GetIamPolicy(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::GetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status = grpc_stub_->GetIamPolicy(&client_context, request, &response);
+  auto status = grpc_stub_->GetIamPolicy(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -134,10 +133,10 @@ StatusOr<google::iam::v1::Policy> DefaultTagValuesStub::GetIamPolicy(
 }
 
 StatusOr<google::iam::v1::Policy> DefaultTagValuesStub::SetIamPolicy(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::SetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status = grpc_stub_->SetIamPolicy(&client_context, request, &response);
+  auto status = grpc_stub_->SetIamPolicy(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -146,11 +145,10 @@ StatusOr<google::iam::v1::Policy> DefaultTagValuesStub::SetIamPolicy(
 
 StatusOr<google::iam::v1::TestIamPermissionsResponse>
 DefaultTagValuesStub::TestIamPermissions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::TestIamPermissionsRequest const& request) {
   google::iam::v1::TestIamPermissionsResponse response;
-  auto status =
-      grpc_stub_->TestIamPermissions(&client_context, request, &response);
+  auto status = grpc_stub_->TestIamPermissions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -160,7 +158,7 @@ DefaultTagValuesStub::TestIamPermissions(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTagValuesStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -175,7 +173,7 @@ DefaultTagValuesStub::AsyncGetOperation(
 
 future<Status> DefaultTagValuesStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

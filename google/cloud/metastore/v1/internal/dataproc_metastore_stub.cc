@@ -32,10 +32,10 @@ DataprocMetastoreStub::~DataprocMetastoreStub() = default;
 
 StatusOr<google::cloud::metastore::v1::ListServicesResponse>
 DefaultDataprocMetastoreStub::ListServices(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::ListServicesRequest const& request) {
   google::cloud::metastore::v1::ListServicesResponse response;
-  auto status = grpc_stub_->ListServices(&client_context, request, &response);
+  auto status = grpc_stub_->ListServices(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultDataprocMetastoreStub::ListServices(
 
 StatusOr<google::cloud::metastore::v1::Service>
 DefaultDataprocMetastoreStub::GetService(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::GetServiceRequest const& request) {
   google::cloud::metastore::v1::Service response;
-  auto status = grpc_stub_->GetService(&client_context, request, &response);
+  auto status = grpc_stub_->GetService(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,7 +57,7 @@ DefaultDataprocMetastoreStub::GetService(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncCreateService(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::CreateServiceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::CreateServiceRequest,
@@ -74,7 +74,7 @@ DefaultDataprocMetastoreStub::AsyncCreateService(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncUpdateService(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::UpdateServiceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::UpdateServiceRequest,
@@ -91,7 +91,7 @@ DefaultDataprocMetastoreStub::AsyncUpdateService(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncDeleteService(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::DeleteServiceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::DeleteServiceRequest,
@@ -107,11 +107,10 @@ DefaultDataprocMetastoreStub::AsyncDeleteService(
 
 StatusOr<google::cloud::metastore::v1::ListMetadataImportsResponse>
 DefaultDataprocMetastoreStub::ListMetadataImports(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::ListMetadataImportsRequest const& request) {
   google::cloud::metastore::v1::ListMetadataImportsResponse response;
-  auto status =
-      grpc_stub_->ListMetadataImports(&client_context, request, &response);
+  auto status = grpc_stub_->ListMetadataImports(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -120,11 +119,10 @@ DefaultDataprocMetastoreStub::ListMetadataImports(
 
 StatusOr<google::cloud::metastore::v1::MetadataImport>
 DefaultDataprocMetastoreStub::GetMetadataImport(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::GetMetadataImportRequest const& request) {
   google::cloud::metastore::v1::MetadataImport response;
-  auto status =
-      grpc_stub_->GetMetadataImport(&client_context, request, &response);
+  auto status = grpc_stub_->GetMetadataImport(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -134,7 +132,7 @@ DefaultDataprocMetastoreStub::GetMetadataImport(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncCreateMetadataImport(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::CreateMetadataImportRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::CreateMetadataImportRequest,
@@ -152,7 +150,7 @@ DefaultDataprocMetastoreStub::AsyncCreateMetadataImport(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncUpdateMetadataImport(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::UpdateMetadataImportRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::UpdateMetadataImportRequest,
@@ -170,7 +168,7 @@ DefaultDataprocMetastoreStub::AsyncUpdateMetadataImport(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncExportMetadata(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::ExportMetadataRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::ExportMetadataRequest,
@@ -187,7 +185,7 @@ DefaultDataprocMetastoreStub::AsyncExportMetadata(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncRestoreService(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::RestoreServiceRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::RestoreServiceRequest,
@@ -203,10 +201,10 @@ DefaultDataprocMetastoreStub::AsyncRestoreService(
 
 StatusOr<google::cloud::metastore::v1::ListBackupsResponse>
 DefaultDataprocMetastoreStub::ListBackups(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::ListBackupsRequest const& request) {
   google::cloud::metastore::v1::ListBackupsResponse response;
-  auto status = grpc_stub_->ListBackups(&client_context, request, &response);
+  auto status = grpc_stub_->ListBackups(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -215,10 +213,10 @@ DefaultDataprocMetastoreStub::ListBackups(
 
 StatusOr<google::cloud::metastore::v1::Backup>
 DefaultDataprocMetastoreStub::GetBackup(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::metastore::v1::GetBackupRequest const& request) {
   google::cloud::metastore::v1::Backup response;
-  auto status = grpc_stub_->GetBackup(&client_context, request, &response);
+  auto status = grpc_stub_->GetBackup(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -228,7 +226,7 @@ DefaultDataprocMetastoreStub::GetBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncCreateBackup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::CreateBackupRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::CreateBackupRequest,
@@ -245,7 +243,7 @@ DefaultDataprocMetastoreStub::AsyncCreateBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncDeleteBackup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::DeleteBackupRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::DeleteBackupRequest,
@@ -262,7 +260,7 @@ DefaultDataprocMetastoreStub::AsyncDeleteBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncQueryMetadata(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::QueryMetadataRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::QueryMetadataRequest,
@@ -279,7 +277,7 @@ DefaultDataprocMetastoreStub::AsyncQueryMetadata(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncMoveTableToDatabase(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::MoveTableToDatabaseRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::metastore::v1::MoveTableToDatabaseRequest,
@@ -297,7 +295,7 @@ DefaultDataprocMetastoreStub::AsyncMoveTableToDatabase(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncAlterMetadataResourceLocation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::metastore::v1::AlterMetadataResourceLocationRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -317,7 +315,7 @@ DefaultDataprocMetastoreStub::AsyncAlterMetadataResourceLocation(
 future<StatusOr<google::longrunning::Operation>>
 DefaultDataprocMetastoreStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -332,7 +330,7 @@ DefaultDataprocMetastoreStub::AsyncGetOperation(
 
 future<Status> DefaultDataprocMetastoreStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

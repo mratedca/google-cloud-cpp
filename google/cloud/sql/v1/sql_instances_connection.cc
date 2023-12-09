@@ -59,6 +59,12 @@ SqlInstancesServiceConnection::DemoteMaster(
 }
 
 StatusOr<google::cloud::sql::v1::Operation>
+SqlInstancesServiceConnection::Demote(
+    google::cloud::sql::v1::SqlInstancesDemoteRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::cloud::sql::v1::Operation>
 SqlInstancesServiceConnection::Export(
     google::cloud::sql::v1::SqlInstancesExportRequest const&) {
   return Status(StatusCode::kUnimplemented, "not implemented");
@@ -117,6 +123,12 @@ SqlInstancesServiceConnection::Patch(
 StatusOr<google::cloud::sql::v1::Operation>
 SqlInstancesServiceConnection::PromoteReplica(
     google::cloud::sql::v1::SqlInstancesPromoteReplicaRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::cloud::sql::v1::Operation>
+SqlInstancesServiceConnection::Switchover(
+    google::cloud::sql::v1::SqlInstancesSwitchoverRequest const&) {
   return Status(StatusCode::kUnimplemented, "not implemented");
 }
 

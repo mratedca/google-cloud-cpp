@@ -29,25 +29,12 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 
 EntityTypesStub::~EntityTypesStub() = default;
 
-StatusOr<google::cloud::dialogflow::cx::v3::ListEntityTypesResponse>
-DefaultEntityTypesStub::ListEntityTypes(
-    grpc::ClientContext& client_context,
-    google::cloud::dialogflow::cx::v3::ListEntityTypesRequest const& request) {
-  google::cloud::dialogflow::cx::v3::ListEntityTypesResponse response;
-  auto status =
-      grpc_stub_->ListEntityTypes(&client_context, request, &response);
-  if (!status.ok()) {
-    return google::cloud::MakeStatusFromRpcError(status);
-  }
-  return response;
-}
-
 StatusOr<google::cloud::dialogflow::cx::v3::EntityType>
 DefaultEntityTypesStub::GetEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::cx::v3::GetEntityTypeRequest const& request) {
   google::cloud::dialogflow::cx::v3::EntityType response;
-  auto status = grpc_stub_->GetEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->GetEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -56,11 +43,10 @@ DefaultEntityTypesStub::GetEntityType(
 
 StatusOr<google::cloud::dialogflow::cx::v3::EntityType>
 DefaultEntityTypesStub::CreateEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::cx::v3::CreateEntityTypeRequest const& request) {
   google::cloud::dialogflow::cx::v3::EntityType response;
-  auto status =
-      grpc_stub_->CreateEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->CreateEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -69,11 +55,10 @@ DefaultEntityTypesStub::CreateEntityType(
 
 StatusOr<google::cloud::dialogflow::cx::v3::EntityType>
 DefaultEntityTypesStub::UpdateEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::cx::v3::UpdateEntityTypeRequest const& request) {
   google::cloud::dialogflow::cx::v3::EntityType response;
-  auto status =
-      grpc_stub_->UpdateEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -81,15 +66,26 @@ DefaultEntityTypesStub::UpdateEntityType(
 }
 
 Status DefaultEntityTypesStub::DeleteEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::cx::v3::DeleteEntityTypeRequest const& request) {
   google::protobuf::Empty response;
-  auto status =
-      grpc_stub_->DeleteEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->DeleteEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
   return google::cloud::Status();
+}
+
+StatusOr<google::cloud::dialogflow::cx::v3::ListEntityTypesResponse>
+DefaultEntityTypesStub::ListEntityTypes(
+    grpc::ClientContext& context,
+    google::cloud::dialogflow::cx::v3::ListEntityTypesRequest const& request) {
+  google::cloud::dialogflow::cx::v3::ListEntityTypesResponse response;
+  auto status = grpc_stub_->ListEntityTypes(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
 }
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

@@ -81,13 +81,14 @@ class MockGoldenKitchenSinkStub : public GoldenKitchenSinkStub {
   MOCK_METHOD((std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
                    ::google::test::admin::database::v1::Request,
                    ::google::test::admin::database::v1::Response>>),
-              StreamingWrite, (std::shared_ptr<grpc::ClientContext>),
+              StreamingWrite,
+              (std::shared_ptr<grpc::ClientContext>, Options const&),
               (override));
 
   MOCK_METHOD((std::unique_ptr<::google::cloud::internal::StreamingReadRpc<
                    ::google::test::admin::database::v1::Response>>),
               StreamingRead,
-              (std::shared_ptr<grpc::ClientContext>,
+              (std::shared_ptr<grpc::ClientContext>, Options const&,
                ::google::test::admin::database::v1::Request const&),
               (override));
 
@@ -129,8 +130,7 @@ class MockStreamingReadRpc
   MOCK_METHOD(
       (absl::variant<Status, ::google::test::admin::database::v1::Response>),
       Read, (), (override));
-  MOCK_METHOD(internal::StreamingRpcMetadata, GetRequestMetadata, (),
-              (const, override));
+  MOCK_METHOD(RpcMetadata, GetRequestMetadata, (), (const, override));
 };
 
 class MockStreamingWriteRpc
@@ -145,8 +145,7 @@ class MockStreamingWriteRpc
               (override));
   MOCK_METHOD(StatusOr<::google::test::admin::database::v1::Response>, Close,
               (), (override));
-  MOCK_METHOD(internal::StreamingRpcMetadata, GetRequestMetadata, (),
-              (const, override));
+  MOCK_METHOD(RpcMetadata, GetRequestMetadata, (), (const, override));
 };
 
 using MockAsyncStreamingReadWriteRpc =

@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/automl/v1/operations.pb.h>
@@ -39,7 +40,7 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::CreateDatasetRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::automl::v1::Dataset> GetDataset(
@@ -57,17 +58,17 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeleteDatasetRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncImportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ImportDataRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncExportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ExportDataRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::automl::v1::AnnotationSpec> GetAnnotationSpec(
@@ -76,7 +77,7 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::CreateModelRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::automl::v1::Model> GetModel(
@@ -89,7 +90,7 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeleteModelRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::automl::v1::Model> UpdateModel(
@@ -98,17 +99,17 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeployModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeployModelRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUndeployModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::UndeployModelRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncExportModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ExportModelRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::automl::v1::ModelEvaluation>
@@ -124,12 +125,12 @@ class AutoMlStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -144,97 +145,97 @@ class DefaultAutoMlStub : public AutoMlStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::CreateDatasetRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::Dataset> GetDataset(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::GetDatasetRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::ListDatasetsResponse> ListDatasets(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::ListDatasetsRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::Dataset> UpdateDataset(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::UpdateDatasetRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteDataset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeleteDatasetRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ImportDataRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportData(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ExportDataRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::AnnotationSpec> GetAnnotationSpec(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::GetAnnotationSpecRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::CreateModelRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::Model> GetModel(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::GetModelRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::ListModelsResponse> ListModels(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::ListModelsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeleteModelRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::Model> UpdateModel(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::UpdateModelRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeployModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::DeployModelRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeployModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::UndeployModelRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportModel(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::automl::v1::ExportModelRequest const& request) override;
 
   StatusOr<google::cloud::automl::v1::ModelEvaluation> GetModelEvaluation(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::GetModelEvaluationRequest const& request)
       override;
 
   StatusOr<google::cloud::automl::v1::ListModelEvaluationsResponse>
   ListModelEvaluations(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::automl::v1::ListModelEvaluationsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

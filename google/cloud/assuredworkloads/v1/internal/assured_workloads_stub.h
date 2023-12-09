@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/assuredworkloads/v1/assuredworkloads.grpc.pb.h>
@@ -38,7 +39,7 @@ class AssuredWorkloadsServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateWorkload(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::assuredworkloads::v1::CreateWorkloadRequest const&
           request) = 0;
 
@@ -90,12 +91,12 @@ class AssuredWorkloadsServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -111,62 +112,62 @@ class DefaultAssuredWorkloadsServiceStub : public AssuredWorkloadsServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateWorkload(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::assuredworkloads::v1::CreateWorkloadRequest const& request)
       override;
 
   StatusOr<google::cloud::assuredworkloads::v1::Workload> UpdateWorkload(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::UpdateWorkloadRequest const& request)
       override;
 
   StatusOr<
       google::cloud::assuredworkloads::v1::RestrictAllowedResourcesResponse>
   RestrictAllowedResources(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::
           RestrictAllowedResourcesRequest const& request) override;
 
   Status DeleteWorkload(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::DeleteWorkloadRequest const& request)
       override;
 
   StatusOr<google::cloud::assuredworkloads::v1::Workload> GetWorkload(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::GetWorkloadRequest const& request)
       override;
 
   StatusOr<google::cloud::assuredworkloads::v1::ListWorkloadsResponse>
-  ListWorkloads(grpc::ClientContext& client_context,
+  ListWorkloads(grpc::ClientContext& context,
                 google::cloud::assuredworkloads::v1::ListWorkloadsRequest const&
                     request) override;
 
   StatusOr<google::cloud::assuredworkloads::v1::ListViolationsResponse>
   ListViolations(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::ListViolationsRequest const& request)
       override;
 
   StatusOr<google::cloud::assuredworkloads::v1::Violation> GetViolation(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::GetViolationRequest const& request)
       override;
 
   StatusOr<google::cloud::assuredworkloads::v1::AcknowledgeViolationResponse>
   AcknowledgeViolation(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::assuredworkloads::v1::AcknowledgeViolationRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

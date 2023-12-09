@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_GKEMULTICLOUD_V1_INTERNAL_AZURE_CLUSTERS_METADATA_DECORATOR_H
 
 #include "google/cloud/gkemulticloud/v1/internal/azure_clusters_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -40,7 +41,7 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAzureClient(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::CreateAzureClientRequest const& request)
       override;
 
@@ -57,19 +58,19 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAzureClient(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::DeleteAzureClientRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAzureCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::CreateAzureClusterRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAzureCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::UpdateAzureClusterRequest const&
           request) override;
 
@@ -86,7 +87,7 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAzureCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::DeleteAzureClusterRequest const&
           request) override;
 
@@ -98,13 +99,13 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAzureNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::CreateAzureNodePoolRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAzureNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::UpdateAzureNodePoolRequest const&
           request) override;
 
@@ -121,7 +122,7 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAzureNodePool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::gkemulticloud::v1::DeleteAzureNodePoolRequest const&
           request) override;
 
@@ -133,18 +134,18 @@ class AzureClustersMetadata : public AzureClustersStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<AzureClustersStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

@@ -32,10 +32,10 @@ UserEventServiceStub::~UserEventServiceStub() = default;
 
 StatusOr<google::cloud::discoveryengine::v1::UserEvent>
 DefaultUserEventServiceStub::WriteUserEvent(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::discoveryengine::v1::WriteUserEventRequest const& request) {
   google::cloud::discoveryengine::v1::UserEvent response;
-  auto status = grpc_stub_->WriteUserEvent(&client_context, request, &response);
+  auto status = grpc_stub_->WriteUserEvent(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -43,12 +43,11 @@ DefaultUserEventServiceStub::WriteUserEvent(
 }
 
 StatusOr<google::api::HttpBody> DefaultUserEventServiceStub::CollectUserEvent(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::discoveryengine::v1::CollectUserEventRequest const&
         request) {
   google::api::HttpBody response;
-  auto status =
-      grpc_stub_->CollectUserEvent(&client_context, request, &response);
+  auto status = grpc_stub_->CollectUserEvent(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -58,7 +57,7 @@ StatusOr<google::api::HttpBody> DefaultUserEventServiceStub::CollectUserEvent(
 future<StatusOr<google::longrunning::Operation>>
 DefaultUserEventServiceStub::AsyncImportUserEvents(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::discoveryengine::v1::ImportUserEventsRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -77,7 +76,7 @@ DefaultUserEventServiceStub::AsyncImportUserEvents(
 future<StatusOr<google::longrunning::Operation>>
 DefaultUserEventServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -92,7 +91,7 @@ DefaultUserEventServiceStub::AsyncGetOperation(
 
 future<Status> DefaultUserEventServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

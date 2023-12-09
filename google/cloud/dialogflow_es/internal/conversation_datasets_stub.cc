@@ -33,7 +33,7 @@ ConversationDatasetsStub::~ConversationDatasetsStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationDatasetsStub::AsyncCreateConversationDataset(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::CreateConversationDatasetRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -52,12 +52,12 @@ DefaultConversationDatasetsStub::AsyncCreateConversationDataset(
 
 StatusOr<google::cloud::dialogflow::v2::ConversationDataset>
 DefaultConversationDatasetsStub::GetConversationDataset(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::GetConversationDatasetRequest const&
         request) {
   google::cloud::dialogflow::v2::ConversationDataset response;
   auto status =
-      grpc_stub_->GetConversationDataset(&client_context, request, &response);
+      grpc_stub_->GetConversationDataset(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -66,12 +66,12 @@ DefaultConversationDatasetsStub::GetConversationDataset(
 
 StatusOr<google::cloud::dialogflow::v2::ListConversationDatasetsResponse>
 DefaultConversationDatasetsStub::ListConversationDatasets(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::ListConversationDatasetsRequest const&
         request) {
   google::cloud::dialogflow::v2::ListConversationDatasetsResponse response;
   auto status =
-      grpc_stub_->ListConversationDatasets(&client_context, request, &response);
+      grpc_stub_->ListConversationDatasets(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -81,7 +81,7 @@ DefaultConversationDatasetsStub::ListConversationDatasets(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationDatasetsStub::AsyncDeleteConversationDataset(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::DeleteConversationDatasetRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -101,7 +101,7 @@ DefaultConversationDatasetsStub::AsyncDeleteConversationDataset(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationDatasetsStub::AsyncImportConversationData(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::ImportConversationDataRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -120,7 +120,7 @@ DefaultConversationDatasetsStub::AsyncImportConversationData(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationDatasetsStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -135,7 +135,7 @@ DefaultConversationDatasetsStub::AsyncGetOperation(
 
 future<Status> DefaultConversationDatasetsStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

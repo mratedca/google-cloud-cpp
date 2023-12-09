@@ -251,7 +251,8 @@ class AsyncRestRetryLoopImpl
     if (state.cancelled) return;
     SetPending(state.operation,
                internal::TracedAsyncBackoff(cq_, *call_context_.options,
-                                            backoff_policy_->OnCompletion())
+                                            backoff_policy_->OnCompletion(),
+                                            "Async Backoff")
                    .then([self](future<TimerArgType> f) {
                      self->OnBackoff(f.get());
                    }));
@@ -350,11 +351,11 @@ class AsyncRestRetryLoopImpl
  * Create the right AsyncRestRetryLoopImpl object and start the retry loop.
  */
 template <typename Functor, typename Request, typename RetryPolicyType,
-          typename std::enable_if<
+          std::enable_if_t<
               google::cloud::internal::is_invocable<
                   Functor, CompletionQueue&, std::unique_ptr<RestContext>,
                   Options const&, Request const&>::value,
-              int>::type = 0>
+              int> = 0>
 auto AsyncRestRetryLoop(std::unique_ptr<RetryPolicyType> retry_policy,
                         std::unique_ptr<BackoffPolicy> backoff_policy,
                         Idempotency idempotency, CompletionQueue cq,
@@ -375,12 +376,12 @@ auto AsyncRestRetryLoop(std::unique_ptr<RetryPolicyType> retry_policy,
 /**
  * Create the right AsyncRestRetryLoopImpl object and start the retry loop.
  */
-template <typename Functor, typename Request, typename RetryPolicyType,
-          typename std::enable_if<
-              google::cloud::internal::is_invocable<
-                  Functor, CompletionQueue&, std::unique_ptr<RestContext>,
-                  Request const&>::value,
-              int>::type = 0>
+template <
+    typename Functor, typename Request, typename RetryPolicyType,
+    std::enable_if_t<google::cloud::internal::is_invocable<
+                         Functor, CompletionQueue&,
+                         std::unique_ptr<RestContext>, Request const&>::value,
+                     int> = 0>
 auto AsyncRestRetryLoop(std::unique_ptr<RetryPolicyType> retry_policy,
                         std::unique_ptr<BackoffPolicy> backoff_policy,
                         Idempotency idempotency, CompletionQueue cq,

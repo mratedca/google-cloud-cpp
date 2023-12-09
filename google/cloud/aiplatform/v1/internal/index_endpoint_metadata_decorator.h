@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_INDEX_ENDPOINT_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/index_endpoint_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class IndexEndpointServiceMetadata : public IndexEndpointServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateIndexEndpoint(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateIndexEndpointRequest const& request)
       override;
 
@@ -63,42 +64,42 @@ class IndexEndpointServiceMetadata : public IndexEndpointServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteIndexEndpoint(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteIndexEndpointRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeployIndex(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeployIndexRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeployIndex(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::UndeployIndexRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncMutateDeployedIndex(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::MutateDeployedIndexRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<IndexEndpointServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

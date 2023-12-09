@@ -38,16 +38,19 @@ else ()
 
     add_library(
         google_cloud_cpp_storage_grpc # cmake-format: sort
-        async_client.cc
-        async_client.h
-        async_connection.h
-        async_object_requests.h
-        async_object_responses.cc
-        async_object_responses.h
-        async_reader.cc
-        async_reader.h
-        async_reader_connection.h
-        async_token.h
+        async/client.cc
+        async/client.h
+        async/connection.h
+        async/object_requests.h
+        async/object_responses.cc
+        async/object_responses.h
+        async/reader.cc
+        async/reader.h
+        async/reader_connection.h
+        async/token.h
+        async/writer.cc
+        async/writer.h
+        async/writer_connection.h
         grpc_plugin.cc
         grpc_plugin.h
         internal/async/accumulate_read_object.cc
@@ -71,6 +74,12 @@ else ()
         internal/async/token_impl.h
         internal/async/write_payload_fwd.h
         internal/async/write_payload_impl.h
+        internal/async/writer_connection_finalized.cc
+        internal/async/writer_connection_finalized.h
+        internal/async/writer_connection_impl.cc
+        internal/async/writer_connection_impl.h
+        internal/async/writer_connection_tracing.cc
+        internal/async/writer_connection_tracing.h
         internal/grpc/bucket_access_control_parser.cc
         internal/grpc/bucket_access_control_parser.h
         internal/grpc/bucket_metadata_parser.cc
@@ -206,7 +215,8 @@ google_cloud_cpp_install_headers(google_cloud_cpp_storage_grpc
 add_library(google_cloud_cpp_storage_grpc_mocks INTERFACE)
 set(google_cloud_cpp_storage_grpc_mocks_hdrs
     # cmake-format: sort
-    mocks/mock_async_connection.h mocks/mock_async_reader_connection.h)
+    mocks/mock_async_connection.h mocks/mock_async_reader_connection.h
+    mocks/mock_async_writer_connection.h)
 export_list_to_bazel("google_cloud_cpp_storage_grpc_mocks.bzl"
                      "google_cloud_cpp_storage_grpc_mocks_hdrs" YEAR "2023")
 target_link_libraries(
@@ -270,8 +280,9 @@ if (BUILD_TESTING AND GOOGLE_CLOUD_CPP_STORAGE_ENABLE_GRPC)
 
     set(storage_client_grpc_unit_tests
         # cmake-format: sort
-        async_reader_test.cc
-        async_token_test.cc
+        async/reader_test.cc
+        async/token_test.cc
+        async/writer_test.cc
         grpc_plugin_test.cc
         internal/async/accumulate_read_object_test.cc
         internal/async/connection_impl_test.cc
@@ -282,6 +293,9 @@ if (BUILD_TESTING AND GOOGLE_CLOUD_CPP_STORAGE_ENABLE_GRPC)
         internal/async/reader_connection_impl_test.cc
         internal/async/reader_connection_tracing_test.cc
         internal/async/write_payload_impl_test.cc
+        internal/async/writer_connection_finalized_test.cc
+        internal/async/writer_connection_impl_test.cc
+        internal/async/writer_connection_tracing_test.cc
         internal/grpc/bucket_access_control_parser_test.cc
         internal/grpc/bucket_metadata_parser_test.cc
         internal/grpc/bucket_name_test.cc

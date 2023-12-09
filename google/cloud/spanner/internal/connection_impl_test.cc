@@ -127,41 +127,42 @@ class ProtoBuilder {
 };
 
 // Matchers for mock calls.
-MATCHER_P(HasSession, session, "request has expected session name") {
+MATCHER_P(HasCompressionAlgorithm, algorithm, "has compression algorithm") {
+  return arg.compression_algorithm() == algorithm;
+}
+
+MATCHER_P(HasSession, session, "has session name") {
   return arg.session() == session;
 }
 
-MATCHER_P(HasTransactionId, transaction_id,
-          "request has expected transaction id") {
+MATCHER_P(HasTransactionId, transaction_id, "has transaction id") {
   return arg.transaction().id() == transaction_id;
 }
 
 // As above, but for Commit and Rollback requests, which don't have a
 // `TransactionSelector` but just store the "naked" ID directly in the proto.
-MATCHER_P(HasNakedTransactionId, transaction_id,
-          "commit or rollback request has expected transaction id") {
+MATCHER_P(HasNakedTransactionId, transaction_id, "has transaction id") {
   return arg.transaction_id() == transaction_id;
 }
 
-MATCHER_P(HasReturnStats, return_commit_stats,
-          "commit request has expected return-stats value") {
+MATCHER_P(HasReturnStats, return_commit_stats, "has return-stats value") {
   return arg.return_commit_stats() == return_commit_stats;
 }
 
-MATCHER(HasBeginTransaction, "request has begin TransactionSelector set") {
+MATCHER(HasBeginTransaction, "has begin TransactionSelector set") {
   return arg.transaction().has_begin();
 }
 
-MATCHER_P(HasDatabase, database, "request has expected database") {
+MATCHER_P(HasDatabase, database, "has database") {
   return arg.database() == database.FullName();
 }
 
-MATCHER_P(HasCreatorRole, role, "request has expected creator role") {
+MATCHER_P(HasCreatorRole, role, "has creator role") {
   return arg.session_template().creator_role() == role;
 }
 
 // Matches a `spanner::Transaction` that is bound to a "bad" session.
-MATCHER(HasBadSession, "bound to a session that's marked bad") {
+MATCHER(HasBadSession, "is bound to a session that's marked bad") {
   return Visit(arg, [&](SessionHolder& session,
                         StatusOr<google::spanner::v1::TransactionSelector>&,
                         TransactionContext const&) {
@@ -177,16 +178,24 @@ MATCHER(HasBadSession, "bound to a session that's marked bad") {
   });
 }
 
-MATCHER_P(HasPriority, priority, "request has expected priority") {
+MATCHER_P(HasPriority, priority, "has priority") {
   return arg.request_options().priority() == priority;
 }
 
-MATCHER_P(HasRequestTag, tag, "request has expected request tag") {
+MATCHER_P(HasRequestTag, tag, "has request tag") {
   return arg.request_options().request_tag() == tag;
 }
 
-MATCHER_P(HasTransactionTag, tag, "request has expected transaction tag") {
+MATCHER_P(HasTransactionTag, tag, "has transaction tag") {
   return arg.request_options().transaction_tag() == tag;
+}
+
+MATCHER_P(HasReplicaLocation, location, "has replica location") {
+  return arg.location() == location;
+}
+
+MATCHER_P(HasReplicaType, type, "has replica type") {
+  return arg.type() == type;
 }
 
 // Ideally this would be a matcher, but matcher args are `const` and `RowStream`
@@ -295,8 +304,7 @@ class MockStreamingReadRpc : public internal::StreamingReadRpc<ResponseType> {
  public:
   MOCK_METHOD(void, Cancel, (), (override));
   MOCK_METHOD((absl::variant<Status, ResponseType>), Read, (), (override));
-  MOCK_METHOD(internal::StreamingRpcMetadata, GetRequestMetadata, (),
-              (const, override));
+  MOCK_METHOD(RpcMetadata, GetRequestMetadata, (), (const, override));
 };
 
 // Creates a MockStreamingReadRpc that yields the specified `responses`
@@ -422,16 +430,16 @@ TEST(ConnectionImplTest, ReadSuccess) {
   EXPECT_CALL(
       *mock,
       StreamingRead(
-          _, HasPriority(google::spanner::v1::RequestOptions::PRIORITY_LOW)))
-      .WillOnce(
-          [&retry_status](std::shared_ptr<grpc::ClientContext> const&,
-                          google::spanner::v1::ReadRequest const& request) {
-            // The beginning of the row stream, but immediately fail.
-            EXPECT_THAT(request.resume_token(), IsEmpty());
-            return MakeReader<PartialResultSet>({}, retry_status);
-          })
+          _, _, HasPriority(google::spanner::v1::RequestOptions::PRIORITY_LOW)))
+      .WillOnce([&retry_status](
+                    std::shared_ptr<grpc::ClientContext> const&, Options const&,
+                    google::spanner::v1::ReadRequest const& request) {
+        // The beginning of the row stream, but immediately fail.
+        EXPECT_THAT(request.resume_token(), IsEmpty());
+        return MakeReader<PartialResultSet>({}, retry_status);
+      })
       .WillOnce([&responses, &retry_status](
-                    std::shared_ptr<grpc::ClientContext> const&,
+                    std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     google::spanner::v1::ReadRequest const& request) {
         // Restart from the beginning, but return the metadata and first
         // row before failing again.
@@ -439,7 +447,7 @@ TEST(ConnectionImplTest, ReadSuccess) {
         return MakeReader<PartialResultSet>({responses[0]}, retry_status);
       })
       .WillOnce([&responses, &retry_status](
-                    std::shared_ptr<grpc::ClientContext> const&,
+                    std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     google::spanner::v1::ReadRequest const& request) {
         // Restart from the second row, but only return part of it before
         // failing once more.
@@ -447,6 +455,7 @@ TEST(ConnectionImplTest, ReadSuccess) {
         return MakeReader<PartialResultSet>({responses[1]}, retry_status);
       })
       .WillOnce([&responses](std::shared_ptr<grpc::ClientContext> const&,
+                             Options const&,
                              google::spanner::v1::ReadRequest const& request) {
         // Restart from the second row, but now deliver it all in two chunks.
         EXPECT_THAT(request.resume_token(), Eq("restart-row-2"));
@@ -469,6 +478,51 @@ TEST(ConnectionImplTest, ReadSuccess) {
   auto actual = std::vector<StatusOr<RowType>>{stream.begin(), stream.end()};
   EXPECT_THAT(actual, ElementsAre(IsOkAndHolds(RowType(12, "Steve")),
                                   IsOkAndHolds(RowType(42, "Ann"))));
+}
+
+TEST(ConnectionImplTest, ReadDirectedRead) {
+  auto mock = std::make_shared<spanner_testing::MockSpannerStub>();
+  auto db = spanner::Database("placeholder_project", "placeholder_instance",
+                              "placeholder_database_id");
+  EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
+      .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
+  EXPECT_CALL(*mock, BeginTransaction).Times(0);
+  EXPECT_CALL(*mock, StreamingRead)
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
+                   google::spanner::v1::ReadRequest const& request) {
+        EXPECT_EQ("test-session-name", request.session());
+        EXPECT_TRUE(request.has_directed_read_options());
+        auto const& directed_read_options = request.directed_read_options();
+        EXPECT_TRUE(directed_read_options.has_include_replicas());
+        EXPECT_THAT(
+            directed_read_options.include_replicas().replica_selections(),
+            ElementsAre(
+                HasReplicaLocation("us-east4"),
+                HasReplicaType(google::spanner::v1::DirectedReadOptions::
+                                   ReplicaSelection::READ_ONLY)));
+        return MakeReader<PartialResultSet>(
+            {R"pb(metadata: { transaction: { id: "ABCDEF00" } })pb"});
+      });
+
+  auto conn = MakeConnectionImpl(db, mock);
+  internal::OptionsSpan span(MakeLimitedTimeOptions());
+  spanner::Transaction txn =
+      MakeReadOnlyTransaction(spanner::Transaction::ReadOnlyOptions());
+  auto rows = conn->Read(
+      {txn,
+       "table",
+       spanner::KeySet::All(),
+       {"UserId", "UserName"},
+       spanner::ReadOptions{},
+       /*partition_token=*/absl::nullopt,
+       /*partition_data_boost=*/false,
+       spanner::IncludeReplicas(
+           {spanner::ReplicaSelection("us-east4"),
+            spanner::ReplicaSelection(spanner::ReplicaType::kReadOnly)},
+           true)});
+  EXPECT_TRUE(ContainsNoRows(rows));
+  EXPECT_THAT(txn, HasSessionAndTransaction("test-session-name", "ABCDEF00",
+                                            false, ""));
 }
 
 TEST(ConnectionImplTest, ReadPermanentFailure) {
@@ -503,7 +557,7 @@ TEST(ConnectionImplTest, ReadTooManyTransientFailures) {
   EXPECT_CALL(*mock, StreamingRead)
       .Times(AtLeast(2))
       // This won't compile without `Unused` despite what the gMock docs say.
-      .WillRepeatedly([](Unused, Unused) {
+      .WillRepeatedly([] {
         return MakeReader<PartialResultSet>(
             {}, internal::UnavailableError("try-again"));
       });
@@ -579,12 +633,14 @@ TEST(ConnectionImplTest, ReadImplicitBeginTransactionOneTransientFailure) {
   EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
       .InSequence(s)
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasBeginTransaction())))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasBeginTransaction())))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(failing_reader))));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasBeginTransaction())))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasBeginTransaction())))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(ok_reader))));
 
@@ -636,15 +692,17 @@ TEST(ConnectionImplTest, ReadImplicitBeginTransactionOnePermanentFailure) {
   EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
       .InSequence(s)
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasBeginTransaction())))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasBeginTransaction())))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(failing_reader))));
   EXPECT_CALL(*mock, BeginTransaction)
       .InSequence(s)
       .WillOnce(Return(MakeTestTransaction("FEDCBA98")));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasTransactionId("FEDCBA98"))))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasTransactionId("FEDCBA98"))))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(ok_reader))));
 
@@ -678,15 +736,17 @@ TEST(ConnectionImplTest, ReadImplicitBeginTransactionPermanentFailure) {
   EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
       .InSequence(s)
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasBeginTransaction())))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasBeginTransaction())))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(reader1))));
   EXPECT_CALL(*mock, BeginTransaction)
       .InSequence(s)
       .WillOnce(Return(MakeTestTransaction("FEDCBA98")));
-  EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("test-session-name"),
-                                            HasTransactionId("FEDCBA98"))))
+  EXPECT_CALL(*mock, StreamingRead(_, _,
+                                   AllOf(HasSession("test-session-name"),
+                                         HasTransactionId("FEDCBA98"))))
       .InSequence(s)
       .WillOnce(Return(ByMove(std::move(reader2))));
 
@@ -792,6 +852,47 @@ TEST(ConnectionImplTest, ExecuteQueryReadSuccess) {
       ElementsAre(IsOkAndHolds(RowType(12, "Steve", absl::nullopt)),
                   IsOkAndHolds(RowType(
                       42, "Ann", spanner::MakeNumeric(12345678, -2).value()))));
+}
+
+TEST(ConnectionImplTest, ExecuteQueryDirectedRead) {
+  auto mock = std::make_shared<spanner_testing::MockSpannerStub>();
+  auto db = spanner::Database("placeholder_project", "placeholder_instance",
+                              "placeholder_database_id");
+  EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
+      .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
+  EXPECT_CALL(*mock, BeginTransaction).Times(0);
+  EXPECT_CALL(*mock, ExecuteStreamingSql)
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
+                   google::spanner::v1::ExecuteSqlRequest const& request) {
+        EXPECT_EQ("test-session-name", request.session());
+        EXPECT_TRUE(request.has_directed_read_options());
+        auto const& directed_read_options = request.directed_read_options();
+        EXPECT_TRUE(directed_read_options.has_exclude_replicas());
+        EXPECT_THAT(
+            directed_read_options.exclude_replicas().replica_selections(),
+            ElementsAre(
+                HasReplicaType(google::spanner::v1::DirectedReadOptions::
+                                   ReplicaSelection::READ_WRITE),
+                HasReplicaLocation("us-east4")));
+        return MakeReader<PartialResultSet>(
+            {R"pb(metadata: { transaction: { id: "00FEDCBA" } })pb"});
+      });
+
+  auto conn = MakeConnectionImpl(db, mock);
+  internal::OptionsSpan span(MakeLimitedTimeOptions());
+  spanner::Transaction txn =
+      MakeReadOnlyTransaction(spanner::Transaction::ReadOnlyOptions());
+  auto rows = conn->ExecuteQuery(
+      {txn, spanner::SqlStatement("SELECT * FROM Table"),
+       spanner::QueryOptions{},
+       /*partition_token=*/absl::nullopt,
+       /*partition_data_boost=*/false,
+       spanner::ExcludeReplicas(
+           {spanner::ReplicaSelection(spanner::ReplicaType::kReadWrite),
+            spanner::ReplicaSelection("us-east4")})});
+  EXPECT_TRUE(ContainsNoRows(rows));
+  EXPECT_THAT(txn, HasSessionAndTransaction("test-session-name", "00FEDCBA",
+                                            false, ""));
 }
 
 TEST(ConnectionImplTest, ExecuteQueryPgNumericResult) {
@@ -913,7 +1014,7 @@ TEST(ConnectionImplTest, ExecuteQueryNumericParameter) {
     values: { string_value: "1999" }
   )pb";
   EXPECT_CALL(*mock, ExecuteStreamingSql)
-      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     google::spanner::v1::ExecuteSqlRequest const& request) {
         EXPECT_EQ(request.params().fields().at("value").string_value(), "998");
         EXPECT_EQ(request.param_types().at("value").code(),
@@ -923,7 +1024,7 @@ TEST(ConnectionImplTest, ExecuteQueryNumericParameter) {
                       TYPE_ANNOTATION_CODE_UNSPECIFIED);
         return MakeReader<PartialResultSet>({kResponseNumeric});
       })
-      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     google::spanner::v1::ExecuteSqlRequest const& request) {
         EXPECT_EQ(request.params().fields().at("value").string_value(), "999");
         EXPECT_EQ(request.param_types().at("value").code(),
@@ -932,7 +1033,7 @@ TEST(ConnectionImplTest, ExecuteQueryNumericParameter) {
                   google::spanner::v1::TypeAnnotationCode::PG_NUMERIC);
         return MakeReader<PartialResultSet>({kResponsePgNumeric});
       })
-      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     google::spanner::v1::ExecuteSqlRequest const& request) {
         EXPECT_EQ(request.params().fields().at("value").string_value(), "NaN");
         EXPECT_EQ(request.param_types().at("value").code(),
@@ -965,6 +1066,49 @@ TEST(ConnectionImplTest, ExecuteQueryNumericParameter) {
     auto row = spanner::GetSingularRow(spanner::StreamOf<RowType>(rows));
     EXPECT_EQ(*row, RowType(spanner::MakePgNumeric(1999).value()));
   }
+}
+
+TEST(ConnectionImplTest, ExecuteQueryPgOidResult) {
+  auto mock = std::make_shared<spanner_testing::MockSpannerStub>();
+  auto db = spanner::Database("placeholder_project", "placeholder_instance",
+                              "placeholder_database_id");
+  EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
+      .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
+  auto constexpr kText = R"pb(
+    metadata: {
+      row_type: {
+        fields: {
+          name: "ColumnA",
+          type: { code: INT64 type_annotation: PG_OID }
+        }
+        fields: {
+          name: "ColumnB",
+          type: { code: INT64 type_annotation: PG_OID }
+        }
+      }
+    }
+    values: { string_value: "42" }
+    values: { null_value: NULL_VALUE }
+    values: { string_value: "0" }
+    values: { string_value: "999" }
+  )pb";
+  EXPECT_CALL(*mock, ExecuteStreamingSql)
+      .WillOnce(Return(ByMove(MakeReader<PartialResultSet>({kText}))));
+
+  auto conn = MakeConnectionImpl(db, mock);
+  internal::OptionsSpan span(MakeLimitedTimeOptions());
+  auto rows = conn->ExecuteQuery(
+      {MakeSingleUseTransaction(spanner::Transaction::ReadOnlyOptions()),
+       spanner::SqlStatement("SELECT * FROM Table")});
+
+  using RowType = std::tuple<spanner::PgOid, absl::optional<spanner::PgOid>>;
+  auto stream = spanner::StreamOf<RowType>(rows);
+  auto actual = std::vector<StatusOr<RowType>>{stream.begin(), stream.end()};
+  EXPECT_THAT(
+      actual,
+      ElementsAre(
+          IsOkAndHolds(RowType(spanner::PgOid(42), absl::nullopt)),
+          IsOkAndHolds(RowType(spanner::PgOid(0), spanner::PgOid(999)))));
 }
 
 /// @test Verify implicit "begin transaction" in ExecuteQuery() works.
@@ -1190,12 +1334,12 @@ TEST(ConnectionImplTest, QueryOptions) {
       EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
           .WillOnce(Return(MakeSessionsResponse({"session-name"})))
           .RetiresOnSaturation();
-      EXPECT_CALL(*mock, ExecuteStreamingSql(_, execute_sql_request_matcher))
+      EXPECT_CALL(*mock, ExecuteStreamingSql(_, _, execute_sql_request_matcher))
           .WillOnce(Return(ByMove(std::move(stream))))
           .RetiresOnSaturation();
 
       // ProfileQuery().
-      EXPECT_CALL(*mock, ExecuteStreamingSql(_, execute_sql_request_matcher))
+      EXPECT_CALL(*mock, ExecuteStreamingSql(_, _, execute_sql_request_matcher))
           .WillOnce(Return(
               ByMove(std::make_unique<
                      NiceMock<MockStreamingReadRpc<PartialResultSet>>>())))
@@ -1208,8 +1352,8 @@ TEST(ConnectionImplTest, QueryOptions) {
       EXPECT_CALL(*mock, BeginTransaction(_, begin_transaction_request_matcher))
           .WillOnce(Return(MakeTestTransaction("2468ACE")))
           .RetiresOnSaturation();
-      EXPECT_CALL(*mock,
-                  ExecuteStreamingSql(_, untagged_execute_sql_request_matcher))
+      EXPECT_CALL(*mock, ExecuteStreamingSql(
+                             _, _, untagged_execute_sql_request_matcher))
           .WillOnce(Return(
               ByMove(std::make_unique<
                      NiceMock<MockStreamingReadRpc<PartialResultSet>>>())))
@@ -1226,7 +1370,7 @@ TEST(ConnectionImplTest, QueryOptions) {
           .RetiresOnSaturation();
 
       // Read().
-      EXPECT_CALL(*mock, StreamingRead(_, read_request_matcher))
+      EXPECT_CALL(*mock, StreamingRead(_, _, read_request_matcher))
           .WillOnce(Return(
               ByMove(std::make_unique<
                      NiceMock<MockStreamingReadRpc<PartialResultSet>>>())))
@@ -1949,8 +2093,9 @@ TEST(ConnectionImplTest, ExecutePartitionedDmlDeleteSuccess) {
     metadata: {}
     stats: { row_count_lower_bound: 42 }
   )pb";
-  EXPECT_CALL(*mock, ExecuteStreamingSql(
-                         _, AllOf(HasRequestTag("tag"), HasTransactionTag(""))))
+  EXPECT_CALL(*mock,
+              ExecuteStreamingSql(
+                  _, _, AllOf(HasRequestTag("tag"), HasTransactionTag(""))))
       .WillOnce(Return(ByMove(MakeReader<PartialResultSet>(
           {},
           internal::UnavailableError("try-again in ExecutePartitionedDml")))))
@@ -2018,7 +2163,7 @@ TEST(ConnectionImplTest, ExecutePartitionedDmlDeleteTooManyTransientFailures) {
   EXPECT_CALL(*mock, ExecuteStreamingSql)
       .Times(AtLeast(2))
       // This won't compile without `Unused` despite what the gMock docs say.
-      .WillRepeatedly([](Unused, Unused) {
+      .WillRepeatedly([] {
         return MakeReader<PartialResultSet>(
             {},
             internal::UnavailableError("try-again in ExecutePartitionedDml"));
@@ -2367,6 +2512,35 @@ TEST(ConnectionImplTest, CommitSuccessWithStats) {
   EXPECT_EQ(42, commit->commit_stats->mutation_count);
 }
 
+TEST(ConnectionImplTest, CommitSuccessWithCompression) {
+  auto mock = std::make_shared<spanner_testing::MockSpannerStub>();
+  auto db = spanner::Database("placeholder_project", "placeholder_instance",
+                              "placeholder_database_id");
+  EXPECT_CALL(*mock, BatchCreateSessions(_, HasDatabase(db)))
+      .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
+  google::spanner::v1::Transaction txn = MakeTestTransaction();
+  EXPECT_CALL(*mock, BeginTransaction).WillOnce(Return(txn));
+  EXPECT_CALL(*mock, Commit(HasCompressionAlgorithm(GRPC_COMPRESS_GZIP),
+                            HasSession("test-session-name")))
+      .WillOnce([](grpc::ClientContext&,
+                   google::spanner::v1::CommitRequest const&) {
+        return MakeCommitResponse(
+            spanner::MakeTimestamp(std::chrono::system_clock::from_time_t(123))
+                .value());
+      });
+
+  auto conn = MakeConnectionImpl(db, mock);
+  internal::OptionsSpan span(
+      MakeLimitedTimeOptions().set<GrpcCompressionAlgorithmOption>(
+          GRPC_COMPRESS_GZIP));
+  auto commit = conn->Commit({spanner::MakeReadWriteTransaction(), {}});
+  EXPECT_THAT(
+      commit,
+      IsOkAndHolds(Field(
+          &spanner::CommitResult::commit_timestamp,
+          Eq(spanner::MakeTimestamp(absl::FromUnixSeconds(123)).value()))));
+}
+
 TEST(ConnectionImplTest, CommitAtLeastOnce) {
   auto mock = std::make_shared<spanner_testing::MockSpannerStub>();
   auto db = spanner::Database("placeholder_project", "placeholder_instance",
@@ -2409,7 +2583,7 @@ TEST(ConnectionImplTest, CommitAtLeastOnceBatched) {
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
   using BatchWriteRequest = google::spanner::v1::BatchWriteRequest;
   EXPECT_CALL(*mock, BatchWrite)
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    BatchWriteRequest const& request) {
         EXPECT_EQ("test-session-name", request.session());
         EXPECT_EQ(google::spanner::v1::RequestOptions::PRIORITY_UNSPECIFIED,
@@ -2423,7 +2597,7 @@ TEST(ConnectionImplTest, CommitAtLeastOnceBatched) {
         return MakeReader<BatchWriteResponse>(
             {}, Status(StatusCode::kUnavailable, "try-again in BatchWrite"));
       })
-      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     BatchWriteRequest const& request) {
         EXPECT_EQ("test-session-name", request.session());
         EXPECT_EQ(google::spanner::v1::RequestOptions::PRIORITY_UNSPECIFIED,
@@ -2467,14 +2641,14 @@ TEST(ConnectionImplTest, CommitAtLeastOnceBatchedSessionNotFound) {
       .WillOnce(Return(MakeSessionsResponse({"test-session-name-2"})));
   using BatchWriteRequest = google::spanner::v1::BatchWriteRequest;
   EXPECT_CALL(*mock, BatchWrite)
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    BatchWriteRequest const& request) {
         EXPECT_EQ("test-session-name-1", request.session());
         EXPECT_THAT(request.mutation_groups(), IsEmpty());
         return MakeReader<BatchWriteResponse>(
             {}, SessionNotFoundError(request.session()));
       })
-      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([&](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                     BatchWriteRequest const& request) {
         EXPECT_EQ("test-session-name-2", request.session());
         EXPECT_THAT(request.mutation_groups(), IsEmpty());
@@ -2658,14 +2832,14 @@ TEST(ConnectionImplTest, ReadPartition) {
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
   EXPECT_CALL(*mock, BeginTransaction).Times(0);
   EXPECT_CALL(*mock, StreamingRead)
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    google::spanner::v1::ReadRequest const& request) {
         EXPECT_EQ("test-session-name", request.session());
         EXPECT_EQ("Table", request.table());
         EXPECT_EQ("DEADBEEF", request.partition_token());
         EXPECT_TRUE(request.data_boost_enabled());
         return MakeReader<PartialResultSet>(
-            {R"pb(metadata: { transaction: { id: " ABCDEF00 " } })pb"});
+            {R"pb(metadata: { transaction: { id: "ABCDEF00" } })pb"});
       });
 
   auto conn = MakeConnectionImpl(db, mock);
@@ -2813,14 +2987,14 @@ TEST(ConnectionImplTest, QueryPartition) {
       .WillOnce(Return(MakeSessionsResponse({"test-session-name"})));
   EXPECT_CALL(*mock, BeginTransaction).Times(0);
   EXPECT_CALL(*mock, ExecuteStreamingSql)
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    google::spanner::v1::ExecuteSqlRequest const& request) {
         EXPECT_EQ("test-session-name", request.session());
         EXPECT_EQ("SELECT * FROM Table", request.sql());
         EXPECT_EQ("DEADBEEF", request.partition_token());
         EXPECT_TRUE(request.data_boost_enabled());
         return MakeReader<PartialResultSet>(
-            {R"pb(metadata: { transaction: { id: " ABCDEF00 " } })pb"});
+            {R"pb(metadata: { transaction: { id: "ABCDEF00" } })pb"});
       });
 
   auto conn = MakeConnectionImpl(db, mock);
@@ -3031,15 +3205,12 @@ TEST(ConnectionImplTest, TransactionSessionBinding) {
     ASSERT_TRUE(TextFormat::ParseFromString(kText, &response));
     // The first two responses are reads from two different "begin"
     // transactions.
-    switch (i) {
-      case 0:
-        *response.mutable_metadata()->mutable_transaction() =
-            MakeTestTransaction("ABCDEF01");
-        break;
-      case 1:
-        *response.mutable_metadata()->mutable_transaction() =
-            MakeTestTransaction("ABCDEF02");
-        break;
+    if (i == 0) {
+      *response.mutable_metadata()->mutable_transaction() =
+          MakeTestTransaction("ABCDEF01");
+    } else if (i == 1) {
+      *response.mutable_metadata()->mutable_transaction() =
+          MakeTestTransaction("ABCDEF02");
     }
     response.add_values()->set_string_value(std::to_string(i));
     readers[i] = MakeReader<PartialResultSet>({std::move(response)});
@@ -3049,17 +3220,21 @@ TEST(ConnectionImplTest, TransactionSessionBinding) {
   // IDs or "begin" set as appropriate.
   {
     InSequence s;
-    EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("session-1"),
-                                              HasBeginTransaction())))
+    EXPECT_CALL(
+        *mock, StreamingRead(
+                   _, _, AllOf(HasSession("session-1"), HasBeginTransaction())))
         .WillOnce(Return(ByMove(std::move(readers[0]))));
-    EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("session-2"),
-                                              HasBeginTransaction())))
+    EXPECT_CALL(
+        *mock, StreamingRead(
+                   _, _, AllOf(HasSession("session-2"), HasBeginTransaction())))
         .WillOnce(Return(ByMove(std::move(readers[1]))));
-    EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("session-1"),
-                                              HasTransactionId("ABCDEF01"))))
+    EXPECT_CALL(*mock, StreamingRead(_, _,
+                                     AllOf(HasSession("session-1"),
+                                           HasTransactionId("ABCDEF01"))))
         .WillOnce(Return(ByMove(std::move(readers[2]))));
-    EXPECT_CALL(*mock, StreamingRead(_, AllOf(HasSession("session-2"),
-                                              HasTransactionId("ABCDEF02"))))
+    EXPECT_CALL(*mock, StreamingRead(_, _,
+                                     AllOf(HasSession("session-2"),
+                                           HasTransactionId("ABCDEF02"))))
         .WillOnce(Return(ByMove(std::move(readers[3]))));
   }
 
@@ -3146,14 +3321,14 @@ TEST(ConnectionImplTest, ReadSessionNotFound) {
       .WillOnce(Return(MakeSessionsResponse({"test-session-name-1"})))
       .WillOnce(Return(MakeSessionsResponse({"test-session-name-2"})));
   EXPECT_CALL(*mock, StreamingRead)
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    google::spanner::v1::ReadRequest const& request) {
         EXPECT_THAT(request.session(), Eq("test-session-name-1"));
         EXPECT_THAT(request.transaction().id(), Eq("test-txn-id-1"));
         return MakeReader<PartialResultSet>(
             {}, SessionNotFoundError(request.session()));
       })
-      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&,
+      .WillOnce([](std::shared_ptr<grpc::ClientContext> const&, Options const&,
                    google::spanner::v1::ReadRequest const& request) {
         EXPECT_THAT(request.session(), Eq("test-session-name-2"));
         EXPECT_THAT(request.transaction().id(), Eq("test-txn-id-2"));

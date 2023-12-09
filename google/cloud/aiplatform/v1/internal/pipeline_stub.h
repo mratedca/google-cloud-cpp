@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/aiplatform/v1/pipeline_service.grpc.pb.h>
@@ -57,7 +58,7 @@ class PipelineServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteTrainingPipeline(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTrainingPipelineRequest const&
           request) = 0;
 
@@ -84,7 +85,7 @@ class PipelineServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeletePipelineJob(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeletePipelineJobRequest const&
           request) = 0;
 
@@ -95,12 +96,12 @@ class PipelineServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -116,66 +117,66 @@ class DefaultPipelineServiceStub : public PipelineServiceStub {
 
   StatusOr<google::cloud::aiplatform::v1::TrainingPipeline>
   CreateTrainingPipeline(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::CreateTrainingPipelineRequest const&
           request) override;
 
   StatusOr<google::cloud::aiplatform::v1::TrainingPipeline> GetTrainingPipeline(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::GetTrainingPipelineRequest const& request)
       override;
 
   StatusOr<google::cloud::aiplatform::v1::ListTrainingPipelinesResponse>
   ListTrainingPipelines(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::ListTrainingPipelinesRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteTrainingPipeline(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteTrainingPipelineRequest const&
           request) override;
 
   Status CancelTrainingPipeline(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::CancelTrainingPipelineRequest const&
           request) override;
 
   StatusOr<google::cloud::aiplatform::v1::PipelineJob> CreatePipelineJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::CreatePipelineJobRequest const& request)
       override;
 
   StatusOr<google::cloud::aiplatform::v1::PipelineJob> GetPipelineJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::GetPipelineJobRequest const& request)
       override;
 
   StatusOr<google::cloud::aiplatform::v1::ListPipelineJobsResponse>
-  ListPipelineJobs(grpc::ClientContext& client_context,
+  ListPipelineJobs(grpc::ClientContext& context,
                    google::cloud::aiplatform::v1::ListPipelineJobsRequest const&
                        request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeletePipelineJob(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeletePipelineJobRequest const& request)
       override;
 
   Status CancelPipelineJob(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::CancelPipelineJobRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

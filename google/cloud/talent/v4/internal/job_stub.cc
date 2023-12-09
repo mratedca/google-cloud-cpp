@@ -31,10 +31,10 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 JobServiceStub::~JobServiceStub() = default;
 
 StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::CreateJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::CreateJobRequest const& request) {
   google::cloud::talent::v4::Job response;
-  auto status = grpc_stub_->CreateJob(&client_context, request, &response);
+  auto status = grpc_stub_->CreateJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,7 +44,7 @@ StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::CreateJob(
 future<StatusOr<google::longrunning::Operation>>
 DefaultJobServiceStub::AsyncBatchCreateJobs(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::talent::v4::BatchCreateJobsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::talent::v4::BatchCreateJobsRequest,
@@ -59,10 +59,10 @@ DefaultJobServiceStub::AsyncBatchCreateJobs(
 }
 
 StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::GetJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::GetJobRequest const& request) {
   google::cloud::talent::v4::Job response;
-  auto status = grpc_stub_->GetJob(&client_context, request, &response);
+  auto status = grpc_stub_->GetJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -70,10 +70,10 @@ StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::GetJob(
 }
 
 StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::UpdateJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::UpdateJobRequest const& request) {
   google::cloud::talent::v4::Job response;
-  auto status = grpc_stub_->UpdateJob(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -83,7 +83,7 @@ StatusOr<google::cloud::talent::v4::Job> DefaultJobServiceStub::UpdateJob(
 future<StatusOr<google::longrunning::Operation>>
 DefaultJobServiceStub::AsyncBatchUpdateJobs(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::talent::v4::BatchUpdateJobsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::talent::v4::BatchUpdateJobsRequest,
@@ -98,10 +98,10 @@ DefaultJobServiceStub::AsyncBatchUpdateJobs(
 }
 
 Status DefaultJobServiceStub::DeleteJob(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::DeleteJobRequest const& request) {
   google::protobuf::Empty response;
-  auto status = grpc_stub_->DeleteJob(&client_context, request, &response);
+  auto status = grpc_stub_->DeleteJob(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -111,7 +111,7 @@ Status DefaultJobServiceStub::DeleteJob(
 future<StatusOr<google::longrunning::Operation>>
 DefaultJobServiceStub::AsyncBatchDeleteJobs(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::talent::v4::BatchDeleteJobsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::talent::v4::BatchDeleteJobsRequest,
@@ -127,10 +127,10 @@ DefaultJobServiceStub::AsyncBatchDeleteJobs(
 
 StatusOr<google::cloud::talent::v4::ListJobsResponse>
 DefaultJobServiceStub::ListJobs(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::ListJobsRequest const& request) {
   google::cloud::talent::v4::ListJobsResponse response;
-  auto status = grpc_stub_->ListJobs(&client_context, request, &response);
+  auto status = grpc_stub_->ListJobs(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -139,10 +139,10 @@ DefaultJobServiceStub::ListJobs(
 
 StatusOr<google::cloud::talent::v4::SearchJobsResponse>
 DefaultJobServiceStub::SearchJobs(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::SearchJobsRequest const& request) {
   google::cloud::talent::v4::SearchJobsResponse response;
-  auto status = grpc_stub_->SearchJobs(&client_context, request, &response);
+  auto status = grpc_stub_->SearchJobs(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -151,11 +151,10 @@ DefaultJobServiceStub::SearchJobs(
 
 StatusOr<google::cloud::talent::v4::SearchJobsResponse>
 DefaultJobServiceStub::SearchJobsForAlert(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::talent::v4::SearchJobsRequest const& request) {
   google::cloud::talent::v4::SearchJobsResponse response;
-  auto status =
-      grpc_stub_->SearchJobsForAlert(&client_context, request, &response);
+  auto status = grpc_stub_->SearchJobsForAlert(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -165,7 +164,7 @@ DefaultJobServiceStub::SearchJobsForAlert(
 future<StatusOr<google::longrunning::Operation>>
 DefaultJobServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -180,7 +179,7 @@ DefaultJobServiceStub::AsyncGetOperation(
 
 future<Status> DefaultJobServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

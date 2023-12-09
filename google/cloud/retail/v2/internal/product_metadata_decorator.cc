@@ -46,7 +46,7 @@ StatusOr<google::cloud::retail::v2::Product>
 ProductServiceMetadata::CreateProduct(
     grpc::ClientContext& context,
     google::cloud::retail::v2::CreateProductRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
   return child_->CreateProduct(context, request);
 }
@@ -54,7 +54,7 @@ ProductServiceMetadata::CreateProduct(
 StatusOr<google::cloud::retail::v2::Product> ProductServiceMetadata::GetProduct(
     grpc::ClientContext& context,
     google::cloud::retail::v2::GetProductRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("name=", internal::UrlEncode(request.name())));
   return child_->GetProduct(context, request);
 }
@@ -63,7 +63,7 @@ StatusOr<google::cloud::retail::v2::ListProductsResponse>
 ProductServiceMetadata::ListProducts(
     grpc::ClientContext& context,
     google::cloud::retail::v2::ListProductsRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
   return child_->ListProducts(context, request);
 }
@@ -72,7 +72,7 @@ StatusOr<google::cloud::retail::v2::Product>
 ProductServiceMetadata::UpdateProduct(
     grpc::ClientContext& context,
     google::cloud::retail::v2::UpdateProductRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("product.name=",
                            internal::UrlEncode(request.product().name())));
   return child_->UpdateProduct(context, request);
@@ -81,7 +81,7 @@ ProductServiceMetadata::UpdateProduct(
 Status ProductServiceMetadata::DeleteProduct(
     grpc::ClientContext& context,
     google::cloud::retail::v2::DeleteProductRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("name=", internal::UrlEncode(request.name())));
   return child_->DeleteProduct(context, request);
 }
@@ -89,95 +89,100 @@ Status ProductServiceMetadata::DeleteProduct(
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncImportProducts(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::ImportProductsRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
-  return child_->AsyncImportProducts(cq, std::move(context), request);
+  return child_->AsyncImportProducts(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncSetInventory(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::SetInventoryRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("inventory.name=",
                            internal::UrlEncode(request.inventory().name())));
-  return child_->AsyncSetInventory(cq, std::move(context), request);
+  return child_->AsyncSetInventory(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncAddFulfillmentPlaces(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::AddFulfillmentPlacesRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("product=", internal::UrlEncode(request.product())));
-  return child_->AsyncAddFulfillmentPlaces(cq, std::move(context), request);
+  return child_->AsyncAddFulfillmentPlaces(cq, std::move(context), options,
+                                           request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncRemoveFulfillmentPlaces(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::RemoveFulfillmentPlacesRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("product=", internal::UrlEncode(request.product())));
-  return child_->AsyncRemoveFulfillmentPlaces(cq, std::move(context), request);
+  return child_->AsyncRemoveFulfillmentPlaces(cq, std::move(context), options,
+                                              request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncAddLocalInventories(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::AddLocalInventoriesRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("product=", internal::UrlEncode(request.product())));
-  return child_->AsyncAddLocalInventories(cq, std::move(context), request);
+  return child_->AsyncAddLocalInventories(cq, std::move(context), options,
+                                          request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncRemoveLocalInventories(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::retail::v2::RemoveLocalInventoriesRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("product=", internal::UrlEncode(request.product())));
-  return child_->AsyncRemoveLocalInventories(cq, std::move(context), request);
+  return child_->AsyncRemoveLocalInventories(cq, std::move(context), options,
+                                             request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 ProductServiceMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncGetOperation(cq, std::move(context), request);
+  return child_->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status> ProductServiceMetadata::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncCancelOperation(cq, std::move(context), request);
+  return child_->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 
 void ProductServiceMetadata::SetMetadata(grpc::ClientContext& context,
+                                         Options const& options,
                                          std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void ProductServiceMetadata::SetMetadata(grpc::ClientContext& context) {
+void ProductServiceMetadata::SetMetadata(grpc::ClientContext& context,
+                                         Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

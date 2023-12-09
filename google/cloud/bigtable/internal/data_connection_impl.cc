@@ -75,9 +75,11 @@ bigtable::Row TransformReadModifyWriteRowResponse(
 
 DataConnectionImpl::DataConnectionImpl(
     std::unique_ptr<BackgroundThreads> background,
-    std::shared_ptr<BigtableStub> stub, Options options)
+    std::shared_ptr<BigtableStub> stub,
+    std::shared_ptr<MutateRowsLimiter> limiter, Options options)
     : background_(std::move(background)),
       stub_(std::move(stub)),
+      limiter_(std::move(limiter)),
       options_(internal::MergeOptions(std::move(options),
                                       DataConnection::options())) {}
 
@@ -153,7 +155,7 @@ std::vector<bigtable::FailedMutation> DataConnectionImpl::BulkApply(
   std::unique_ptr<bigtable::DataRetryPolicy> retry;
   std::unique_ptr<BackoffPolicy> backoff;
   while (true) {
-    auto status = mutator.MakeOneRequest(*stub_);
+    auto status = mutator.MakeOneRequest(*stub_, *limiter_);
     if (!mutator.HasPendingMutations()) break;
     if (!retry) retry = retry_policy(*current);
     if (!retry->OnFailure(status)) break;
@@ -169,7 +171,7 @@ DataConnectionImpl::AsyncBulkApply(std::string const& table_name,
                                    bigtable::BulkMutation mut) {
   auto current = google::cloud::internal::SaveCurrentOptions();
   return AsyncBulkApplier::Create(
-      background_->cq(), stub_, retry_policy(*current),
+      background_->cq(), stub_, limiter_, retry_policy(*current),
       backoff_policy(*current), *idempotency_policy(*current),
       app_profile_id(*current), table_name, std::move(mut));
 }
@@ -297,7 +299,7 @@ StatusOr<std::vector<bigtable::RowKeySample>> DataConnectionImpl::SampleRows(
   while (true) {
     auto context = std::make_shared<grpc::ClientContext>();
     internal::ConfigureContext(*context, internal::CurrentOptions());
-    auto stream = stub_->SampleRowKeys(std::move(context), request);
+    auto stream = stub_->SampleRowKeys(std::move(context), Options{}, request);
 
     struct UnpackVariant {
       Status& status;

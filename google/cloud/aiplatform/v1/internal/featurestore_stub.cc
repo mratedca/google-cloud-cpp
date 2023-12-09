@@ -33,7 +33,7 @@ FeaturestoreServiceStub::~FeaturestoreServiceStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncCreateFeaturestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::CreateFeaturestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::CreateFeaturestoreRequest,
@@ -50,11 +50,10 @@ DefaultFeaturestoreServiceStub::AsyncCreateFeaturestore(
 
 StatusOr<google::cloud::aiplatform::v1::Featurestore>
 DefaultFeaturestoreServiceStub::GetFeaturestore(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetFeaturestoreRequest const& request) {
   google::cloud::aiplatform::v1::Featurestore response;
-  auto status =
-      grpc_stub_->GetFeaturestore(&client_context, request, &response);
+  auto status = grpc_stub_->GetFeaturestore(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -63,11 +62,10 @@ DefaultFeaturestoreServiceStub::GetFeaturestore(
 
 StatusOr<google::cloud::aiplatform::v1::ListFeaturestoresResponse>
 DefaultFeaturestoreServiceStub::ListFeaturestores(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListFeaturestoresRequest const& request) {
   google::cloud::aiplatform::v1::ListFeaturestoresResponse response;
-  auto status =
-      grpc_stub_->ListFeaturestores(&client_context, request, &response);
+  auto status = grpc_stub_->ListFeaturestores(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -77,7 +75,7 @@ DefaultFeaturestoreServiceStub::ListFeaturestores(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncUpdateFeaturestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::UpdateFeaturestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::UpdateFeaturestoreRequest,
@@ -95,7 +93,7 @@ DefaultFeaturestoreServiceStub::AsyncUpdateFeaturestore(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncDeleteFeaturestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteFeaturestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteFeaturestoreRequest,
@@ -113,7 +111,7 @@ DefaultFeaturestoreServiceStub::AsyncDeleteFeaturestore(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncCreateEntityType(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::CreateEntityTypeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::CreateEntityTypeRequest,
@@ -130,10 +128,10 @@ DefaultFeaturestoreServiceStub::AsyncCreateEntityType(
 
 StatusOr<google::cloud::aiplatform::v1::EntityType>
 DefaultFeaturestoreServiceStub::GetEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetEntityTypeRequest const& request) {
   google::cloud::aiplatform::v1::EntityType response;
-  auto status = grpc_stub_->GetEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->GetEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -142,11 +140,10 @@ DefaultFeaturestoreServiceStub::GetEntityType(
 
 StatusOr<google::cloud::aiplatform::v1::ListEntityTypesResponse>
 DefaultFeaturestoreServiceStub::ListEntityTypes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListEntityTypesRequest const& request) {
   google::cloud::aiplatform::v1::ListEntityTypesResponse response;
-  auto status =
-      grpc_stub_->ListEntityTypes(&client_context, request, &response);
+  auto status = grpc_stub_->ListEntityTypes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -155,11 +152,10 @@ DefaultFeaturestoreServiceStub::ListEntityTypes(
 
 StatusOr<google::cloud::aiplatform::v1::EntityType>
 DefaultFeaturestoreServiceStub::UpdateEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::UpdateEntityTypeRequest const& request) {
   google::cloud::aiplatform::v1::EntityType response;
-  auto status =
-      grpc_stub_->UpdateEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -169,7 +165,7 @@ DefaultFeaturestoreServiceStub::UpdateEntityType(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncDeleteEntityType(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteEntityTypeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteEntityTypeRequest,
@@ -187,7 +183,7 @@ DefaultFeaturestoreServiceStub::AsyncDeleteEntityType(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncCreateFeature(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::CreateFeatureRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::CreateFeatureRequest,
@@ -204,7 +200,7 @@ DefaultFeaturestoreServiceStub::AsyncCreateFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncBatchCreateFeatures(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::BatchCreateFeaturesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::BatchCreateFeaturesRequest,
@@ -221,10 +217,10 @@ DefaultFeaturestoreServiceStub::AsyncBatchCreateFeatures(
 
 StatusOr<google::cloud::aiplatform::v1::Feature>
 DefaultFeaturestoreServiceStub::GetFeature(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::GetFeatureRequest const& request) {
   google::cloud::aiplatform::v1::Feature response;
-  auto status = grpc_stub_->GetFeature(&client_context, request, &response);
+  auto status = grpc_stub_->GetFeature(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -233,10 +229,10 @@ DefaultFeaturestoreServiceStub::GetFeature(
 
 StatusOr<google::cloud::aiplatform::v1::ListFeaturesResponse>
 DefaultFeaturestoreServiceStub::ListFeatures(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ListFeaturesRequest const& request) {
   google::cloud::aiplatform::v1::ListFeaturesResponse response;
-  auto status = grpc_stub_->ListFeatures(&client_context, request, &response);
+  auto status = grpc_stub_->ListFeatures(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -245,10 +241,10 @@ DefaultFeaturestoreServiceStub::ListFeatures(
 
 StatusOr<google::cloud::aiplatform::v1::Feature>
 DefaultFeaturestoreServiceStub::UpdateFeature(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::UpdateFeatureRequest const& request) {
   google::cloud::aiplatform::v1::Feature response;
-  auto status = grpc_stub_->UpdateFeature(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateFeature(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -258,7 +254,7 @@ DefaultFeaturestoreServiceStub::UpdateFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncDeleteFeature(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteFeatureRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteFeatureRequest,
@@ -275,7 +271,7 @@ DefaultFeaturestoreServiceStub::AsyncDeleteFeature(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncImportFeatureValues(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::ImportFeatureValuesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::ImportFeatureValuesRequest,
@@ -293,7 +289,7 @@ DefaultFeaturestoreServiceStub::AsyncImportFeatureValues(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncBatchReadFeatureValues(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::BatchReadFeatureValuesRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -312,7 +308,7 @@ DefaultFeaturestoreServiceStub::AsyncBatchReadFeatureValues(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncExportFeatureValues(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::ExportFeatureValuesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::ExportFeatureValuesRequest,
@@ -330,7 +326,7 @@ DefaultFeaturestoreServiceStub::AsyncExportFeatureValues(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncDeleteFeatureValues(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::aiplatform::v1::DeleteFeatureValuesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::aiplatform::v1::DeleteFeatureValuesRequest,
@@ -347,10 +343,10 @@ DefaultFeaturestoreServiceStub::AsyncDeleteFeatureValues(
 
 StatusOr<google::cloud::aiplatform::v1::SearchFeaturesResponse>
 DefaultFeaturestoreServiceStub::SearchFeatures(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::aiplatform::v1::SearchFeaturesRequest const& request) {
   google::cloud::aiplatform::v1::SearchFeaturesResponse response;
-  auto status = grpc_stub_->SearchFeatures(&client_context, request, &response);
+  auto status = grpc_stub_->SearchFeatures(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -360,7 +356,7 @@ DefaultFeaturestoreServiceStub::SearchFeatures(
 future<StatusOr<google::longrunning::Operation>>
 DefaultFeaturestoreServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -375,7 +371,7 @@ DefaultFeaturestoreServiceStub::AsyncGetOperation(
 
 future<Status> DefaultFeaturestoreServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

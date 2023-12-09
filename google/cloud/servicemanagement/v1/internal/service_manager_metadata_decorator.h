@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_SERVICEMANAGEMENT_V1_INTERNAL_SERVICE_MANAGER_METADATA_DECORATOR_H
 
 #include "google/cloud/servicemanagement/v1/internal/service_manager_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -50,19 +51,19 @@ class ServiceManagerMetadata : public ServiceManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::api::servicemanagement::v1::CreateServiceRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::api::servicemanagement::v1::DeleteServiceRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUndeleteService(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::api::servicemanagement::v1::UndeleteServiceRequest const& request)
       override;
 
@@ -84,7 +85,7 @@ class ServiceManagerMetadata : public ServiceManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncSubmitConfigSource(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::api::servicemanagement::v1::SubmitConfigSourceRequest const&
           request) override;
 
@@ -101,7 +102,7 @@ class ServiceManagerMetadata : public ServiceManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateServiceRollout(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::api::servicemanagement::v1::CreateServiceRolloutRequest const&
           request) override;
 
@@ -113,18 +114,18 @@ class ServiceManagerMetadata : public ServiceManagerStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ServiceManagerStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_FEATURESTORE_ONLINE_SERVING_STUB_H
 
 #include "google/cloud/internal/streaming_read_rpc.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/aiplatform/v1/featurestore_online_service.grpc.pb.h>
@@ -43,7 +44,7 @@ class FeaturestoreOnlineServingServiceStub {
   virtual std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::cloud::aiplatform::v1::ReadFeatureValuesResponse>>
   StreamingReadFeatureValues(
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::StreamingReadFeatureValuesRequest const&
           request) = 0;
 
@@ -65,20 +66,20 @@ class DefaultFeaturestoreOnlineServingServiceStub
 
   StatusOr<google::cloud::aiplatform::v1::ReadFeatureValuesResponse>
   ReadFeatureValues(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::ReadFeatureValuesRequest const& request)
       override;
 
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::cloud::aiplatform::v1::ReadFeatureValuesResponse>>
   StreamingReadFeatureValues(
-      std::shared_ptr<grpc::ClientContext> client_context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::StreamingReadFeatureValuesRequest const&
           request) override;
 
   StatusOr<google::cloud::aiplatform::v1::WriteFeatureValuesResponse>
   WriteFeatureValues(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::aiplatform::v1::WriteFeatureValuesRequest const& request)
       override;
 

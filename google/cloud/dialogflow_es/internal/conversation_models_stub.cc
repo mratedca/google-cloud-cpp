@@ -33,7 +33,7 @@ ConversationModelsStub::~ConversationModelsStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncCreateConversationModel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::CreateConversationModelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -52,11 +52,10 @@ DefaultConversationModelsStub::AsyncCreateConversationModel(
 
 StatusOr<google::cloud::dialogflow::v2::ConversationModel>
 DefaultConversationModelsStub::GetConversationModel(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::GetConversationModelRequest const& request) {
   google::cloud::dialogflow::v2::ConversationModel response;
-  auto status =
-      grpc_stub_->GetConversationModel(&client_context, request, &response);
+  auto status = grpc_stub_->GetConversationModel(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -65,12 +64,12 @@ DefaultConversationModelsStub::GetConversationModel(
 
 StatusOr<google::cloud::dialogflow::v2::ListConversationModelsResponse>
 DefaultConversationModelsStub::ListConversationModels(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::ListConversationModelsRequest const&
         request) {
   google::cloud::dialogflow::v2::ListConversationModelsResponse response;
   auto status =
-      grpc_stub_->ListConversationModels(&client_context, request, &response);
+      grpc_stub_->ListConversationModels(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -80,7 +79,7 @@ DefaultConversationModelsStub::ListConversationModels(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncDeleteConversationModel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::DeleteConversationModelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -100,7 +99,7 @@ DefaultConversationModelsStub::AsyncDeleteConversationModel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncDeployConversationModel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::DeployConversationModelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -120,7 +119,7 @@ DefaultConversationModelsStub::AsyncDeployConversationModel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncUndeployConversationModel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::UndeployConversationModelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -139,12 +138,12 @@ DefaultConversationModelsStub::AsyncUndeployConversationModel(
 
 StatusOr<google::cloud::dialogflow::v2::ConversationModelEvaluation>
 DefaultConversationModelsStub::GetConversationModelEvaluation(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::GetConversationModelEvaluationRequest const&
         request) {
   google::cloud::dialogflow::v2::ConversationModelEvaluation response;
-  auto status = grpc_stub_->GetConversationModelEvaluation(&client_context,
-                                                           request, &response);
+  auto status =
+      grpc_stub_->GetConversationModelEvaluation(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -154,13 +153,13 @@ DefaultConversationModelsStub::GetConversationModelEvaluation(
 StatusOr<
     google::cloud::dialogflow::v2::ListConversationModelEvaluationsResponse>
 DefaultConversationModelsStub::ListConversationModelEvaluations(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::
         ListConversationModelEvaluationsRequest const& request) {
   google::cloud::dialogflow::v2::ListConversationModelEvaluationsResponse
       response;
-  auto status = grpc_stub_->ListConversationModelEvaluations(
-      &client_context, request, &response);
+  auto status = grpc_stub_->ListConversationModelEvaluations(&context, request,
+                                                             &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -170,7 +169,7 @@ DefaultConversationModelsStub::ListConversationModelEvaluations(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncCreateConversationModelEvaluation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::
         CreateConversationModelEvaluationRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -190,7 +189,7 @@ DefaultConversationModelsStub::AsyncCreateConversationModelEvaluation(
 future<StatusOr<google::longrunning::Operation>>
 DefaultConversationModelsStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -205,7 +204,7 @@ DefaultConversationModelsStub::AsyncGetOperation(
 
 future<Status> DefaultConversationModelsStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

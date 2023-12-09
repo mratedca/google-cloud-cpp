@@ -87,7 +87,8 @@ class OTelScope {
   ~OTelScope();
 
  private:
-  opentelemetry::trace::Scope scope_;
+  opentelemetry::nostd::shared_ptr<opentelemetry::trace::Span> span_;
+  opentelemetry::context::Context context_;
 };
 
 /**
@@ -109,6 +110,7 @@ class ScopedOTelContext {
 
   ~ScopedOTelContext() {
     if (noop_) return;
+    // NOLINTNEXTLINE(modernize-loop-convert)
     for (auto it = contexts_.rbegin(); it != contexts_.rend(); ++it) {
       DetachOTelContext(*it);
     }

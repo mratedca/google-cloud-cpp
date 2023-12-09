@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_DATAPLEX_V1_INTERNAL_DATAPLEX_METADATA_DECORATOR_H
 
 #include "google/cloud/dataplex/v1/internal/dataplex_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,17 +42,17 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateLake(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::CreateLakeRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateLake(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::UpdateLakeRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteLake(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::DeleteLakeRequest const& request) override;
 
   StatusOr<google::cloud::dataplex::v1::ListLakesResponse> ListLakes(
@@ -69,17 +70,17 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateZone(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::CreateZoneRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateZone(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::UpdateZoneRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteZone(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::DeleteZoneRequest const& request) override;
 
   StatusOr<google::cloud::dataplex::v1::ListZonesResponse> ListZones(
@@ -97,17 +98,17 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateAsset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::CreateAssetRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAsset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::UpdateAssetRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteAsset(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::DeleteAssetRequest const& request) override;
 
   StatusOr<google::cloud::dataplex::v1::ListAssetsResponse> ListAssets(
@@ -125,17 +126,17 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateTask(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::CreateTaskRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateTask(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::UpdateTaskRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteTask(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::DeleteTaskRequest const& request) override;
 
   StatusOr<google::cloud::dataplex::v1::ListTasksResponse> ListTasks(
@@ -164,19 +165,19 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::CreateEnvironmentRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::UpdateEnvironmentRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteEnvironment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::dataplex::v1::DeleteEnvironmentRequest const& request)
       override;
 
@@ -196,18 +197,18 @@ class DataplexServiceMetadata : public DataplexServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<DataplexServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

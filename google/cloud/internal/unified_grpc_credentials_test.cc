@@ -16,6 +16,7 @@
 #include "google/cloud/common_options.h"
 #include "google/cloud/grpc_error_delegate.h"
 #include "google/cloud/grpc_options.h"
+#include "google/cloud/internal/credentials_impl.h"
 #include "google/cloud/internal/filesystem.h"
 #include "google/cloud/internal/random.h"
 #include "google/cloud/options.h"
@@ -32,7 +33,9 @@ namespace {
 
 using ::google::cloud::testing_util::IsOk;
 using ::google::cloud::testing_util::ScopedEnvironment;
+using ::google::cloud::testing_util::StatusIs;
 using ::testing::IsEmpty;
+using ::testing::IsNull;
 
 TEST(UnifiedGrpcCredentialsTest, GrpcCredentialOption) {
   CompletionQueue cq;
@@ -101,6 +104,25 @@ TEST(UnifiedGrpcCredentialsTest, WithAccessTokenCredentials) {
   auto status = result->ConfigureContext(context);
   EXPECT_THAT(status, IsOk());
   ASSERT_NE(nullptr, context.credentials());
+}
+
+TEST(UnifiedGrpcCredentialsTest, WithErrorCredentials) {
+  Status const error_status{StatusCode::kFailedPrecondition,
+                            "Precondition failed."};
+  CompletionQueue cq;
+  auto result = CreateAuthenticationStrategy(
+      *internal::MakeErrorCredentials(error_status), cq);
+  ASSERT_NE(nullptr, result.get());
+  EXPECT_TRUE(result->RequiresConfigureContext());
+  grpc::ClientContext context;
+  auto configured_context = result->ConfigureContext(context);
+  EXPECT_THAT(configured_context, StatusIs(error_status.code()));
+  auto async_configured_context =
+      result->AsyncConfigureContext(std::make_shared<grpc::ClientContext>())
+          .get();
+  EXPECT_THAT(async_configured_context, StatusIs(error_status.code()));
+  auto channel = result->CreateChannel(std::string{}, grpc::ChannelArguments{});
+  EXPECT_THAT(channel.get(), Not(IsNull()));
 }
 
 TEST(UnifiedGrpcCredentialsTest, LoadCAInfoNotSet) {

@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_NETWORKSECURITY_V1_INTERNAL_NETWORK_SECURITY_METADATA_DECORATOR_H
 
 #include "google/cloud/networksecurity/v1/internal/network_security_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -55,21 +56,21 @@ class NetworkSecurityMetadata : public NetworkSecurityStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncCreateAuthorizationPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::
           CreateAuthorizationPolicyRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateAuthorizationPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::
           UpdateAuthorizationPolicyRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteAuthorizationPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::
           DeleteAuthorizationPolicyRequest const& request) override;
 
@@ -87,19 +88,19 @@ class NetworkSecurityMetadata : public NetworkSecurityStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateServerTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::CreateServerTlsPolicyRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateServerTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::UpdateServerTlsPolicyRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteServerTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::DeleteServerTlsPolicyRequest const&
           request) override;
 
@@ -117,36 +118,36 @@ class NetworkSecurityMetadata : public NetworkSecurityStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateClientTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::CreateClientTlsPolicyRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateClientTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::UpdateClientTlsPolicyRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteClientTlsPolicy(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networksecurity::v1::DeleteClientTlsPolicyRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<NetworkSecurityStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

@@ -46,50 +46,95 @@ StatusOr<google::cloud::aiplatform::v1::PredictResponse>
 PredictionServiceMetadata::Predict(
     grpc::ClientContext& context,
     google::cloud::aiplatform::v1::PredictRequest const& request) {
-  SetMetadata(context, absl::StrCat("endpoint=",
-                                    internal::UrlEncode(request.endpoint())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
   return child_->Predict(context, request);
 }
 
 StatusOr<google::api::HttpBody> PredictionServiceMetadata::RawPredict(
     grpc::ClientContext& context,
     google::cloud::aiplatform::v1::RawPredictRequest const& request) {
-  SetMetadata(context, absl::StrCat("endpoint=",
-                                    internal::UrlEncode(request.endpoint())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
   return child_->RawPredict(context, request);
+}
+
+StatusOr<google::cloud::aiplatform::v1::DirectPredictResponse>
+PredictionServiceMetadata::DirectPredict(
+    grpc::ClientContext& context,
+    google::cloud::aiplatform::v1::DirectPredictRequest const& request) {
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
+  return child_->DirectPredict(context, request);
+}
+
+StatusOr<google::cloud::aiplatform::v1::DirectRawPredictResponse>
+PredictionServiceMetadata::DirectRawPredict(
+    grpc::ClientContext& context,
+    google::cloud::aiplatform::v1::DirectRawPredictRequest const& request) {
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
+  return child_->DirectRawPredict(context, request);
+}
+
+std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<
+    google::cloud::aiplatform::v1::StreamingPredictRequest,
+    google::cloud::aiplatform::v1::StreamingPredictResponse>>
+PredictionServiceMetadata::AsyncStreamingPredict(
+    google::cloud::CompletionQueue const& cq,
+    std::shared_ptr<grpc::ClientContext> context) {
+  SetMetadata(*context, internal::CurrentOptions());
+  return child_->AsyncStreamingPredict(cq, std::move(context));
 }
 
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<
     google::cloud::aiplatform::v1::StreamingPredictResponse>>
 PredictionServiceMetadata::ServerStreamingPredict(
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::aiplatform::v1::StreamingPredictRequest const& request) {
-  SetMetadata(*context, absl::StrCat("endpoint=",
-                                     internal::UrlEncode(request.endpoint())));
-  return child_->ServerStreamingPredict(std::move(context), request);
+  SetMetadata(
+      *context, options,
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
+  return child_->ServerStreamingPredict(std::move(context), options, request);
+}
+
+std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<
+    google::cloud::aiplatform::v1::StreamingRawPredictRequest,
+    google::cloud::aiplatform::v1::StreamingRawPredictResponse>>
+PredictionServiceMetadata::AsyncStreamingRawPredict(
+    google::cloud::CompletionQueue const& cq,
+    std::shared_ptr<grpc::ClientContext> context) {
+  SetMetadata(*context, internal::CurrentOptions());
+  return child_->AsyncStreamingRawPredict(cq, std::move(context));
 }
 
 StatusOr<google::cloud::aiplatform::v1::ExplainResponse>
 PredictionServiceMetadata::Explain(
     grpc::ClientContext& context,
     google::cloud::aiplatform::v1::ExplainRequest const& request) {
-  SetMetadata(context, absl::StrCat("endpoint=",
-                                    internal::UrlEncode(request.endpoint())));
+  SetMetadata(
+      context, internal::CurrentOptions(),
+      absl::StrCat("endpoint=", internal::UrlEncode(request.endpoint())));
   return child_->Explain(context, request);
 }
 
 void PredictionServiceMetadata::SetMetadata(grpc::ClientContext& context,
+                                            Options const& options,
                                             std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void PredictionServiceMetadata::SetMetadata(grpc::ClientContext& context) {
+void PredictionServiceMetadata::SetMetadata(grpc::ClientContext& context,
+                                            Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

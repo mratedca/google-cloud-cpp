@@ -43,6 +43,7 @@ using ::google::cloud::storage::testing::MockStorageStub;
 using ::google::cloud::testing_util::ScopedEnvironment;
 using ::google::cloud::testing_util::StatusIs;
 using ::google::cloud::testing_util::ValidateMetadataFixture;
+using ::testing::Contains;
 using ::testing::Pair;
 using ::testing::Return;
 using ::testing::UnorderedElementsAre;
@@ -149,11 +150,9 @@ TEST_F(GrpcClientTest, QueryResumableUpload) {
       .WillOnce([this](grpc::ClientContext& context,
                        v2::QueryWriteStatusRequest const& request) {
         auto metadata = GetMetadata(context);
-        EXPECT_THAT(metadata,
-                    UnorderedElementsAre(
-                        Pair("x-goog-quota-user", "test-quota-user"),
-                        // Map JSON names to the `resource` subobject
-                        Pair("x-goog-fieldmask", "resource(field1,field2)")));
+        EXPECT_THAT(metadata, UnorderedElementsAre(
+                                  Pair("x-goog-quota-user", "test-quota-user"),
+                                  Pair("x-goog-fieldmask", "field1,field2")));
         EXPECT_EQ(request.upload_id(), "test-only-upload-id");
         return PermanentError();
       });
@@ -195,21 +194,21 @@ TEST_F(GrpcClientTest, DeleteResumableUpload) {
 
 TEST_F(GrpcClientTest, UploadChunk) {
   auto mock = std::make_shared<MockStorageStub>();
-  EXPECT_CALL(*mock, WriteObject).WillOnce([this](auto context) {
-    auto metadata = GetMetadata(*context);
-    EXPECT_THAT(metadata,
-                UnorderedElementsAre(
-                    Pair("x-goog-quota-user", "test-quota-user"),
-                    // Map JSON names to the `resource` subobject
-                    Pair("x-goog-fieldmask", "resource(field1,field2)"),
-                    Pair("x-goog-request-params",
-                         "bucket=projects%2F_%2Fbuckets%2Ftest-bucket")));
-    ::testing::InSequence sequence;
-    auto stream = std::make_unique<MockInsertStream>();
-    EXPECT_CALL(*stream, Write).WillOnce(Return(false));
-    EXPECT_CALL(*stream, Close).WillOnce(Return(PermanentError()));
-    return stream;
-  });
+  EXPECT_CALL(*mock, WriteObject)
+      .WillOnce([this](auto context, Options const&) {
+        auto metadata = GetMetadata(*context);
+        EXPECT_THAT(metadata,
+                    UnorderedElementsAre(
+                        Pair("x-goog-quota-user", "test-quota-user"),
+                        Pair("x-goog-fieldmask", "field1,field2"),
+                        Pair("x-goog-request-params",
+                             "bucket=projects%2F_%2Fbuckets%2Ftest-bucket")));
+        ::testing::InSequence sequence;
+        auto stream = std::make_unique<MockInsertStream>();
+        EXPECT_CALL(*stream, Write).WillOnce(Return(false));
+        EXPECT_CALL(*stream, Close).WillOnce(Return(PermanentError()));
+        return stream;
+      });
   auto client = CreateTestClient(mock);
   auto context = rest_internal::RestContext(TestOptions());
   auto response = client->UploadChunk(
@@ -501,22 +500,22 @@ TEST_F(GrpcClientTest, TestBucketIamPermissions) {
 
 TEST_F(GrpcClientTest, InsertObjectMedia) {
   auto mock = std::make_shared<MockStorageStub>();
-  EXPECT_CALL(*mock, WriteObject).WillOnce([this](auto context) {
-    auto metadata = GetMetadata(*context);
-    EXPECT_THAT(metadata,
-                UnorderedElementsAre(
-                    Pair(kIdempotencyTokenHeader, "test-token-1234"),
-                    Pair("x-goog-quota-user", "test-quota-user"),
-                    // Map JSON names to the `resource` subobject
-                    Pair("x-goog-fieldmask", "resource(field1,field2)"),
-                    Pair("x-goog-request-params",
-                         "bucket=projects%2F_%2Fbuckets%2Ftest-bucket")));
-    ::testing::InSequence sequence;
-    auto stream = std::make_unique<MockInsertStream>();
-    EXPECT_CALL(*stream, Write).WillOnce(Return(false));
-    EXPECT_CALL(*stream, Close).WillOnce(Return(PermanentError()));
-    return stream;
-  });
+  EXPECT_CALL(*mock, WriteObject)
+      .WillOnce([this](auto context, Options const&) {
+        auto metadata = GetMetadata(*context);
+        EXPECT_THAT(metadata,
+                    UnorderedElementsAre(
+                        Pair(kIdempotencyTokenHeader, "test-token-1234"),
+                        Pair("x-goog-quota-user", "test-quota-user"),
+                        Pair("x-goog-fieldmask", "field1,field2"),
+                        Pair("x-goog-request-params",
+                             "bucket=projects%2F_%2Fbuckets%2Ftest-bucket")));
+        ::testing::InSequence sequence;
+        auto stream = std::make_unique<MockInsertStream>();
+        EXPECT_CALL(*stream, Write).WillOnce(Return(false));
+        EXPECT_CALL(*stream, Close).WillOnce(Return(PermanentError()));
+        return stream;
+      });
   auto client = CreateTestClient(mock);
   auto context = TestContext();
   auto response = client->InsertObjectMedia(
@@ -538,8 +537,7 @@ TEST_F(GrpcClientTest, CopyObject) {
                     UnorderedElementsAre(
                         Pair(kIdempotencyTokenHeader, "test-token-1234"),
                         Pair("x-goog-quota-user", "test-quota-user"),
-                        // Map JSON names to the `resource` subobject
-                        Pair("x-goog-fieldmask", "resource(field1,field2)")));
+                        Pair("x-goog-fieldmask", "field1,field2")));
         EXPECT_THAT(request.source_bucket(),
                     "projects/_/buckets/test-source-bucket");
         EXPECT_THAT(request.source_object(), "test-source-object");
@@ -570,8 +568,7 @@ TEST_F(GrpcClientTest, CopyObjectTooLarge) {
                     UnorderedElementsAre(
                         Pair(kIdempotencyTokenHeader, "test-token-1234"),
                         Pair("x-goog-quota-user", "test-quota-user"),
-                        // Map JSON names to the `resource` subobject
-                        Pair("x-goog-fieldmask", "resource(field1,field2)")));
+                        Pair("x-goog-fieldmask", "field1,field2")));
         EXPECT_THAT(request.source_bucket(),
                     "projects/_/buckets/test-source-bucket");
         EXPECT_THAT(request.source_object(), "test-source-object");
@@ -623,13 +620,16 @@ TEST_F(GrpcClientTest, GetObjectMetadata) {
 TEST_F(GrpcClientTest, ReadObject) {
   auto mock = std::make_shared<MockStorageStub>();
   EXPECT_CALL(*mock, ReadObject)
-      .WillOnce([this](auto context, v2::ReadObjectRequest const& request) {
+      .WillOnce([this](auto context, Options const& options,
+                       v2::ReadObjectRequest const& request) {
         auto metadata = GetMetadata(*context);
         EXPECT_THAT(metadata,
                     UnorderedElementsAre(
                         Pair(kIdempotencyTokenHeader, "test-token-1234"),
                         Pair("x-goog-quota-user", "test-quota-user"),
                         Pair("x-goog-fieldmask", "field1,field2")));
+        EXPECT_THAT(options.get<UserAgentProductsOption>(),
+                    Contains("test-only/1.2.3"));
         EXPECT_THAT(request.bucket(), "projects/_/buckets/test-bucket");
         EXPECT_THAT(request.object(), "test-object");
         return std::make_unique<storage::testing::MockObjectMediaStream>();
@@ -637,7 +637,7 @@ TEST_F(GrpcClientTest, ReadObject) {
   auto client = CreateTestClient(mock);
   auto context = TestContext();
   auto stream = client->ReadObject(
-      context, TestOptions(),
+      context, TestOptions().set<UserAgentProductsOption>({"test-only/1.2.3"}),
       storage::internal::ReadObjectRangeRequest("test-bucket", "test-object")
           .set_multiple_options(Fields("field1,field2"),
                                 QuotaUser("test-quota-user")));
@@ -790,8 +790,7 @@ TEST_F(GrpcClientTest, RewriteObject) {
                     UnorderedElementsAre(
                         Pair(kIdempotencyTokenHeader, "test-token-1234"),
                         Pair("x-goog-quota-user", "test-quota-user"),
-                        // Map JSON names to the `resource` subobject
-                        Pair("x-goog-fieldmask", "resource(field1,field2)")));
+                        Pair("x-goog-fieldmask", "field1,field2")));
         EXPECT_THAT(request.source_bucket(),
                     "projects/_/buckets/test-source-bucket");
         EXPECT_THAT(request.source_object(), "test-source-object");
@@ -822,8 +821,7 @@ TEST_F(GrpcClientTest, CreateResumableUpload) {
                     UnorderedElementsAre(
                         Pair(kIdempotencyTokenHeader, "test-token-1234"),
                         Pair("x-goog-quota-user", "test-quota-user"),
-                        // Map the JSON field names to the `resource` subobject
-                        Pair("x-goog-fieldmask", "resource(field1,field2)")));
+                        Pair("x-goog-fieldmask", "field1,field2")));
         EXPECT_THAT(request.write_object_spec().resource().bucket(),
                     "projects/_/buckets/test-bucket");
         EXPECT_THAT(request.write_object_spec().resource().name(),

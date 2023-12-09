@@ -47,6 +47,31 @@ namespace cloud {
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 namespace internal {
 
+class GrpcErrorCredentialsAuthentication : public GrpcAuthenticationStrategy {
+ public:
+  explicit GrpcErrorCredentialsAuthentication(ErrorCredentialsConfig const& cfg)
+      : error_status_(std::move(cfg.status())) {}
+  ~GrpcErrorCredentialsAuthentication() override = default;
+
+  std::shared_ptr<grpc::Channel> CreateChannel(
+      std::string const&, grpc::ChannelArguments const&) override {
+    return grpc::CreateCustomChannel("error:///",
+                                     grpc::InsecureChannelCredentials(), {});
+  }
+  bool RequiresConfigureContext() const override { return true; }
+  Status ConfigureContext(grpc::ClientContext&) override {
+    return error_status_;
+  }
+  future<StatusOr<std::shared_ptr<grpc::ClientContext>>> AsyncConfigureContext(
+      std::shared_ptr<grpc::ClientContext>) override {
+    return make_ready_future<StatusOr<std::shared_ptr<grpc::ClientContext>>>(
+        error_status_);
+  }
+
+ private:
+  Status error_status_;
+};
+
 std::shared_ptr<GrpcAuthenticationStrategy> CreateAuthenticationStrategy(
     google::cloud::CompletionQueue cq, Options const& options) {
   if (options.has<google::cloud::UnifiedCredentialsOption>()) {
@@ -68,6 +93,9 @@ std::shared_ptr<GrpcAuthenticationStrategy> CreateAuthenticationStrategy(
     Visitor(CompletionQueue c, Options o)
         : cq(std::move(c)), options(std::move(o)) {}
 
+    void visit(ErrorCredentialsConfig const& cfg) override {
+      result = std::make_unique<GrpcErrorCredentialsAuthentication>(cfg);
+    }
     void visit(InsecureCredentialsConfig const&) override {
       result = std::make_unique<GrpcChannelCredentialsAuthentication>(
           grpc::InsecureChannelCredentials());
@@ -89,9 +117,12 @@ std::shared_ptr<GrpcAuthenticationStrategy> CreateAuthenticationStrategy(
           cfg.json_object(), std::move(options));
     }
     void visit(ExternalAccountConfig const& cfg) override {
+      grpc::SslCredentialsOptions ssl_options;
+      auto cainfo = LoadCAInfo(options);
+      if (cainfo) ssl_options.pem_root_certs = std::move(*cainfo);
       result = std::make_unique<GrpcChannelCredentialsAuthentication>(
           grpc::CompositeChannelCredentials(
-              grpc::SslCredentials(grpc::SslCredentialsOptions()),
+              grpc::SslCredentials(ssl_options),
               GrpcExternalAccountCredentials(cfg)));
     }
   } visitor(std::move(cq), std::move(options));

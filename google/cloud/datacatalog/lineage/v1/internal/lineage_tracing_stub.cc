@@ -29,6 +29,21 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 LineageTracingStub::LineageTracingStub(std::shared_ptr<LineageStub> child)
     : child_(std::move(child)), propagator_(internal::MakePropagator()) {}
 
+StatusOr<
+    google::cloud::datacatalog::lineage::v1::ProcessOpenLineageRunEventResponse>
+LineageTracingStub::ProcessOpenLineageRunEvent(
+    grpc::ClientContext& context,
+    google::cloud::datacatalog::lineage::v1::
+        ProcessOpenLineageRunEventRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.datacatalog.lineage.v1.Lineage",
+                             "ProcessOpenLineageRunEvent");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(
+      context, *span, child_->ProcessOpenLineageRunEvent(context, request));
+}
+
 StatusOr<google::cloud::datacatalog::lineage::v1::Process>
 LineageTracingStub::CreateProcess(
     grpc::ClientContext& context,
@@ -83,14 +98,14 @@ LineageTracingStub::ListProcesses(
 future<StatusOr<google::longrunning::Operation>>
 LineageTracingStub::AsyncDeleteProcess(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::datacatalog::lineage::v1::DeleteProcessRequest const&
         request) {
   auto span = internal::MakeSpanGrpc(
       "google.cloud.datacatalog.lineage.v1.Lineage", "DeleteProcess");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncDeleteProcess(cq, context, request);
+  auto f = child_->AsyncDeleteProcess(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 
@@ -141,13 +156,13 @@ LineageTracingStub::ListRuns(
 future<StatusOr<google::longrunning::Operation>>
 LineageTracingStub::AsyncDeleteRun(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::datacatalog::lineage::v1::DeleteRunRequest const& request) {
   auto span = internal::MakeSpanGrpc(
       "google.cloud.datacatalog.lineage.v1.Lineage", "DeleteRun");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncDeleteRun(cq, context, request);
+  auto f = child_->AsyncDeleteRun(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 
@@ -233,25 +248,25 @@ LineageTracingStub::BatchSearchLinkProcesses(
 future<StatusOr<google::longrunning::Operation>>
 LineageTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
   auto span =
       internal::MakeSpanGrpc("google.longrunning.Operations", "GetOperation");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncGetOperation(cq, context, request);
+  auto f = child_->AsyncGetOperation(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 
 future<Status> LineageTracingStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
   auto span = internal::MakeSpanGrpc("google.longrunning.Operations",
                                      "CancelOperation");
   internal::OTelScope scope(span);
   internal::InjectTraceContext(*context, *propagator_);
-  auto f = child_->AsyncCancelOperation(cq, context, request);
+  auto f = child_->AsyncCancelOperation(cq, context, options, request);
   return internal::EndSpan(std::move(context), std::move(span), std::move(f));
 }
 

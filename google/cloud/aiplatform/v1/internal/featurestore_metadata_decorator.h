@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_FEATURESTORE_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/featurestore_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class FeaturestoreServiceMetadata : public FeaturestoreServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateFeaturestore(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateFeaturestoreRequest const& request)
       override;
 
@@ -58,19 +59,19 @@ class FeaturestoreServiceMetadata : public FeaturestoreServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateFeaturestore(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::UpdateFeaturestoreRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteFeaturestore(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteFeaturestoreRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateEntityType(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateEntityTypeRequest const& request)
       override;
 
@@ -91,19 +92,19 @@ class FeaturestoreServiceMetadata : public FeaturestoreServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteEntityType(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteEntityTypeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateFeature(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CreateFeatureRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchCreateFeatures(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::BatchCreateFeaturesRequest const& request)
       override;
 
@@ -123,31 +124,31 @@ class FeaturestoreServiceMetadata : public FeaturestoreServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteFeature(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteFeatureRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportFeatureValues(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::ImportFeatureValuesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncBatchReadFeatureValues(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::BatchReadFeatureValuesRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncExportFeatureValues(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::ExportFeatureValuesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteFeatureValues(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::DeleteFeatureValuesRequest const& request)
       override;
 
@@ -158,18 +159,18 @@ class FeaturestoreServiceMetadata : public FeaturestoreServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<FeaturestoreServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

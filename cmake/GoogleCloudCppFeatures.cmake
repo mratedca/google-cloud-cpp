@@ -33,7 +33,7 @@ set(GOOGLE_CLOUD_CPP_REST_ONLY_FEATURES
 set(GOOGLE_CLOUD_CPP_EXPERIMENTAL_LIBRARIES
     # cmake-format: sort
     "pubsublite" # This is WIP, it needs a number of hand-crafted APIs.
-    "sql")
+)
 
 set(GOOGLE_CLOUD_CPP_TRANSITION_LIBRARIES # cmake-format: sort
 )
@@ -88,6 +88,7 @@ set(GOOGLE_CLOUD_CPP_GA_LIBRARIES
     "documentai"
     "domains"
     "edgecontainer"
+    "edgenetwork"
     "essentialcontacts"
     "eventarc"
     "filestore"
@@ -141,12 +142,14 @@ set(GOOGLE_CLOUD_CPP_GA_LIBRARIES
     "shell"
     "spanner"
     "speech"
+    "sql"
     "storage"
     "storageinsights"
     "storagetransfer"
     "support"
     "talent"
     "tasks"
+    "telcoautomation"
     "texttospeech"
     "timeseriesinsights"
     "tpu"

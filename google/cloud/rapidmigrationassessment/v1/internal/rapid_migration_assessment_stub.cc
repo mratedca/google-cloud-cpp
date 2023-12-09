@@ -34,7 +34,7 @@ RapidMigrationAssessmentStub::~RapidMigrationAssessmentStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncCreateCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::CreateCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -53,7 +53,7 @@ DefaultRapidMigrationAssessmentStub::AsyncCreateCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncCreateAnnotation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::CreateAnnotationRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -71,11 +71,11 @@ DefaultRapidMigrationAssessmentStub::AsyncCreateAnnotation(
 
 StatusOr<google::cloud::rapidmigrationassessment::v1::Annotation>
 DefaultRapidMigrationAssessmentStub::GetAnnotation(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::rapidmigrationassessment::v1::GetAnnotationRequest const&
         request) {
   google::cloud::rapidmigrationassessment::v1::Annotation response;
-  auto status = grpc_stub_->GetAnnotation(&client_context, request, &response);
+  auto status = grpc_stub_->GetAnnotation(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -84,11 +84,11 @@ DefaultRapidMigrationAssessmentStub::GetAnnotation(
 
 StatusOr<google::cloud::rapidmigrationassessment::v1::ListCollectorsResponse>
 DefaultRapidMigrationAssessmentStub::ListCollectors(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::rapidmigrationassessment::v1::ListCollectorsRequest const&
         request) {
   google::cloud::rapidmigrationassessment::v1::ListCollectorsResponse response;
-  auto status = grpc_stub_->ListCollectors(&client_context, request, &response);
+  auto status = grpc_stub_->ListCollectors(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -97,11 +97,11 @@ DefaultRapidMigrationAssessmentStub::ListCollectors(
 
 StatusOr<google::cloud::rapidmigrationassessment::v1::Collector>
 DefaultRapidMigrationAssessmentStub::GetCollector(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::rapidmigrationassessment::v1::GetCollectorRequest const&
         request) {
   google::cloud::rapidmigrationassessment::v1::Collector response;
-  auto status = grpc_stub_->GetCollector(&client_context, request, &response);
+  auto status = grpc_stub_->GetCollector(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -111,7 +111,7 @@ DefaultRapidMigrationAssessmentStub::GetCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncUpdateCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::UpdateCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -130,7 +130,7 @@ DefaultRapidMigrationAssessmentStub::AsyncUpdateCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncDeleteCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::DeleteCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -149,7 +149,7 @@ DefaultRapidMigrationAssessmentStub::AsyncDeleteCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncResumeCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::ResumeCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -168,7 +168,7 @@ DefaultRapidMigrationAssessmentStub::AsyncResumeCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncRegisterCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::RegisterCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -187,7 +187,7 @@ DefaultRapidMigrationAssessmentStub::AsyncRegisterCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncPauseCollector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::rapidmigrationassessment::v1::PauseCollectorRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -206,7 +206,7 @@ DefaultRapidMigrationAssessmentStub::AsyncPauseCollector(
 future<StatusOr<google::longrunning::Operation>>
 DefaultRapidMigrationAssessmentStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -221,7 +221,7 @@ DefaultRapidMigrationAssessmentStub::AsyncGetOperation(
 
 future<Status> DefaultRapidMigrationAssessmentStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

@@ -33,7 +33,7 @@ OsConfigZonalServiceStub::~OsConfigZonalServiceStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultOsConfigZonalServiceStub::AsyncCreateOSPolicyAssignment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::osconfig::v1::CreateOSPolicyAssignmentRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -52,7 +52,7 @@ DefaultOsConfigZonalServiceStub::AsyncCreateOSPolicyAssignment(
 future<StatusOr<google::longrunning::Operation>>
 DefaultOsConfigZonalServiceStub::AsyncUpdateOSPolicyAssignment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::osconfig::v1::UpdateOSPolicyAssignmentRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -70,11 +70,10 @@ DefaultOsConfigZonalServiceStub::AsyncUpdateOSPolicyAssignment(
 
 StatusOr<google::cloud::osconfig::v1::OSPolicyAssignment>
 DefaultOsConfigZonalServiceStub::GetOSPolicyAssignment(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::GetOSPolicyAssignmentRequest const& request) {
   google::cloud::osconfig::v1::OSPolicyAssignment response;
-  auto status =
-      grpc_stub_->GetOSPolicyAssignment(&client_context, request, &response);
+  auto status = grpc_stub_->GetOSPolicyAssignment(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -83,12 +82,12 @@ DefaultOsConfigZonalServiceStub::GetOSPolicyAssignment(
 
 StatusOr<google::cloud::osconfig::v1::ListOSPolicyAssignmentsResponse>
 DefaultOsConfigZonalServiceStub::ListOSPolicyAssignments(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::ListOSPolicyAssignmentsRequest const&
         request) {
   google::cloud::osconfig::v1::ListOSPolicyAssignmentsResponse response;
   auto status =
-      grpc_stub_->ListOSPolicyAssignments(&client_context, request, &response);
+      grpc_stub_->ListOSPolicyAssignments(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -97,12 +96,12 @@ DefaultOsConfigZonalServiceStub::ListOSPolicyAssignments(
 
 StatusOr<google::cloud::osconfig::v1::ListOSPolicyAssignmentRevisionsResponse>
 DefaultOsConfigZonalServiceStub::ListOSPolicyAssignmentRevisions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::ListOSPolicyAssignmentRevisionsRequest const&
         request) {
   google::cloud::osconfig::v1::ListOSPolicyAssignmentRevisionsResponse response;
-  auto status = grpc_stub_->ListOSPolicyAssignmentRevisions(&client_context,
-                                                            request, &response);
+  auto status =
+      grpc_stub_->ListOSPolicyAssignmentRevisions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -112,7 +111,7 @@ DefaultOsConfigZonalServiceStub::ListOSPolicyAssignmentRevisions(
 future<StatusOr<google::longrunning::Operation>>
 DefaultOsConfigZonalServiceStub::AsyncDeleteOSPolicyAssignment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::osconfig::v1::DeleteOSPolicyAssignmentRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -130,12 +129,12 @@ DefaultOsConfigZonalServiceStub::AsyncDeleteOSPolicyAssignment(
 
 StatusOr<google::cloud::osconfig::v1::OSPolicyAssignmentReport>
 DefaultOsConfigZonalServiceStub::GetOSPolicyAssignmentReport(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::GetOSPolicyAssignmentReportRequest const&
         request) {
   google::cloud::osconfig::v1::OSPolicyAssignmentReport response;
-  auto status = grpc_stub_->GetOSPolicyAssignmentReport(&client_context,
-                                                        request, &response);
+  auto status =
+      grpc_stub_->GetOSPolicyAssignmentReport(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -144,12 +143,12 @@ DefaultOsConfigZonalServiceStub::GetOSPolicyAssignmentReport(
 
 StatusOr<google::cloud::osconfig::v1::ListOSPolicyAssignmentReportsResponse>
 DefaultOsConfigZonalServiceStub::ListOSPolicyAssignmentReports(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::ListOSPolicyAssignmentReportsRequest const&
         request) {
   google::cloud::osconfig::v1::ListOSPolicyAssignmentReportsResponse response;
-  auto status = grpc_stub_->ListOSPolicyAssignmentReports(&client_context,
-                                                          request, &response);
+  auto status =
+      grpc_stub_->ListOSPolicyAssignmentReports(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -158,10 +157,10 @@ DefaultOsConfigZonalServiceStub::ListOSPolicyAssignmentReports(
 
 StatusOr<google::cloud::osconfig::v1::Inventory>
 DefaultOsConfigZonalServiceStub::GetInventory(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::GetInventoryRequest const& request) {
   google::cloud::osconfig::v1::Inventory response;
-  auto status = grpc_stub_->GetInventory(&client_context, request, &response);
+  auto status = grpc_stub_->GetInventory(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -170,11 +169,10 @@ DefaultOsConfigZonalServiceStub::GetInventory(
 
 StatusOr<google::cloud::osconfig::v1::ListInventoriesResponse>
 DefaultOsConfigZonalServiceStub::ListInventories(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::ListInventoriesRequest const& request) {
   google::cloud::osconfig::v1::ListInventoriesResponse response;
-  auto status =
-      grpc_stub_->ListInventories(&client_context, request, &response);
+  auto status = grpc_stub_->ListInventories(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -183,11 +181,11 @@ DefaultOsConfigZonalServiceStub::ListInventories(
 
 StatusOr<google::cloud::osconfig::v1::VulnerabilityReport>
 DefaultOsConfigZonalServiceStub::GetVulnerabilityReport(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::GetVulnerabilityReportRequest const& request) {
   google::cloud::osconfig::v1::VulnerabilityReport response;
   auto status =
-      grpc_stub_->GetVulnerabilityReport(&client_context, request, &response);
+      grpc_stub_->GetVulnerabilityReport(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -196,12 +194,12 @@ DefaultOsConfigZonalServiceStub::GetVulnerabilityReport(
 
 StatusOr<google::cloud::osconfig::v1::ListVulnerabilityReportsResponse>
 DefaultOsConfigZonalServiceStub::ListVulnerabilityReports(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::osconfig::v1::ListVulnerabilityReportsRequest const&
         request) {
   google::cloud::osconfig::v1::ListVulnerabilityReportsResponse response;
   auto status =
-      grpc_stub_->ListVulnerabilityReports(&client_context, request, &response);
+      grpc_stub_->ListVulnerabilityReports(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -211,7 +209,7 @@ DefaultOsConfigZonalServiceStub::ListVulnerabilityReports(
 future<StatusOr<google::longrunning::Operation>>
 DefaultOsConfigZonalServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -226,7 +224,7 @@ DefaultOsConfigZonalServiceStub::AsyncGetOperation(
 
 future<Status> DefaultOsConfigZonalServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

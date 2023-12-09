@@ -47,7 +47,7 @@ StatusOr<
 AppConnectorsServiceMetadata::ListAppConnectors(
     grpc::ClientContext& context, google::cloud::beyondcorp::appconnectors::v1::
                                       ListAppConnectorsRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
   return child_->ListAppConnectors(context, request);
 }
@@ -57,7 +57,7 @@ AppConnectorsServiceMetadata::GetAppConnector(
     grpc::ClientContext& context,
     google::cloud::beyondcorp::appconnectors::v1::GetAppConnectorRequest const&
         request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("name=", internal::UrlEncode(request.name())));
   return child_->GetAppConnector(context, request);
 }
@@ -65,81 +65,85 @@ AppConnectorsServiceMetadata::GetAppConnector(
 future<StatusOr<google::longrunning::Operation>>
 AppConnectorsServiceMetadata::AsyncCreateAppConnector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::beyondcorp::appconnectors::v1::
         CreateAppConnectorRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
-  return child_->AsyncCreateAppConnector(cq, std::move(context), request);
+  return child_->AsyncCreateAppConnector(cq, std::move(context), options,
+                                         request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 AppConnectorsServiceMetadata::AsyncUpdateAppConnector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::beyondcorp::appconnectors::v1::
         UpdateAppConnectorRequest const& request) {
   SetMetadata(
-      *context,
+      *context, options,
       absl::StrCat("app_connector.name=",
                    internal::UrlEncode(request.app_connector().name())));
-  return child_->AsyncUpdateAppConnector(cq, std::move(context), request);
+  return child_->AsyncUpdateAppConnector(cq, std::move(context), options,
+                                         request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 AppConnectorsServiceMetadata::AsyncDeleteAppConnector(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::beyondcorp::appconnectors::v1::
         DeleteAppConnectorRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncDeleteAppConnector(cq, std::move(context), request);
+  return child_->AsyncDeleteAppConnector(cq, std::move(context), options,
+                                         request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 AppConnectorsServiceMetadata::AsyncReportStatus(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::cloud::beyondcorp::appconnectors::v1::ReportStatusRequest const&
         request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("app_connector=",
                            internal::UrlEncode(request.app_connector())));
-  return child_->AsyncReportStatus(cq, std::move(context), request);
+  return child_->AsyncReportStatus(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 AppConnectorsServiceMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncGetOperation(cq, std::move(context), request);
+  return child_->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status> AppConnectorsServiceMetadata::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncCancelOperation(cq, std::move(context), request);
+  return child_->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 
 void AppConnectorsServiceMetadata::SetMetadata(
-    grpc::ClientContext& context, std::string const& request_params) {
+    grpc::ClientContext& context, Options const& options,
+    std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void AppConnectorsServiceMetadata::SetMetadata(grpc::ClientContext& context) {
+void AppConnectorsServiceMetadata::SetMetadata(grpc::ClientContext& context,
+                                               Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

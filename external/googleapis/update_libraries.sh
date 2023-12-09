@@ -126,6 +126,7 @@ declare -A -r LIBRARIES=(
   ["documentai"]="@com_google_googleapis//google/cloud/documentai/v1:documentai_cc_grpc"
   ["domains"]="@com_google_googleapis//google/cloud/domains/v1:domains_cc_grpc"
   ["edgecontainer"]="@com_google_googleapis//google/cloud/edgecontainer/v1:edgecontainer_cc_grpc"
+  ["edgenetwork"]="@com_google_googleapis//google/cloud/edgenetwork/v1:edgenetwork_cc_grpc"
   ["essentialcontacts"]="@com_google_googleapis//google/cloud/essentialcontacts/v1:essentialcontacts_cc_grpc"
   ["eventarc"]="$(
     printf ",%s" \
@@ -220,7 +221,11 @@ declare -A -r LIBRARIES=(
       "@com_google_googleapis//google/cloud/recommender/v1:recommender_cc_grpc" \
       "@com_google_googleapis//google/cloud/recommender/logging/v1:logging_cc_grpc"
   )"
-  ["redis"]="@com_google_googleapis//google/cloud/redis/v1:redis_cc_grpc"
+  ["redis"]="$(
+    printf ",%s" \
+      "@com_google_googleapis//google/cloud/redis/cluster/v1:cluster_cc_grpc" \
+      "@com_google_googleapis//google/cloud/redis/v1:redis_cc_grpc"
+  )"
   ["resourcemanager"]="@com_google_googleapis//google/cloud/resourcemanager/v3:resourcemanager_cc_grpc"
   ["resourcesettings"]="@com_google_googleapis//google/cloud/resourcesettings/v1:resourcesettings_cc_grpc"
   ["retail"]="@com_google_googleapis//google/cloud/retail/v2:retail_cc_grpc"
@@ -260,6 +265,7 @@ declare -A -r LIBRARIES=(
   ["support"]="@com_google_googleapis//google/cloud/support/v2:support_cc_grpc"
   ["talent"]="@com_google_googleapis//google/cloud/talent/v4:talent_cc_grpc"
   ["tasks"]="@com_google_googleapis//google/cloud/tasks/v2:tasks_cc_grpc"
+  ["telcoautomation"]="@com_google_googleapis//google/cloud/telcoautomation/v1:telcoautomation_cc_grpc"
   ["texttospeech"]="@com_google_googleapis//google/cloud/texttospeech/v1:texttospeech_cc_grpc"
   ["timeseriesinsights"]="@com_google_googleapis//google/cloud/timeseriesinsights/v1:timeseriesinsights_cc_grpc"
   ["tpu"]="$(

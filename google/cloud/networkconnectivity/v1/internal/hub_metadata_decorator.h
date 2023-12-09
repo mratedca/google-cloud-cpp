@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_NETWORKCONNECTIVITY_V1_INTERNAL_HUB_METADATA_DECORATOR_H
 
 #include "google/cloud/networkconnectivity/v1/internal/hub_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -50,19 +51,19 @@ class HubServiceMetadata : public HubServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateHub(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::CreateHubRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateHub(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::UpdateHubRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteHub(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::DeleteHubRequest const& request)
       override;
 
@@ -84,31 +85,31 @@ class HubServiceMetadata : public HubServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateSpoke(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::CreateSpokeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateSpoke(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::UpdateSpokeRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRejectHubSpoke(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::RejectHubSpokeRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncAcceptHubSpoke(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::AcceptHubSpokeRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteSpoke(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::networkconnectivity::v1::DeleteSpokeRequest const& request)
       override;
 
@@ -145,18 +146,18 @@ class HubServiceMetadata : public HubServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<HubServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

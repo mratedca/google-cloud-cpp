@@ -33,7 +33,7 @@ EnvironmentsStub::~EnvironmentsStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncCreateEnvironment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         CreateEnvironmentRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::orchestration::airflow::
@@ -51,11 +51,11 @@ DefaultEnvironmentsStub::AsyncCreateEnvironment(
 
 StatusOr<google::cloud::orchestration::airflow::service::v1::Environment>
 DefaultEnvironmentsStub::GetEnvironment(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         GetEnvironmentRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::Environment response;
-  auto status = grpc_stub_->GetEnvironment(&client_context, request, &response);
+  auto status = grpc_stub_->GetEnvironment(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -65,13 +65,12 @@ DefaultEnvironmentsStub::GetEnvironment(
 StatusOr<google::cloud::orchestration::airflow::service::v1::
              ListEnvironmentsResponse>
 DefaultEnvironmentsStub::ListEnvironments(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         ListEnvironmentsRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::ListEnvironmentsResponse
       response;
-  auto status =
-      grpc_stub_->ListEnvironments(&client_context, request, &response);
+  auto status = grpc_stub_->ListEnvironments(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -81,7 +80,7 @@ DefaultEnvironmentsStub::ListEnvironments(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncUpdateEnvironment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         UpdateEnvironmentRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::orchestration::airflow::
@@ -100,7 +99,7 @@ DefaultEnvironmentsStub::AsyncUpdateEnvironment(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncDeleteEnvironment(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         DeleteEnvironmentRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::orchestration::airflow::
@@ -119,13 +118,12 @@ DefaultEnvironmentsStub::AsyncDeleteEnvironment(
 StatusOr<google::cloud::orchestration::airflow::service::v1::
              ExecuteAirflowCommandResponse>
 DefaultEnvironmentsStub::ExecuteAirflowCommand(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         ExecuteAirflowCommandRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::
       ExecuteAirflowCommandResponse response;
-  auto status =
-      grpc_stub_->ExecuteAirflowCommand(&client_context, request, &response);
+  auto status = grpc_stub_->ExecuteAirflowCommand(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -135,13 +133,12 @@ DefaultEnvironmentsStub::ExecuteAirflowCommand(
 StatusOr<google::cloud::orchestration::airflow::service::v1::
              StopAirflowCommandResponse>
 DefaultEnvironmentsStub::StopAirflowCommand(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         StopAirflowCommandRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::StopAirflowCommandResponse
       response;
-  auto status =
-      grpc_stub_->StopAirflowCommand(&client_context, request, &response);
+  auto status = grpc_stub_->StopAirflowCommand(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -151,13 +148,12 @@ DefaultEnvironmentsStub::StopAirflowCommand(
 StatusOr<google::cloud::orchestration::airflow::service::v1::
              PollAirflowCommandResponse>
 DefaultEnvironmentsStub::PollAirflowCommand(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         PollAirflowCommandRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::PollAirflowCommandResponse
       response;
-  auto status =
-      grpc_stub_->PollAirflowCommand(&client_context, request, &response);
+  auto status = grpc_stub_->PollAirflowCommand(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -167,7 +163,7 @@ DefaultEnvironmentsStub::PollAirflowCommand(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncSaveSnapshot(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         SaveSnapshotRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -186,7 +182,7 @@ DefaultEnvironmentsStub::AsyncSaveSnapshot(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncLoadSnapshot(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         LoadSnapshotRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -205,7 +201,7 @@ DefaultEnvironmentsStub::AsyncLoadSnapshot(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncDatabaseFailover(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::orchestration::airflow::service::v1::
         DatabaseFailoverRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::cloud::orchestration::airflow::
@@ -224,13 +220,13 @@ DefaultEnvironmentsStub::AsyncDatabaseFailover(
 StatusOr<google::cloud::orchestration::airflow::service::v1::
              FetchDatabasePropertiesResponse>
 DefaultEnvironmentsStub::FetchDatabaseProperties(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::orchestration::airflow::service::v1::
         FetchDatabasePropertiesRequest const& request) {
   google::cloud::orchestration::airflow::service::v1::
       FetchDatabasePropertiesResponse response;
   auto status =
-      grpc_stub_->FetchDatabaseProperties(&client_context, request, &response);
+      grpc_stub_->FetchDatabaseProperties(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -240,7 +236,7 @@ DefaultEnvironmentsStub::FetchDatabaseProperties(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEnvironmentsStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -255,7 +251,7 @@ DefaultEnvironmentsStub::AsyncGetOperation(
 
 future<Status> DefaultEnvironmentsStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

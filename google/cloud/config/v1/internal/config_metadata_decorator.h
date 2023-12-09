@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_CONFIG_V1_INTERNAL_CONFIG_METADATA_DECORATOR_H
 
 #include "google/cloud/config/v1/internal/config_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -49,19 +50,19 @@ class ConfigMetadata : public ConfigStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateDeployment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::config::v1::CreateDeploymentRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateDeployment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::config::v1::UpdateDeploymentRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteDeployment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::config::v1::DeleteDeploymentRequest const& request)
       override;
 
@@ -103,12 +104,12 @@ class ConfigMetadata : public ConfigStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncLockDeployment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::config::v1::LockDeploymentRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUnlockDeployment(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::config::v1::UnlockDeploymentRequest const& request)
       override;
 
@@ -118,18 +119,18 @@ class ConfigMetadata : public ConfigStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ConfigStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

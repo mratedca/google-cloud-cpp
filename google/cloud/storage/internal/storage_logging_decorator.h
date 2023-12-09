@@ -120,6 +120,7 @@ class StorageLogging : public StorageStub {
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::storage::v2::ReadObjectResponse>>
   ReadObject(std::shared_ptr<grpc::ClientContext> context,
+             Options const& options,
              google::storage::v2::ReadObjectRequest const& request) override;
 
   StatusOr<google::storage::v2::Object> UpdateObject(
@@ -129,7 +130,8 @@ class StorageLogging : public StorageStub {
   std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
       google::storage::v2::WriteObjectRequest,
       google::storage::v2::WriteObjectResponse>>
-  WriteObject(std::shared_ptr<grpc::ClientContext> context) override;
+  WriteObject(std::shared_ptr<grpc::ClientContext> context,
+              Options const& options) override;
 
   std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<
       google::storage::v2::BidiWriteObjectRequest,

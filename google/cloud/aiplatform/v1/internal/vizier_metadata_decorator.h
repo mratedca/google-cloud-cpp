@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_AIPLATFORM_V1_INTERNAL_VIZIER_METADATA_DECORATOR_H
 
 #include "google/cloud/aiplatform/v1/internal/vizier_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -63,7 +64,7 @@ class VizierServiceMetadata : public VizierServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncSuggestTrials(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::SuggestTrialsRequest const& request)
       override;
 
@@ -97,7 +98,7 @@ class VizierServiceMetadata : public VizierServiceStub {
   future<StatusOr<google::longrunning::Operation>>
   AsyncCheckTrialEarlyStoppingState(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::CheckTrialEarlyStoppingStateRequest const&
           request) override;
 
@@ -113,18 +114,18 @@ class VizierServiceMetadata : public VizierServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<VizierServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

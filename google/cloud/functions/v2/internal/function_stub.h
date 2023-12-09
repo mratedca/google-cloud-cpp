@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/functions/v2/functions.grpc.pb.h>
@@ -47,17 +48,17 @@ class FunctionServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::CreateFunctionRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::UpdateFunctionRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::DeleteFunctionRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::functions::v2::GenerateUploadUrlResponse>
@@ -79,12 +80,12 @@ class FunctionServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -99,57 +100,57 @@ class DefaultFunctionServiceStub : public FunctionServiceStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::functions::v2::Function> GetFunction(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::functions::v2::GetFunctionRequest const& request) override;
 
   StatusOr<google::cloud::functions::v2::ListFunctionsResponse> ListFunctions(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::functions::v2::ListFunctionsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::CreateFunctionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::UpdateFunctionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteFunction(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::functions::v2::DeleteFunctionRequest const& request)
       override;
 
   StatusOr<google::cloud::functions::v2::GenerateUploadUrlResponse>
   GenerateUploadUrl(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::functions::v2::GenerateUploadUrlRequest const& request)
       override;
 
   StatusOr<google::cloud::functions::v2::GenerateDownloadUrlResponse>
   GenerateDownloadUrl(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::functions::v2::GenerateDownloadUrlRequest const& request)
       override;
 
   StatusOr<google::cloud::functions::v2::ListRuntimesResponse> ListRuntimes(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::functions::v2::ListRuntimesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

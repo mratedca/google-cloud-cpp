@@ -32,13 +32,12 @@ AccessContextManagerStub::~AccessContextManagerStub() = default;
 
 StatusOr<google::identity::accesscontextmanager::v1::ListAccessPoliciesResponse>
 DefaultAccessContextManagerStub::ListAccessPolicies(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::ListAccessPoliciesRequest const&
         request) {
   google::identity::accesscontextmanager::v1::ListAccessPoliciesResponse
       response;
-  auto status =
-      grpc_stub_->ListAccessPolicies(&client_context, request, &response);
+  auto status = grpc_stub_->ListAccessPolicies(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -47,12 +46,11 @@ DefaultAccessContextManagerStub::ListAccessPolicies(
 
 StatusOr<google::identity::accesscontextmanager::v1::AccessPolicy>
 DefaultAccessContextManagerStub::GetAccessPolicy(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::GetAccessPolicyRequest const&
         request) {
   google::identity::accesscontextmanager::v1::AccessPolicy response;
-  auto status =
-      grpc_stub_->GetAccessPolicy(&client_context, request, &response);
+  auto status = grpc_stub_->GetAccessPolicy(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -62,7 +60,7 @@ DefaultAccessContextManagerStub::GetAccessPolicy(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncCreateAccessPolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::AccessPolicy const& request) {
   return internal::MakeUnaryRpcImpl<
       google::identity::accesscontextmanager::v1::AccessPolicy,
@@ -80,7 +78,7 @@ DefaultAccessContextManagerStub::AsyncCreateAccessPolicy(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncUpdateAccessPolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::UpdateAccessPolicyRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -99,7 +97,7 @@ DefaultAccessContextManagerStub::AsyncUpdateAccessPolicy(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncDeleteAccessPolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::DeleteAccessPolicyRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -117,12 +115,11 @@ DefaultAccessContextManagerStub::AsyncDeleteAccessPolicy(
 
 StatusOr<google::identity::accesscontextmanager::v1::ListAccessLevelsResponse>
 DefaultAccessContextManagerStub::ListAccessLevels(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::ListAccessLevelsRequest const&
         request) {
   google::identity::accesscontextmanager::v1::ListAccessLevelsResponse response;
-  auto status =
-      grpc_stub_->ListAccessLevels(&client_context, request, &response);
+  auto status = grpc_stub_->ListAccessLevels(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -131,11 +128,11 @@ DefaultAccessContextManagerStub::ListAccessLevels(
 
 StatusOr<google::identity::accesscontextmanager::v1::AccessLevel>
 DefaultAccessContextManagerStub::GetAccessLevel(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::GetAccessLevelRequest const&
         request) {
   google::identity::accesscontextmanager::v1::AccessLevel response;
-  auto status = grpc_stub_->GetAccessLevel(&client_context, request, &response);
+  auto status = grpc_stub_->GetAccessLevel(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -145,7 +142,7 @@ DefaultAccessContextManagerStub::GetAccessLevel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncCreateAccessLevel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::CreateAccessLevelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -164,7 +161,7 @@ DefaultAccessContextManagerStub::AsyncCreateAccessLevel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncUpdateAccessLevel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::UpdateAccessLevelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -183,7 +180,7 @@ DefaultAccessContextManagerStub::AsyncUpdateAccessLevel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncDeleteAccessLevel(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::DeleteAccessLevelRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -202,7 +199,7 @@ DefaultAccessContextManagerStub::AsyncDeleteAccessLevel(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncReplaceAccessLevels(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         ReplaceAccessLevelsRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -221,13 +218,12 @@ DefaultAccessContextManagerStub::AsyncReplaceAccessLevels(
 StatusOr<
     google::identity::accesscontextmanager::v1::ListServicePerimetersResponse>
 DefaultAccessContextManagerStub::ListServicePerimeters(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::
         ListServicePerimetersRequest const& request) {
   google::identity::accesscontextmanager::v1::ListServicePerimetersResponse
       response;
-  auto status =
-      grpc_stub_->ListServicePerimeters(&client_context, request, &response);
+  auto status = grpc_stub_->ListServicePerimeters(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -236,12 +232,11 @@ DefaultAccessContextManagerStub::ListServicePerimeters(
 
 StatusOr<google::identity::accesscontextmanager::v1::ServicePerimeter>
 DefaultAccessContextManagerStub::GetServicePerimeter(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::
         GetServicePerimeterRequest const& request) {
   google::identity::accesscontextmanager::v1::ServicePerimeter response;
-  auto status =
-      grpc_stub_->GetServicePerimeter(&client_context, request, &response);
+  auto status = grpc_stub_->GetServicePerimeter(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -251,7 +246,7 @@ DefaultAccessContextManagerStub::GetServicePerimeter(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncCreateServicePerimeter(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         CreateServicePerimeterRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -270,7 +265,7 @@ DefaultAccessContextManagerStub::AsyncCreateServicePerimeter(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncUpdateServicePerimeter(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         UpdateServicePerimeterRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -289,7 +284,7 @@ DefaultAccessContextManagerStub::AsyncUpdateServicePerimeter(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncDeleteServicePerimeter(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         DeleteServicePerimeterRequest const& request) {
   return internal::MakeUnaryRpcImpl<
@@ -308,7 +303,7 @@ DefaultAccessContextManagerStub::AsyncDeleteServicePerimeter(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncReplaceServicePerimeters(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         ReplaceServicePerimetersRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::identity::accesscontextmanager::v1::
@@ -327,7 +322,7 @@ DefaultAccessContextManagerStub::AsyncReplaceServicePerimeters(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncCommitServicePerimeters(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         CommitServicePerimetersRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::identity::accesscontextmanager::v1::
@@ -346,13 +341,13 @@ DefaultAccessContextManagerStub::AsyncCommitServicePerimeters(
 StatusOr<google::identity::accesscontextmanager::v1::
              ListGcpUserAccessBindingsResponse>
 DefaultAccessContextManagerStub::ListGcpUserAccessBindings(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::
         ListGcpUserAccessBindingsRequest const& request) {
   google::identity::accesscontextmanager::v1::ListGcpUserAccessBindingsResponse
       response;
-  auto status = grpc_stub_->ListGcpUserAccessBindings(&client_context, request,
-                                                      &response);
+  auto status =
+      grpc_stub_->ListGcpUserAccessBindings(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -361,12 +356,12 @@ DefaultAccessContextManagerStub::ListGcpUserAccessBindings(
 
 StatusOr<google::identity::accesscontextmanager::v1::GcpUserAccessBinding>
 DefaultAccessContextManagerStub::GetGcpUserAccessBinding(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::identity::accesscontextmanager::v1::
         GetGcpUserAccessBindingRequest const& request) {
   google::identity::accesscontextmanager::v1::GcpUserAccessBinding response;
   auto status =
-      grpc_stub_->GetGcpUserAccessBinding(&client_context, request, &response);
+      grpc_stub_->GetGcpUserAccessBinding(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -376,7 +371,7 @@ DefaultAccessContextManagerStub::GetGcpUserAccessBinding(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncCreateGcpUserAccessBinding(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         CreateGcpUserAccessBindingRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::identity::accesscontextmanager::v1::
@@ -396,7 +391,7 @@ DefaultAccessContextManagerStub::AsyncCreateGcpUserAccessBinding(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncUpdateGcpUserAccessBinding(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         UpdateGcpUserAccessBindingRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::identity::accesscontextmanager::v1::
@@ -416,7 +411,7 @@ DefaultAccessContextManagerStub::AsyncUpdateGcpUserAccessBinding(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncDeleteGcpUserAccessBinding(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::identity::accesscontextmanager::v1::
         DeleteGcpUserAccessBindingRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::identity::accesscontextmanager::v1::
@@ -434,10 +429,10 @@ DefaultAccessContextManagerStub::AsyncDeleteGcpUserAccessBinding(
 }
 
 StatusOr<google::iam::v1::Policy> DefaultAccessContextManagerStub::SetIamPolicy(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::SetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status = grpc_stub_->SetIamPolicy(&client_context, request, &response);
+  auto status = grpc_stub_->SetIamPolicy(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -445,10 +440,10 @@ StatusOr<google::iam::v1::Policy> DefaultAccessContextManagerStub::SetIamPolicy(
 }
 
 StatusOr<google::iam::v1::Policy> DefaultAccessContextManagerStub::GetIamPolicy(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::GetIamPolicyRequest const& request) {
   google::iam::v1::Policy response;
-  auto status = grpc_stub_->GetIamPolicy(&client_context, request, &response);
+  auto status = grpc_stub_->GetIamPolicy(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -457,11 +452,10 @@ StatusOr<google::iam::v1::Policy> DefaultAccessContextManagerStub::GetIamPolicy(
 
 StatusOr<google::iam::v1::TestIamPermissionsResponse>
 DefaultAccessContextManagerStub::TestIamPermissions(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::iam::v1::TestIamPermissionsRequest const& request) {
   google::iam::v1::TestIamPermissionsResponse response;
-  auto status =
-      grpc_stub_->TestIamPermissions(&client_context, request, &response);
+  auto status = grpc_stub_->TestIamPermissions(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -471,7 +465,7 @@ DefaultAccessContextManagerStub::TestIamPermissions(
 future<StatusOr<google::longrunning::Operation>>
 DefaultAccessContextManagerStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -486,7 +480,7 @@ DefaultAccessContextManagerStub::AsyncGetOperation(
 
 future<Status> DefaultAccessContextManagerStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

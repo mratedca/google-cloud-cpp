@@ -672,6 +672,10 @@
 ./include/google/cloud/edgecontainer/v1
 ./include/google/cloud/edgecontainer/v1/internal
 ./include/google/cloud/edgecontainer/v1/mocks
+./include/google/cloud/edgenetwork
+./include/google/cloud/edgenetwork/v1
+./include/google/cloud/edgenetwork/v1/internal
+./include/google/cloud/edgenetwork/v1/mocks
 ./include/google/cloud/essentialcontacts
 ./include/google/cloud/essentialcontacts/v1
 ./include/google/cloud/essentialcontacts/v1/internal
@@ -872,6 +876,9 @@
 ./include/google/cloud/profiler/v2/internal
 ./include/google/cloud/profiler/v2/mocks
 ./include/google/cloud/pubsub
+./include/google/cloud/pubsub/admin
+./include/google/cloud/pubsub/admin/internal
+./include/google/cloud/pubsub/admin/mocks
 ./include/google/cloud/pubsub/internal
 ./include/google/cloud/pubsub/mocks
 ./include/google/cloud/pubsublite
@@ -892,6 +899,10 @@
 ./include/google/cloud/recommender/v1/internal
 ./include/google/cloud/recommender/v1/mocks
 ./include/google/cloud/redis
+./include/google/cloud/redis/cluster
+./include/google/cloud/redis/cluster/v1
+./include/google/cloud/redis/cluster/v1/internal
+./include/google/cloud/redis/cluster/v1/mocks
 ./include/google/cloud/redis/mocks
 ./include/google/cloud/redis/v1
 ./include/google/cloud/redis/v1/internal
@@ -1008,6 +1019,10 @@
 ./include/google/cloud/tasks/v2
 ./include/google/cloud/tasks/v2/internal
 ./include/google/cloud/tasks/v2/mocks
+./include/google/cloud/telcoautomation
+./include/google/cloud/telcoautomation/v1
+./include/google/cloud/telcoautomation/v1/internal
+./include/google/cloud/telcoautomation/v1/mocks
 ./include/google/cloud/texttospeech
 ./include/google/cloud/texttospeech/mocks
 ./include/google/cloud/texttospeech/v1
@@ -1202,6 +1217,7 @@
 ./lib64/cmake/google_cloud_cpp_documentai
 ./lib64/cmake/google_cloud_cpp_domains
 ./lib64/cmake/google_cloud_cpp_edgecontainer
+./lib64/cmake/google_cloud_cpp_edgenetwork
 ./lib64/cmake/google_cloud_cpp_essentialcontacts
 ./lib64/cmake/google_cloud_cpp_eventarc
 ./lib64/cmake/google_cloud_cpp_filestore
@@ -1262,6 +1278,7 @@
 ./lib64/cmake/google_cloud_cpp_support
 ./lib64/cmake/google_cloud_cpp_talent
 ./lib64/cmake/google_cloud_cpp_tasks
+./lib64/cmake/google_cloud_cpp_telcoautomation
 ./lib64/cmake/google_cloud_cpp_texttospeech
 ./lib64/cmake/google_cloud_cpp_timeseriesinsights
 ./lib64/cmake/google_cloud_cpp_tpu

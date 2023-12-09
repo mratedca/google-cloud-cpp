@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_CLOUDBUILD_V1_INTERNAL_CLOUD_BUILD_METADATA_DECORATOR_H
 
 #include "google/cloud/cloudbuild/v1/internal/cloud_build_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -40,7 +41,7 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBuild(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::CreateBuildRequest const& request)
       override;
 
@@ -61,13 +62,13 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncRetryBuild(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::RetryBuildRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncApproveBuild(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::ApproveBuildRequest const& request)
       override;
 
@@ -99,7 +100,7 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncRunBuildTrigger(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::RunBuildTriggerRequest const& request)
       override;
 
@@ -111,7 +112,7 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateWorkerPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::CreateWorkerPoolRequest const& request)
       override;
 
@@ -122,13 +123,13 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteWorkerPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::DeleteWorkerPoolRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateWorkerPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::cloudbuild::v1::UpdateWorkerPoolRequest const& request)
       override;
 
@@ -140,18 +141,18 @@ class CloudBuildMetadata : public CloudBuildStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<CloudBuildStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

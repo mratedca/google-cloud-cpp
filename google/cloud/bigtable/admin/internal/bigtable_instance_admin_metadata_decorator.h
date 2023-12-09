@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_BIGTABLE_ADMIN_INTERNAL_BIGTABLE_INSTANCE_ADMIN_METADATA_DECORATOR_H
 
 #include "google/cloud/bigtable/admin/internal/bigtable_instance_admin_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateInstance(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::CreateInstanceRequest const& request)
       override;
 
@@ -60,7 +61,7 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncPartialUpdateInstance(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::PartialUpdateInstanceRequest const& request)
       override;
 
@@ -71,7 +72,7 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::CreateClusterRequest const& request)
       override;
 
@@ -85,12 +86,12 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::Cluster const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncPartialUpdateCluster(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::PartialUpdateClusterRequest const& request)
       override;
 
@@ -115,7 +116,7 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateAppProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::bigtable::admin::v2::UpdateAppProfileRequest const& request)
       override;
 
@@ -143,18 +144,18 @@ class BigtableInstanceAdminMetadata : public BigtableInstanceAdminStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<BigtableInstanceAdminStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

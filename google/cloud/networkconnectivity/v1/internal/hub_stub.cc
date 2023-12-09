@@ -32,10 +32,10 @@ HubServiceStub::~HubServiceStub() = default;
 
 StatusOr<google::cloud::networkconnectivity::v1::ListHubsResponse>
 DefaultHubServiceStub::ListHubs(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListHubsRequest const& request) {
   google::cloud::networkconnectivity::v1::ListHubsResponse response;
-  auto status = grpc_stub_->ListHubs(&client_context, request, &response);
+  auto status = grpc_stub_->ListHubs(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultHubServiceStub::ListHubs(
 
 StatusOr<google::cloud::networkconnectivity::v1::Hub>
 DefaultHubServiceStub::GetHub(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::GetHubRequest const& request) {
   google::cloud::networkconnectivity::v1::Hub response;
-  auto status = grpc_stub_->GetHub(&client_context, request, &response);
+  auto status = grpc_stub_->GetHub(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,7 +57,7 @@ DefaultHubServiceStub::GetHub(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncCreateHub(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::CreateHubRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::CreateHubRequest,
@@ -75,7 +75,7 @@ DefaultHubServiceStub::AsyncCreateHub(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncUpdateHub(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::UpdateHubRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::UpdateHubRequest,
@@ -93,7 +93,7 @@ DefaultHubServiceStub::AsyncUpdateHub(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncDeleteHub(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::DeleteHubRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::DeleteHubRequest,
@@ -110,11 +110,11 @@ DefaultHubServiceStub::AsyncDeleteHub(
 
 StatusOr<google::cloud::networkconnectivity::v1::ListHubSpokesResponse>
 DefaultHubServiceStub::ListHubSpokes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListHubSpokesRequest const&
         request) {
   google::cloud::networkconnectivity::v1::ListHubSpokesResponse response;
-  auto status = grpc_stub_->ListHubSpokes(&client_context, request, &response);
+  auto status = grpc_stub_->ListHubSpokes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -123,10 +123,10 @@ DefaultHubServiceStub::ListHubSpokes(
 
 StatusOr<google::cloud::networkconnectivity::v1::ListSpokesResponse>
 DefaultHubServiceStub::ListSpokes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListSpokesRequest const& request) {
   google::cloud::networkconnectivity::v1::ListSpokesResponse response;
-  auto status = grpc_stub_->ListSpokes(&client_context, request, &response);
+  auto status = grpc_stub_->ListSpokes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -135,10 +135,10 @@ DefaultHubServiceStub::ListSpokes(
 
 StatusOr<google::cloud::networkconnectivity::v1::Spoke>
 DefaultHubServiceStub::GetSpoke(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::GetSpokeRequest const& request) {
   google::cloud::networkconnectivity::v1::Spoke response;
-  auto status = grpc_stub_->GetSpoke(&client_context, request, &response);
+  auto status = grpc_stub_->GetSpoke(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -148,7 +148,7 @@ DefaultHubServiceStub::GetSpoke(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncCreateSpoke(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::CreateSpokeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::CreateSpokeRequest,
@@ -166,7 +166,7 @@ DefaultHubServiceStub::AsyncCreateSpoke(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncUpdateSpoke(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::UpdateSpokeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::UpdateSpokeRequest,
@@ -184,7 +184,7 @@ DefaultHubServiceStub::AsyncUpdateSpoke(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncRejectHubSpoke(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::RejectHubSpokeRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -204,7 +204,7 @@ DefaultHubServiceStub::AsyncRejectHubSpoke(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncAcceptHubSpoke(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::AcceptHubSpokeRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -224,7 +224,7 @@ DefaultHubServiceStub::AsyncAcceptHubSpoke(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncDeleteSpoke(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::networkconnectivity::v1::DeleteSpokeRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::networkconnectivity::v1::DeleteSpokeRequest,
@@ -241,11 +241,11 @@ DefaultHubServiceStub::AsyncDeleteSpoke(
 
 StatusOr<google::cloud::networkconnectivity::v1::RouteTable>
 DefaultHubServiceStub::GetRouteTable(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::GetRouteTableRequest const&
         request) {
   google::cloud::networkconnectivity::v1::RouteTable response;
-  auto status = grpc_stub_->GetRouteTable(&client_context, request, &response);
+  auto status = grpc_stub_->GetRouteTable(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -254,10 +254,10 @@ DefaultHubServiceStub::GetRouteTable(
 
 StatusOr<google::cloud::networkconnectivity::v1::Route>
 DefaultHubServiceStub::GetRoute(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::GetRouteRequest const& request) {
   google::cloud::networkconnectivity::v1::Route response;
-  auto status = grpc_stub_->GetRoute(&client_context, request, &response);
+  auto status = grpc_stub_->GetRoute(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -266,10 +266,10 @@ DefaultHubServiceStub::GetRoute(
 
 StatusOr<google::cloud::networkconnectivity::v1::ListRoutesResponse>
 DefaultHubServiceStub::ListRoutes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListRoutesRequest const& request) {
   google::cloud::networkconnectivity::v1::ListRoutesResponse response;
-  auto status = grpc_stub_->ListRoutes(&client_context, request, &response);
+  auto status = grpc_stub_->ListRoutes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -278,12 +278,11 @@ DefaultHubServiceStub::ListRoutes(
 
 StatusOr<google::cloud::networkconnectivity::v1::ListRouteTablesResponse>
 DefaultHubServiceStub::ListRouteTables(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListRouteTablesRequest const&
         request) {
   google::cloud::networkconnectivity::v1::ListRouteTablesResponse response;
-  auto status =
-      grpc_stub_->ListRouteTables(&client_context, request, &response);
+  auto status = grpc_stub_->ListRouteTables(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -292,10 +291,10 @@ DefaultHubServiceStub::ListRouteTables(
 
 StatusOr<google::cloud::networkconnectivity::v1::Group>
 DefaultHubServiceStub::GetGroup(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::GetGroupRequest const& request) {
   google::cloud::networkconnectivity::v1::Group response;
-  auto status = grpc_stub_->GetGroup(&client_context, request, &response);
+  auto status = grpc_stub_->GetGroup(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -304,10 +303,10 @@ DefaultHubServiceStub::GetGroup(
 
 StatusOr<google::cloud::networkconnectivity::v1::ListGroupsResponse>
 DefaultHubServiceStub::ListGroups(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::networkconnectivity::v1::ListGroupsRequest const& request) {
   google::cloud::networkconnectivity::v1::ListGroupsResponse response;
-  auto status = grpc_stub_->ListGroups(&client_context, request, &response);
+  auto status = grpc_stub_->ListGroups(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -317,7 +316,7 @@ DefaultHubServiceStub::ListGroups(
 future<StatusOr<google::longrunning::Operation>>
 DefaultHubServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -332,7 +331,7 @@ DefaultHubServiceStub::AsyncGetOperation(
 
 future<Status> DefaultHubServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

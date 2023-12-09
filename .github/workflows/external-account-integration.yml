@@ -30,7 +30,7 @@ jobs:
       with:
         ref: ${{ inputs.checkout-ref }}
     - id: auth
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
         create_credentials_file: true
         credentials_json: ${{ secrets.BUILD_CACHE_KEY }}
@@ -46,7 +46,7 @@ jobs:
     - name: download-sccache
       working-directory: "${{runner.temp}}"
       run: |
-        curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.5.4/sccache-v0.5.4-x86_64-unknown-linux-musl.tar.gz | \
+        curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.1/sccache-v0.7.1-x86_64-unknown-linux-musl.tar.gz | \
           tar -zxf - --strip-components=1 && \
         sudo mv sccache /usr/bin/sccache && \
         sudo chmod +x /usr/bin/sccache
@@ -64,7 +64,7 @@ jobs:
     - id: byoid-auth
       if: '!github.event.pull_request.head.repo.fork'
       name: 'Authenticate to GCP'
-      uses: 'google-github-actions/auth@v1'
+      uses: 'google-github-actions/auth@v2'
       with:
         create_credentials_file: true
         workload_identity_provider: 'projects/49427430084/locations/global/workloadIdentityPools/github-wif-pool/providers/github-wif-provider'

@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/security/privateca/v1/service.grpc.pb.h>
@@ -70,28 +71,28 @@ class CertificateAuthorityServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncActivateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           ActivateCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           CreateCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDisableCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DisableCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncEnableCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           EnableCertificateAuthorityRequest const& request) = 0;
 
@@ -118,33 +119,33 @@ class CertificateAuthorityServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUndeleteCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UndeleteCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DeleteCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateAuthorityRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::CreateCaPoolRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::UpdateCaPoolRequest const&
           request) = 0;
 
@@ -160,7 +161,7 @@ class CertificateAuthorityServiceStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::DeleteCaPoolRequest const&
           request) = 0;
 
@@ -187,21 +188,21 @@ class CertificateAuthorityServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateRevocationList(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateRevocationListRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           CreateCertificateTemplateRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DeleteCertificateTemplateRequest const& request) = 0;
 
@@ -220,18 +221,18 @@ class CertificateAuthorityServiceStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateTemplateRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -248,198 +249,198 @@ class DefaultCertificateAuthorityServiceStub
 
   StatusOr<google::cloud::security::privateca::v1::Certificate>
   CreateCertificate(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::CreateCertificateRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::Certificate> GetCertificate(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::GetCertificateRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::ListCertificatesResponse>
   ListCertificates(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::ListCertificatesRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::Certificate>
   RevokeCertificate(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::RevokeCertificateRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::Certificate>
   UpdateCertificate(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::UpdateCertificateRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncActivateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           ActivateCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncCreateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           CreateCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncDisableCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DisableCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncEnableCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           EnableCertificateAuthorityRequest const& request) override;
 
   StatusOr<google::cloud::security::privateca::v1::
                FetchCertificateAuthorityCsrResponse>
   FetchCertificateAuthorityCsr(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           FetchCertificateAuthorityCsrRequest const& request) override;
 
   StatusOr<google::cloud::security::privateca::v1::CertificateAuthority>
   GetCertificateAuthority(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           GetCertificateAuthorityRequest const& request) override;
 
   StatusOr<google::cloud::security::privateca::v1::
                ListCertificateAuthoritiesResponse>
   ListCertificateAuthorities(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           ListCertificateAuthoritiesRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncUndeleteCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UndeleteCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DeleteCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateAuthority(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateAuthorityRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::CreateCaPoolRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::UpdateCaPoolRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::CaPool> GetCaPool(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::GetCaPoolRequest const& request)
       override;
 
   StatusOr<google::cloud::security::privateca::v1::ListCaPoolsResponse>
-  ListCaPools(grpc::ClientContext& client_context,
+  ListCaPools(grpc::ClientContext& context,
               google::cloud::security::privateca::v1::ListCaPoolsRequest const&
                   request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteCaPool(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::DeleteCaPoolRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::FetchCaCertsResponse>
   FetchCaCerts(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::FetchCaCertsRequest const&
           request) override;
 
   StatusOr<google::cloud::security::privateca::v1::CertificateRevocationList>
   GetCertificateRevocationList(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           GetCertificateRevocationListRequest const& request) override;
 
   StatusOr<google::cloud::security::privateca::v1::
                ListCertificateRevocationListsResponse>
   ListCertificateRevocationLists(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           ListCertificateRevocationListsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateRevocationList(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateRevocationListRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncCreateCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           CreateCertificateTemplateRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           DeleteCertificateTemplateRequest const& request) override;
 
   StatusOr<google::cloud::security::privateca::v1::CertificateTemplate>
   GetCertificateTemplate(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           GetCertificateTemplateRequest const& request) override;
 
   StatusOr<
       google::cloud::security::privateca::v1::ListCertificateTemplatesResponse>
   ListCertificateTemplates(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::security::privateca::v1::
           ListCertificateTemplatesRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateCertificateTemplate(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::security::privateca::v1::
           UpdateCertificateTemplateRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_ARTIFACTREGISTRY_V1_INTERNAL_ARTIFACT_REGISTRY_METADATA_DECORATOR_H
 
 #include "google/cloud/artifactregistry/v1/internal/artifact_registry_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -87,13 +88,13 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportAptArtifacts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::ImportAptArtifactsRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncImportYumArtifacts(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::ImportYumArtifactsRequest const&
           request) override;
 
@@ -110,7 +111,7 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::CreateRepositoryRequest const&
           request) override;
 
@@ -121,7 +122,7 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRepository(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeleteRepositoryRequest const&
           request) override;
 
@@ -138,7 +139,7 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeletePackage(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeletePackageRequest const&
           request) override;
 
@@ -155,8 +156,14 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteVersion(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::devtools::artifactregistry::v1::DeleteVersionRequest const&
+          request) override;
+
+  future<StatusOr<google::longrunning::Operation>> AsyncBatchDeleteVersions(
+      google::cloud::CompletionQueue& cq,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
+      google::devtools::artifactregistry::v1::BatchDeleteVersionsRequest const&
           request) override;
 
   StatusOr<google::devtools::artifactregistry::v1::ListFilesResponse> ListFiles(
@@ -231,18 +238,18 @@ class ArtifactRegistryMetadata : public ArtifactRegistryStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ArtifactRegistryStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

@@ -32,11 +32,10 @@ EntityTypesStub::~EntityTypesStub() = default;
 
 StatusOr<google::cloud::dialogflow::v2::ListEntityTypesResponse>
 DefaultEntityTypesStub::ListEntityTypes(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::ListEntityTypesRequest const& request) {
   google::cloud::dialogflow::v2::ListEntityTypesResponse response;
-  auto status =
-      grpc_stub_->ListEntityTypes(&client_context, request, &response);
+  auto status = grpc_stub_->ListEntityTypes(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -45,10 +44,10 @@ DefaultEntityTypesStub::ListEntityTypes(
 
 StatusOr<google::cloud::dialogflow::v2::EntityType>
 DefaultEntityTypesStub::GetEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::GetEntityTypeRequest const& request) {
   google::cloud::dialogflow::v2::EntityType response;
-  auto status = grpc_stub_->GetEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->GetEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -57,11 +56,10 @@ DefaultEntityTypesStub::GetEntityType(
 
 StatusOr<google::cloud::dialogflow::v2::EntityType>
 DefaultEntityTypesStub::CreateEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::CreateEntityTypeRequest const& request) {
   google::cloud::dialogflow::v2::EntityType response;
-  auto status =
-      grpc_stub_->CreateEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->CreateEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -70,11 +68,10 @@ DefaultEntityTypesStub::CreateEntityType(
 
 StatusOr<google::cloud::dialogflow::v2::EntityType>
 DefaultEntityTypesStub::UpdateEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::UpdateEntityTypeRequest const& request) {
   google::cloud::dialogflow::v2::EntityType response;
-  auto status =
-      grpc_stub_->UpdateEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->UpdateEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -82,11 +79,10 @@ DefaultEntityTypesStub::UpdateEntityType(
 }
 
 Status DefaultEntityTypesStub::DeleteEntityType(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::dialogflow::v2::DeleteEntityTypeRequest const& request) {
   google::protobuf::Empty response;
-  auto status =
-      grpc_stub_->DeleteEntityType(&client_context, request, &response);
+  auto status = grpc_stub_->DeleteEntityType(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -96,7 +92,7 @@ Status DefaultEntityTypesStub::DeleteEntityType(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncBatchUpdateEntityTypes(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::BatchUpdateEntityTypesRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -115,7 +111,7 @@ DefaultEntityTypesStub::AsyncBatchUpdateEntityTypes(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncBatchDeleteEntityTypes(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::BatchDeleteEntityTypesRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -134,7 +130,7 @@ DefaultEntityTypesStub::AsyncBatchDeleteEntityTypes(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncBatchCreateEntities(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::BatchCreateEntitiesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::dialogflow::v2::BatchCreateEntitiesRequest,
@@ -152,7 +148,7 @@ DefaultEntityTypesStub::AsyncBatchCreateEntities(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncBatchUpdateEntities(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::BatchUpdateEntitiesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::dialogflow::v2::BatchUpdateEntitiesRequest,
@@ -170,7 +166,7 @@ DefaultEntityTypesStub::AsyncBatchUpdateEntities(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncBatchDeleteEntities(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::dialogflow::v2::BatchDeleteEntitiesRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::dialogflow::v2::BatchDeleteEntitiesRequest,
@@ -188,7 +184,7 @@ DefaultEntityTypesStub::AsyncBatchDeleteEntities(
 future<StatusOr<google::longrunning::Operation>>
 DefaultEntityTypesStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -203,7 +199,7 @@ DefaultEntityTypesStub::AsyncGetOperation(
 
 future<Status> DefaultEntityTypesStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

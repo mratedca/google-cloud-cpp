@@ -25,8 +25,7 @@ namespace sql_v1 {
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 
 SqlInstancesServiceClient::SqlInstancesServiceClient(
-    ExperimentalTag, std::shared_ptr<SqlInstancesServiceConnection> connection,
-    Options opts)
+    std::shared_ptr<SqlInstancesServiceConnection> connection, Options opts)
     : connection_(std::move(connection)),
       options_(
           internal::MergeOptions(std::move(opts), connection_->options())) {}
@@ -60,6 +59,13 @@ SqlInstancesServiceClient::DemoteMaster(
     Options opts) {
   internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
   return connection_->DemoteMaster(request);
+}
+
+StatusOr<google::cloud::sql::v1::Operation> SqlInstancesServiceClient::Demote(
+    google::cloud::sql::v1::SqlInstancesDemoteRequest const& request,
+    Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->Demote(request);
 }
 
 StatusOr<google::cloud::sql::v1::Operation> SqlInstancesServiceClient::Export(
@@ -134,6 +140,14 @@ SqlInstancesServiceClient::PromoteReplica(
     Options opts) {
   internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
   return connection_->PromoteReplica(request);
+}
+
+StatusOr<google::cloud::sql::v1::Operation>
+SqlInstancesServiceClient::Switchover(
+    google::cloud::sql::v1::SqlInstancesSwitchoverRequest const& request,
+    Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->Switchover(request);
 }
 
 StatusOr<google::cloud::sql::v1::Operation>

@@ -186,12 +186,13 @@ StatusOr<google::storage::v2::Object> StorageAuth::GetObject(
 std::unique_ptr<google::cloud::internal::StreamingReadRpc<
     google::storage::v2::ReadObjectResponse>>
 StorageAuth::ReadObject(std::shared_ptr<grpc::ClientContext> context,
+                        Options const& options,
                         google::storage::v2::ReadObjectRequest const& request) {
   using ErrorStream = ::google::cloud::internal::StreamingReadRpcError<
       google::storage::v2::ReadObjectResponse>;
   auto status = auth_->ConfigureContext(*context);
   if (!status.ok()) return std::make_unique<ErrorStream>(std::move(status));
-  return child_->ReadObject(std::move(context), request);
+  return child_->ReadObject(std::move(context), options, request);
 }
 
 StatusOr<google::storage::v2::Object> StorageAuth::UpdateObject(
@@ -205,13 +206,14 @@ StatusOr<google::storage::v2::Object> StorageAuth::UpdateObject(
 std::unique_ptr<::google::cloud::internal::StreamingWriteRpc<
     google::storage::v2::WriteObjectRequest,
     google::storage::v2::WriteObjectResponse>>
-StorageAuth::WriteObject(std::shared_ptr<grpc::ClientContext> context) {
+StorageAuth::WriteObject(std::shared_ptr<grpc::ClientContext> context,
+                         Options const& options) {
   using ErrorStream = ::google::cloud::internal::StreamingWriteRpcError<
       google::storage::v2::WriteObjectRequest,
       google::storage::v2::WriteObjectResponse>;
   auto status = auth_->ConfigureContext(*context);
   if (!status.ok()) return std::make_unique<ErrorStream>(std::move(status));
-  return child_->WriteObject(std::move(context));
+  return child_->WriteObject(std::move(context), options);
 }
 
 std::unique_ptr<::google::cloud::AsyncStreamingReadWriteRpc<

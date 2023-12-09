@@ -33,7 +33,7 @@ BackupForGKEStub::~BackupForGKEStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncCreateBackupPlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::CreateBackupPlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::CreateBackupPlanRequest,
@@ -50,11 +50,10 @@ DefaultBackupForGKEStub::AsyncCreateBackupPlan(
 
 StatusOr<google::cloud::gkebackup::v1::ListBackupPlansResponse>
 DefaultBackupForGKEStub::ListBackupPlans(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListBackupPlansRequest const& request) {
   google::cloud::gkebackup::v1::ListBackupPlansResponse response;
-  auto status =
-      grpc_stub_->ListBackupPlans(&client_context, request, &response);
+  auto status = grpc_stub_->ListBackupPlans(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -63,10 +62,10 @@ DefaultBackupForGKEStub::ListBackupPlans(
 
 StatusOr<google::cloud::gkebackup::v1::BackupPlan>
 DefaultBackupForGKEStub::GetBackupPlan(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetBackupPlanRequest const& request) {
   google::cloud::gkebackup::v1::BackupPlan response;
-  auto status = grpc_stub_->GetBackupPlan(&client_context, request, &response);
+  auto status = grpc_stub_->GetBackupPlan(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -76,7 +75,7 @@ DefaultBackupForGKEStub::GetBackupPlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncUpdateBackupPlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::UpdateBackupPlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::UpdateBackupPlanRequest,
@@ -94,7 +93,7 @@ DefaultBackupForGKEStub::AsyncUpdateBackupPlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncDeleteBackupPlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::DeleteBackupPlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::DeleteBackupPlanRequest,
@@ -112,7 +111,7 @@ DefaultBackupForGKEStub::AsyncDeleteBackupPlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncCreateBackup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::CreateBackupRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::CreateBackupRequest,
@@ -128,10 +127,10 @@ DefaultBackupForGKEStub::AsyncCreateBackup(
 
 StatusOr<google::cloud::gkebackup::v1::ListBackupsResponse>
 DefaultBackupForGKEStub::ListBackups(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListBackupsRequest const& request) {
   google::cloud::gkebackup::v1::ListBackupsResponse response;
-  auto status = grpc_stub_->ListBackups(&client_context, request, &response);
+  auto status = grpc_stub_->ListBackups(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -140,10 +139,10 @@ DefaultBackupForGKEStub::ListBackups(
 
 StatusOr<google::cloud::gkebackup::v1::Backup>
 DefaultBackupForGKEStub::GetBackup(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetBackupRequest const& request) {
   google::cloud::gkebackup::v1::Backup response;
-  auto status = grpc_stub_->GetBackup(&client_context, request, &response);
+  auto status = grpc_stub_->GetBackup(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -153,7 +152,7 @@ DefaultBackupForGKEStub::GetBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncUpdateBackup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::UpdateBackupRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::UpdateBackupRequest,
@@ -170,7 +169,7 @@ DefaultBackupForGKEStub::AsyncUpdateBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncDeleteBackup(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::DeleteBackupRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::DeleteBackupRequest,
@@ -186,11 +185,10 @@ DefaultBackupForGKEStub::AsyncDeleteBackup(
 
 StatusOr<google::cloud::gkebackup::v1::ListVolumeBackupsResponse>
 DefaultBackupForGKEStub::ListVolumeBackups(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListVolumeBackupsRequest const& request) {
   google::cloud::gkebackup::v1::ListVolumeBackupsResponse response;
-  auto status =
-      grpc_stub_->ListVolumeBackups(&client_context, request, &response);
+  auto status = grpc_stub_->ListVolumeBackups(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -199,11 +197,10 @@ DefaultBackupForGKEStub::ListVolumeBackups(
 
 StatusOr<google::cloud::gkebackup::v1::VolumeBackup>
 DefaultBackupForGKEStub::GetVolumeBackup(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetVolumeBackupRequest const& request) {
   google::cloud::gkebackup::v1::VolumeBackup response;
-  auto status =
-      grpc_stub_->GetVolumeBackup(&client_context, request, &response);
+  auto status = grpc_stub_->GetVolumeBackup(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -213,7 +210,7 @@ DefaultBackupForGKEStub::GetVolumeBackup(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncCreateRestorePlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::CreateRestorePlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::CreateRestorePlanRequest,
@@ -230,11 +227,10 @@ DefaultBackupForGKEStub::AsyncCreateRestorePlan(
 
 StatusOr<google::cloud::gkebackup::v1::ListRestorePlansResponse>
 DefaultBackupForGKEStub::ListRestorePlans(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListRestorePlansRequest const& request) {
   google::cloud::gkebackup::v1::ListRestorePlansResponse response;
-  auto status =
-      grpc_stub_->ListRestorePlans(&client_context, request, &response);
+  auto status = grpc_stub_->ListRestorePlans(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -243,10 +239,10 @@ DefaultBackupForGKEStub::ListRestorePlans(
 
 StatusOr<google::cloud::gkebackup::v1::RestorePlan>
 DefaultBackupForGKEStub::GetRestorePlan(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetRestorePlanRequest const& request) {
   google::cloud::gkebackup::v1::RestorePlan response;
-  auto status = grpc_stub_->GetRestorePlan(&client_context, request, &response);
+  auto status = grpc_stub_->GetRestorePlan(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -256,7 +252,7 @@ DefaultBackupForGKEStub::GetRestorePlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncUpdateRestorePlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::UpdateRestorePlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::UpdateRestorePlanRequest,
@@ -274,7 +270,7 @@ DefaultBackupForGKEStub::AsyncUpdateRestorePlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncDeleteRestorePlan(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::DeleteRestorePlanRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::DeleteRestorePlanRequest,
@@ -292,7 +288,7 @@ DefaultBackupForGKEStub::AsyncDeleteRestorePlan(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncCreateRestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::CreateRestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::CreateRestoreRequest,
@@ -308,10 +304,10 @@ DefaultBackupForGKEStub::AsyncCreateRestore(
 
 StatusOr<google::cloud::gkebackup::v1::ListRestoresResponse>
 DefaultBackupForGKEStub::ListRestores(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListRestoresRequest const& request) {
   google::cloud::gkebackup::v1::ListRestoresResponse response;
-  auto status = grpc_stub_->ListRestores(&client_context, request, &response);
+  auto status = grpc_stub_->ListRestores(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -320,10 +316,10 @@ DefaultBackupForGKEStub::ListRestores(
 
 StatusOr<google::cloud::gkebackup::v1::Restore>
 DefaultBackupForGKEStub::GetRestore(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetRestoreRequest const& request) {
   google::cloud::gkebackup::v1::Restore response;
-  auto status = grpc_stub_->GetRestore(&client_context, request, &response);
+  auto status = grpc_stub_->GetRestore(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -333,7 +329,7 @@ DefaultBackupForGKEStub::GetRestore(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncUpdateRestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::UpdateRestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::UpdateRestoreRequest,
@@ -350,7 +346,7 @@ DefaultBackupForGKEStub::AsyncUpdateRestore(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncDeleteRestore(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::gkebackup::v1::DeleteRestoreRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::gkebackup::v1::DeleteRestoreRequest,
@@ -366,11 +362,10 @@ DefaultBackupForGKEStub::AsyncDeleteRestore(
 
 StatusOr<google::cloud::gkebackup::v1::ListVolumeRestoresResponse>
 DefaultBackupForGKEStub::ListVolumeRestores(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::ListVolumeRestoresRequest const& request) {
   google::cloud::gkebackup::v1::ListVolumeRestoresResponse response;
-  auto status =
-      grpc_stub_->ListVolumeRestores(&client_context, request, &response);
+  auto status = grpc_stub_->ListVolumeRestores(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -379,11 +374,10 @@ DefaultBackupForGKEStub::ListVolumeRestores(
 
 StatusOr<google::cloud::gkebackup::v1::VolumeRestore>
 DefaultBackupForGKEStub::GetVolumeRestore(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::gkebackup::v1::GetVolumeRestoreRequest const& request) {
   google::cloud::gkebackup::v1::VolumeRestore response;
-  auto status =
-      grpc_stub_->GetVolumeRestore(&client_context, request, &response);
+  auto status = grpc_stub_->GetVolumeRestore(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -393,7 +387,7 @@ DefaultBackupForGKEStub::GetVolumeRestore(
 future<StatusOr<google::longrunning::Operation>>
 DefaultBackupForGKEStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -408,7 +402,7 @@ DefaultBackupForGKEStub::AsyncGetOperation(
 
 future<Status> DefaultBackupForGKEStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

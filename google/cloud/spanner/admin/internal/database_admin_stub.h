@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
@@ -44,7 +45,7 @@ class DatabaseAdminStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CreateDatabaseRequest const&
           request) = 0;
 
@@ -55,14 +56,14 @@ class DatabaseAdminStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::UpdateDatabaseRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateDatabaseDdl(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::UpdateDatabaseDdlRequest const&
           request) = 0;
 
@@ -92,13 +93,13 @@ class DatabaseAdminStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CreateBackupRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCopyBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CopyBackupRequest const&
           request) = 0;
 
@@ -124,7 +125,7 @@ class DatabaseAdminStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncRestoreDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::RestoreDatabaseRequest const&
           request) = 0;
 
@@ -151,12 +152,12 @@ class DatabaseAdminStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -172,120 +173,120 @@ class DefaultDatabaseAdminStub : public DatabaseAdminStub {
 
   StatusOr<google::spanner::admin::database::v1::ListDatabasesResponse>
   ListDatabases(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::ListDatabasesRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CreateDatabaseRequest const&
           request) override;
 
   StatusOr<google::spanner::admin::database::v1::Database> GetDatabase(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::GetDatabaseRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::UpdateDatabaseRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateDatabaseDdl(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::UpdateDatabaseDdlRequest const&
           request) override;
 
   Status DropDatabase(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::DropDatabaseRequest const& request)
       override;
 
   StatusOr<google::spanner::admin::database::v1::GetDatabaseDdlResponse>
   GetDatabaseDdl(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::GetDatabaseDdlRequest const&
           request) override;
 
   StatusOr<google::iam::v1::Policy> SetIamPolicy(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::iam::v1::SetIamPolicyRequest const& request) override;
 
   StatusOr<google::iam::v1::Policy> GetIamPolicy(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::iam::v1::GetIamPolicyRequest const& request) override;
 
   StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::iam::v1::TestIamPermissionsRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CreateBackupRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCopyBackup(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::CopyBackupRequest const& request)
       override;
 
   StatusOr<google::spanner::admin::database::v1::Backup> GetBackup(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::GetBackupRequest const& request)
       override;
 
   StatusOr<google::spanner::admin::database::v1::Backup> UpdateBackup(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::UpdateBackupRequest const& request)
       override;
 
   Status DeleteBackup(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::DeleteBackupRequest const& request)
       override;
 
   StatusOr<google::spanner::admin::database::v1::ListBackupsResponse>
-  ListBackups(grpc::ClientContext& client_context,
+  ListBackups(grpc::ClientContext& context,
               google::spanner::admin::database::v1::ListBackupsRequest const&
                   request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncRestoreDatabase(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::spanner::admin::database::v1::RestoreDatabaseRequest const&
           request) override;
 
   StatusOr<google::spanner::admin::database::v1::ListDatabaseOperationsResponse>
   ListDatabaseOperations(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::ListDatabaseOperationsRequest const&
           request) override;
 
   StatusOr<google::spanner::admin::database::v1::ListBackupOperationsResponse>
   ListBackupOperations(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::ListBackupOperationsRequest const&
           request) override;
 
   StatusOr<google::spanner::admin::database::v1::ListDatabaseRolesResponse>
   ListDatabaseRoles(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::spanner::admin::database::v1::ListDatabaseRolesRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

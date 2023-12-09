@@ -18,6 +18,7 @@
 #include "google/cloud/credentials.h"
 #include "google/cloud/grpc_options.h"
 #include "google/cloud/internal/api_client_header.h"
+#include "google/cloud/internal/background_threads_impl.h"
 #include "google/cloud/internal/make_status.h"
 #include "google/cloud/testing_util/opentelemetry_matchers.h"
 #include "google/cloud/testing_util/scoped_log.h"
@@ -43,6 +44,7 @@ using ::testing::Contains;
 using ::testing::HasSubstr;
 using ::testing::NotNull;
 using ::testing::Return;
+using ::testing::VariantWith;
 
 // The point of these tests is to verify that the `CreateStorageStub` factory
 // function injects the right decorators. We do this by observing the
@@ -72,17 +74,22 @@ static_assert(std::is_same<decltype(MockFactory{}.AsStdFunction()),
                            BaseStorageStubFactory>::value,
               "Mismatched mock factory type");
 
-std::pair<std::shared_ptr<GrpcChannelRefresh>, std::shared_ptr<StorageStub>>
-CreateTestStub(CompletionQueue cq, BaseStorageStubFactory const& factory) {
+std::shared_ptr<StorageStub> CreateTestStub(
+    CompletionQueue cq, BaseStorageStubFactory const& factory, Options opts) {
   auto credentials = google::cloud::MakeAccessTokenCredentials(
       "test-only-invalid",
       std::chrono::system_clock::now() + std::chrono::minutes(5));
-  return CreateDecoratedStubs(std::move(cq),
-                              google::cloud::Options{}
-                                  .set<GrpcNumChannelsOption>(kTestChannels)
-                                  .set<TracingComponentsOption>({"rpc"})
-                                  .set<UnifiedCredentialsOption>(credentials),
-                              factory);
+  return CreateDecoratedStubs(
+             std::move(cq),
+             internal::MergeOptions(
+                 std::move(opts),
+                 Options{}
+                     .set<EndpointOption>("localhost:1")
+                     .set<GrpcNumChannelsOption>(kTestChannels)
+                     .set<TracingComponentsOption>({"rpc"})
+                     .set<UnifiedCredentialsOption>(credentials)),
+             factory)
+      .second;
 }
 
 TEST_F(StorageStubFactory, ReadObject) {
@@ -93,7 +100,7 @@ TEST_F(StorageStubFactory, ReadObject) {
         auto mock = std::make_shared<MockStorageStub>();
         EXPECT_CALL(*mock, ReadObject)
             .WillOnce(
-                [this](auto context,
+                [this](auto context, Options const& options,
                        google::storage::v2::ReadObjectRequest const& request) {
                   // Verify the Auth decorator is present
                   EXPECT_THAT(context->credentials(), NotNull());
@@ -101,6 +108,9 @@ TEST_F(StorageStubFactory, ReadObject) {
                   IsContextMDValid(*context,
                                    "google.storage.v2.Storage.ReadObject",
                                    request);
+                  // Verify the options are passed through
+                  EXPECT_THAT(options.get<UserAgentProductsOption>(),
+                              Contains("test-only/1"));
                   auto stream = std::make_unique<MockObjectMediaStream>();
                   EXPECT_CALL(*stream, Read)
                       .WillOnce(Return(
@@ -116,14 +126,14 @@ TEST_F(StorageStubFactory, ReadObject) {
       });
 
   ScopedLog log;
-  CompletionQueue cq;
-  auto p = CreateTestStub(cq, factory.AsStdFunction());
-  auto stream = p.second->ReadObject(std::make_shared<grpc::ClientContext>(),
-                                     google::storage::v2::ReadObjectRequest{});
-  auto response = stream->Read();
-  ASSERT_TRUE(absl::holds_alternative<Status>(response));
-  auto status = absl::get<Status>(std::move(response));
-  EXPECT_THAT(status, StatusIs(StatusCode::kUnavailable));
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(), {});
+  auto stream =
+      stub->ReadObject(std::make_shared<grpc::ClientContext>(),
+                       Options{}.set<UserAgentProductsOption>({"test-only/1"}),
+                       google::storage::v2::ReadObjectRequest{});
+  EXPECT_THAT(stream->Read(),
+              VariantWith<Status>(StatusIs(StatusCode::kUnavailable)));
   EXPECT_THAT(log.ExtractLines(), Contains(HasSubstr("ReadObject")));
 }
 
@@ -160,10 +170,10 @@ TEST_F(StorageStubFactory, WriteObject) {
       });
 
   ScopedLog log;
-  CompletionQueue cq;
-  auto p = CreateTestStub(cq, factory.AsStdFunction());
-  auto stream =
-      p.second->AsyncWriteObject(cq, std::make_shared<grpc::ClientContext>());
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(), {});
+  auto stream = stub->AsyncWriteObject(pool.cq(),
+                                       std::make_shared<grpc::ClientContext>());
   EXPECT_TRUE(stream->Start().get());
   auto close = stream->Finish().get();
   EXPECT_THAT(close, StatusIs(StatusCode::kUnavailable));
@@ -199,10 +209,10 @@ TEST_F(StorageStubFactory, StartResumableWrite) {
       });
 
   ScopedLog log;
-  CompletionQueue cq;
-  auto p = CreateTestStub(cq, factory.AsStdFunction());
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(), {});
   grpc::ClientContext context;
-  auto response = p.second->StartResumableWrite(
+  auto response = stub->StartResumableWrite(
       context, google::storage::v2::StartResumableWriteRequest{});
   EXPECT_THAT(response, StatusIs(StatusCode::kUnavailable));
   EXPECT_THAT(log.ExtractLines(), Contains(HasSubstr("StartResumableWrite")));
@@ -236,10 +246,10 @@ TEST_F(StorageStubFactory, QueryWriteStatus) {
       });
 
   ScopedLog log;
-  CompletionQueue cq;
-  auto p = CreateTestStub(cq, factory.AsStdFunction());
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(), {});
   grpc::ClientContext context;
-  auto response = p.second->QueryWriteStatus(
+  auto response = stub->QueryWriteStatus(
       context, google::storage::v2::QueryWriteStatusRequest{});
   EXPECT_THAT(response, StatusIs(StatusCode::kUnavailable));
   EXPECT_THAT(log.ExtractLines(), Contains(HasSubstr("QueryWriteStatus")));
@@ -269,16 +279,9 @@ TEST_F(StorageStubFactory, TracingEnabled) {
         return mock;
       });
 
-  CompletionQueue cq;
-  auto stub =
-      CreateDecoratedStubs(std::move(cq),
-                           EnableTracing(Options{}
-                                             .set<EndpointOption>("localhost:1")
-                                             .set<GrpcNumChannelsOption>(1)
-                                             .set<UnifiedCredentialsOption>(
-                                                 MakeInsecureCredentials())),
-                           factory.AsStdFunction())
-          .second;
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(),
+                             EnableTracing({}).set<GrpcNumChannelsOption>(1));
   grpc::ClientContext context;
   (void)stub->DeleteBucket(context, {});
 
@@ -301,16 +304,9 @@ TEST_F(StorageStubFactory, TracingDisabled) {
         return mock;
       });
 
-  CompletionQueue cq;
-  auto stub = CreateDecoratedStubs(
-                  std::move(cq),
-                  DisableTracing(Options{}
-                                     .set<EndpointOption>("localhost:1")
-                                     .set<GrpcNumChannelsOption>(1)
-                                     .set<UnifiedCredentialsOption>(
-                                         MakeInsecureCredentials())),
-                  factory.AsStdFunction())
-                  .second;
+  internal::AutomaticallyCreatedBackgroundThreads pool;
+  auto stub = CreateTestStub(pool.cq(), factory.AsStdFunction(),
+                             DisableTracing({}).set<GrpcNumChannelsOption>(1));
   grpc::ClientContext context;
   (void)stub->DeleteBucket(context, {});
 

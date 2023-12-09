@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_MANAGEDIDENTITIES_V1_INTERNAL_MANAGED_IDENTITIES_METADATA_DECORATOR_H
 
 #include "google/cloud/managedidentities/v1/internal/managed_identities_stub.h"
+#include "google/cloud/options.h"
 #include "google/cloud/version.h"
 #include <google/longrunning/operations.grpc.pb.h>
 #include <map>
@@ -41,7 +42,7 @@ class ManagedIdentitiesServiceMetadata : public ManagedIdentitiesServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateMicrosoftAdDomain(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::
           CreateMicrosoftAdDomainRequest const& request) override;
 
@@ -63,54 +64,54 @@ class ManagedIdentitiesServiceMetadata : public ManagedIdentitiesServiceStub {
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateDomain(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::UpdateDomainRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteDomain(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::DeleteDomainRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncAttachTrust(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::AttachTrustRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncReconfigureTrust(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::ReconfigureTrustRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDetachTrust(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::DetachTrustRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncValidateTrust(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::managedidentities::v1::ValidateTrustRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:
-  void SetMetadata(grpc::ClientContext& context,
+  void SetMetadata(grpc::ClientContext& context, Options const& options,
                    std::string const& request_params);
-  void SetMetadata(grpc::ClientContext& context);
+  void SetMetadata(grpc::ClientContext& context, Options const& options);
 
   std::shared_ptr<ManagedIdentitiesServiceStub> child_;
   std::multimap<std::string, std::string> fixed_metadata_;

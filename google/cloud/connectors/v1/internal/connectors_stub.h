@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/connectors/v1/connectors_service.grpc.pb.h>
@@ -48,21 +49,21 @@ class ConnectorsStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::CreateConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::UpdateConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::DeleteConnectionRequest const&
           request) = 0;
 
@@ -105,7 +106,7 @@ class ConnectorsStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncRefreshConnectionSchemaMetadata(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::
           RefreshConnectionSchemaMetadataRequest const& request) = 0;
 
@@ -135,12 +136,12 @@ class ConnectorsStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -154,107 +155,107 @@ class DefaultConnectorsStub : public ConnectorsStub {
       : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::connectors::v1::ListConnectionsResponse>
-  ListConnections(grpc::ClientContext& client_context,
+  ListConnections(grpc::ClientContext& context,
                   google::cloud::connectors::v1::ListConnectionsRequest const&
                       request) override;
 
   StatusOr<google::cloud::connectors::v1::Connection> GetConnection(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::CreateConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::UpdateConnectionRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::DeleteConnectionRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::ListProvidersResponse> ListProviders(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::ListProvidersRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::Provider> GetProvider(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetProviderRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::ListConnectorsResponse>
-  ListConnectors(grpc::ClientContext& client_context,
+  ListConnectors(grpc::ClientContext& context,
                  google::cloud::connectors::v1::ListConnectorsRequest const&
                      request) override;
 
   StatusOr<google::cloud::connectors::v1::Connector> GetConnector(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetConnectorRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::ListConnectorVersionsResponse>
   ListConnectorVersions(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::ListConnectorVersionsRequest const&
           request) override;
 
   StatusOr<google::cloud::connectors::v1::ConnectorVersion> GetConnectorVersion(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetConnectorVersionRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::ConnectionSchemaMetadata>
   GetConnectionSchemaMetadata(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetConnectionSchemaMetadataRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>>
   AsyncRefreshConnectionSchemaMetadata(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::connectors::v1::
           RefreshConnectionSchemaMetadataRequest const& request) override;
 
   StatusOr<google::cloud::connectors::v1::ListRuntimeEntitySchemasResponse>
   ListRuntimeEntitySchemas(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::ListRuntimeEntitySchemasRequest const&
           request) override;
 
   StatusOr<google::cloud::connectors::v1::ListRuntimeActionSchemasResponse>
   ListRuntimeActionSchemas(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::ListRuntimeActionSchemasRequest const&
           request) override;
 
   StatusOr<google::cloud::connectors::v1::RuntimeConfig> GetRuntimeConfig(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetRuntimeConfigRequest const& request)
       override;
 
   StatusOr<google::cloud::connectors::v1::Settings> GetGlobalSettings(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::connectors::v1::GetGlobalSettingsRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

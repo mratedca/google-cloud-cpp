@@ -20,6 +20,7 @@
 #define GOOGLE_CLOUD_CPP_GOOGLE_CLOUD_BIGQUERY_STORAGE_V1_INTERNAL_BIGQUERY_READ_STUB_H
 
 #include "google/cloud/internal/streaming_read_rpc.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/bigquery/storage/v1/storage.grpc.pb.h>
@@ -43,7 +44,7 @@ class BigQueryReadStub {
   virtual std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::cloud::bigquery::storage::v1::ReadRowsResponse>>
   ReadRows(
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::bigquery::storage::v1::ReadRowsRequest const& request) = 0;
 
   virtual StatusOr<
@@ -63,19 +64,19 @@ class DefaultBigQueryReadStub : public BigQueryReadStub {
       : grpc_stub_(std::move(grpc_stub)) {}
 
   StatusOr<google::cloud::bigquery::storage::v1::ReadSession> CreateReadSession(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::bigquery::storage::v1::CreateReadSessionRequest const&
           request) override;
 
   std::unique_ptr<google::cloud::internal::StreamingReadRpc<
       google::cloud::bigquery::storage::v1::ReadRowsResponse>>
-  ReadRows(std::shared_ptr<grpc::ClientContext> client_context,
+  ReadRows(std::shared_ptr<grpc::ClientContext> context, Options const& options,
            google::cloud::bigquery::storage::v1::ReadRowsRequest const& request)
       override;
 
   StatusOr<google::cloud::bigquery::storage::v1::SplitReadStreamResponse>
   SplitReadStream(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::bigquery::storage::v1::SplitReadStreamRequest const&
           request) override;
 

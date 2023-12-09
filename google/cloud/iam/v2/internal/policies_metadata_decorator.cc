@@ -45,7 +45,7 @@ PoliciesMetadata::PoliciesMetadata(
 StatusOr<google::iam::v2::ListPoliciesResponse> PoliciesMetadata::ListPolicies(
     grpc::ClientContext& context,
     google::iam::v2::ListPoliciesRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
   return child_->ListPolicies(context, request);
 }
@@ -53,7 +53,7 @@ StatusOr<google::iam::v2::ListPoliciesResponse> PoliciesMetadata::ListPolicies(
 StatusOr<google::iam::v2::Policy> PoliciesMetadata::GetPolicy(
     grpc::ClientContext& context,
     google::iam::v2::GetPolicyRequest const& request) {
-  SetMetadata(context,
+  SetMetadata(context, internal::CurrentOptions(),
               absl::StrCat("name=", internal::UrlEncode(request.name())));
   return child_->GetPolicy(context, request);
 }
@@ -61,65 +61,66 @@ StatusOr<google::iam::v2::Policy> PoliciesMetadata::GetPolicy(
 future<StatusOr<google::longrunning::Operation>>
 PoliciesMetadata::AsyncCreatePolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::iam::v2::CreatePolicyRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("parent=", internal::UrlEncode(request.parent())));
-  return child_->AsyncCreatePolicy(cq, std::move(context), request);
+  return child_->AsyncCreatePolicy(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 PoliciesMetadata::AsyncUpdatePolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::iam::v2::UpdatePolicyRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("policy.name=",
                            internal::UrlEncode(request.policy().name())));
-  return child_->AsyncUpdatePolicy(cq, std::move(context), request);
+  return child_->AsyncUpdatePolicy(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 PoliciesMetadata::AsyncDeletePolicy(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::iam::v2::DeletePolicyRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncDeletePolicy(cq, std::move(context), request);
+  return child_->AsyncDeletePolicy(cq, std::move(context), options, request);
 }
 
 future<StatusOr<google::longrunning::Operation>>
 PoliciesMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::GetOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncGetOperation(cq, std::move(context), request);
+  return child_->AsyncGetOperation(cq, std::move(context), options, request);
 }
 
 future<Status> PoliciesMetadata::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const& options,
     google::longrunning::CancelOperationRequest const& request) {
-  SetMetadata(*context,
+  SetMetadata(*context, options,
               absl::StrCat("name=", internal::UrlEncode(request.name())));
-  return child_->AsyncCancelOperation(cq, std::move(context), request);
+  return child_->AsyncCancelOperation(cq, std::move(context), options, request);
 }
 
 void PoliciesMetadata::SetMetadata(grpc::ClientContext& context,
+                                   Options const& options,
                                    std::string const& request_params) {
   context.AddMetadata("x-goog-request-params", request_params);
-  SetMetadata(context);
+  SetMetadata(context, options);
 }
 
-void PoliciesMetadata::SetMetadata(grpc::ClientContext& context) {
+void PoliciesMetadata::SetMetadata(grpc::ClientContext& context,
+                                   Options const& options) {
   for (auto const& kv : fixed_metadata_) {
     context.AddMetadata(kv.first, kv.second);
   }
   context.AddMetadata("x-goog-api-client", api_client_header_);
-  auto const& options = internal::CurrentOptions();
   if (options.has<UserProjectOption>()) {
     context.AddMetadata("x-goog-user-project",
                         options.get<UserProjectOption>());

@@ -33,7 +33,7 @@ CloudChannelReportsServiceStub::~CloudChannelReportsServiceStub() = default;
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudChannelReportsServiceStub::AsyncRunReportJob(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::channel::v1::RunReportJobRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::channel::v1::RunReportJobRequest,
@@ -49,11 +49,10 @@ DefaultCloudChannelReportsServiceStub::AsyncRunReportJob(
 
 StatusOr<google::cloud::channel::v1::FetchReportResultsResponse>
 DefaultCloudChannelReportsServiceStub::FetchReportResults(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::channel::v1::FetchReportResultsRequest const& request) {
   google::cloud::channel::v1::FetchReportResultsResponse response;
-  auto status =
-      grpc_stub_->FetchReportResults(&client_context, request, &response);
+  auto status = grpc_stub_->FetchReportResults(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -62,10 +61,10 @@ DefaultCloudChannelReportsServiceStub::FetchReportResults(
 
 StatusOr<google::cloud::channel::v1::ListReportsResponse>
 DefaultCloudChannelReportsServiceStub::ListReports(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::channel::v1::ListReportsRequest const& request) {
   google::cloud::channel::v1::ListReportsResponse response;
-  auto status = grpc_stub_->ListReports(&client_context, request, &response);
+  auto status = grpc_stub_->ListReports(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -75,7 +74,7 @@ DefaultCloudChannelReportsServiceStub::ListReports(
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudChannelReportsServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -90,7 +89,7 @@ DefaultCloudChannelReportsServiceStub::AsyncGetOperation(
 
 future<Status> DefaultCloudChannelReportsServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(

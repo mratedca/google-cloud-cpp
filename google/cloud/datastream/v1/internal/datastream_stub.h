@@ -21,6 +21,7 @@
 
 #include "google/cloud/completion_queue.h"
 #include "google/cloud/future.h"
+#include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/datastream/v1/datastream.grpc.pb.h>
@@ -52,21 +53,21 @@ class DatastreamStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreateConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateConnectionProfileRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncUpdateConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::UpdateConnectionProfileRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeleteConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteConnectionProfileRequest const&
           request) = 0;
 
@@ -88,17 +89,17 @@ class DatastreamStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateStreamRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncUpdateStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::UpdateStreamRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteStreamRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::datastream::v1::StreamObject> GetStreamObject(
@@ -135,7 +136,7 @@ class DatastreamStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncCreatePrivateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreatePrivateConnectionRequest const&
           request) = 0;
 
@@ -155,13 +156,13 @@ class DatastreamStub {
   virtual future<StatusOr<google::longrunning::Operation>>
   AsyncDeletePrivateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeletePrivateConnectionRequest const&
           request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncCreateRoute(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateRouteRequest const& request) = 0;
 
   virtual StatusOr<google::cloud::datastream::v1::Route> GetRoute(
@@ -175,17 +176,17 @@ class DatastreamStub {
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncDeleteRoute(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteRouteRequest const& request) = 0;
 
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) = 0;
 
   virtual future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) = 0;
 };
 
@@ -200,150 +201,150 @@ class DefaultDatastreamStub : public DatastreamStub {
 
   StatusOr<google::cloud::datastream::v1::ListConnectionProfilesResponse>
   ListConnectionProfiles(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::ListConnectionProfilesRequest const&
           request) override;
 
   StatusOr<google::cloud::datastream::v1::ConnectionProfile>
   GetConnectionProfile(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::GetConnectionProfileRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateConnectionProfileRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::UpdateConnectionProfileRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteConnectionProfile(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteConnectionProfileRequest const&
           request) override;
 
   StatusOr<google::cloud::datastream::v1::DiscoverConnectionProfileResponse>
   DiscoverConnectionProfile(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::DiscoverConnectionProfileRequest const&
           request) override;
 
   StatusOr<google::cloud::datastream::v1::ListStreamsResponse> ListStreams(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::ListStreamsRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::Stream> GetStream(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::GetStreamRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateStreamRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncUpdateStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::UpdateStreamRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteStream(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteStreamRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::StreamObject> GetStreamObject(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::GetStreamObjectRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::StreamObject> LookupStreamObject(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::LookupStreamObjectRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::ListStreamObjectsResponse>
   ListStreamObjects(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::ListStreamObjectsRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::StartBackfillJobResponse>
-  StartBackfillJob(grpc::ClientContext& client_context,
+  StartBackfillJob(grpc::ClientContext& context,
                    google::cloud::datastream::v1::StartBackfillJobRequest const&
                        request) override;
 
   StatusOr<google::cloud::datastream::v1::StopBackfillJobResponse>
-  StopBackfillJob(grpc::ClientContext& client_context,
+  StopBackfillJob(grpc::ClientContext& context,
                   google::cloud::datastream::v1::StopBackfillJobRequest const&
                       request) override;
 
   StatusOr<google::cloud::datastream::v1::FetchStaticIpsResponse>
-  FetchStaticIps(grpc::ClientContext& client_context,
+  FetchStaticIps(grpc::ClientContext& context,
                  google::cloud::datastream::v1::FetchStaticIpsRequest const&
                      request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreatePrivateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreatePrivateConnectionRequest const&
           request) override;
 
   StatusOr<google::cloud::datastream::v1::PrivateConnection>
   GetPrivateConnection(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::GetPrivateConnectionRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::ListPrivateConnectionsResponse>
   ListPrivateConnections(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::ListPrivateConnectionsRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeletePrivateConnection(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeletePrivateConnectionRequest const&
           request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateRoute(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::CreateRouteRequest const& request)
       override;
 
   StatusOr<google::cloud::datastream::v1::Route> GetRoute(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::GetRouteRequest const& request) override;
 
   StatusOr<google::cloud::datastream::v1::ListRoutesResponse> ListRoutes(
-      grpc::ClientContext& client_context,
+      grpc::ClientContext& context,
       google::cloud::datastream::v1::ListRoutesRequest const& request) override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncDeleteRoute(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::datastream::v1::DeleteRouteRequest const& request)
       override;
 
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::GetOperationRequest const& request) override;
 
   future<Status> AsyncCancelOperation(
       google::cloud::CompletionQueue& cq,
-      std::shared_ptr<grpc::ClientContext> context,
+      std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::longrunning::CancelOperationRequest const& request) override;
 
  private:

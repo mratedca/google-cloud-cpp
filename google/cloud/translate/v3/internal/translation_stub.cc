@@ -32,10 +32,10 @@ TranslationServiceStub::~TranslationServiceStub() = default;
 
 StatusOr<google::cloud::translation::v3::TranslateTextResponse>
 DefaultTranslationServiceStub::TranslateText(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::TranslateTextRequest const& request) {
   google::cloud::translation::v3::TranslateTextResponse response;
-  auto status = grpc_stub_->TranslateText(&client_context, request, &response);
+  auto status = grpc_stub_->TranslateText(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -44,10 +44,10 @@ DefaultTranslationServiceStub::TranslateText(
 
 StatusOr<google::cloud::translation::v3::DetectLanguageResponse>
 DefaultTranslationServiceStub::DetectLanguage(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::DetectLanguageRequest const& request) {
   google::cloud::translation::v3::DetectLanguageResponse response;
-  auto status = grpc_stub_->DetectLanguage(&client_context, request, &response);
+  auto status = grpc_stub_->DetectLanguage(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -56,12 +56,11 @@ DefaultTranslationServiceStub::DetectLanguage(
 
 StatusOr<google::cloud::translation::v3::SupportedLanguages>
 DefaultTranslationServiceStub::GetSupportedLanguages(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::GetSupportedLanguagesRequest const&
         request) {
   google::cloud::translation::v3::SupportedLanguages response;
-  auto status =
-      grpc_stub_->GetSupportedLanguages(&client_context, request, &response);
+  auto status = grpc_stub_->GetSupportedLanguages(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -70,11 +69,10 @@ DefaultTranslationServiceStub::GetSupportedLanguages(
 
 StatusOr<google::cloud::translation::v3::TranslateDocumentResponse>
 DefaultTranslationServiceStub::TranslateDocument(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::TranslateDocumentRequest const& request) {
   google::cloud::translation::v3::TranslateDocumentResponse response;
-  auto status =
-      grpc_stub_->TranslateDocument(&client_context, request, &response);
+  auto status = grpc_stub_->TranslateDocument(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -84,7 +82,7 @@ DefaultTranslationServiceStub::TranslateDocument(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTranslationServiceStub::AsyncBatchTranslateText(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::translation::v3::BatchTranslateTextRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::translation::v3::BatchTranslateTextRequest,
@@ -102,7 +100,7 @@ DefaultTranslationServiceStub::AsyncBatchTranslateText(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTranslationServiceStub::AsyncBatchTranslateDocument(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::translation::v3::BatchTranslateDocumentRequest const&
         request) {
   return internal::MakeUnaryRpcImpl<
@@ -122,7 +120,7 @@ DefaultTranslationServiceStub::AsyncBatchTranslateDocument(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTranslationServiceStub::AsyncCreateGlossary(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::translation::v3::CreateGlossaryRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::translation::v3::CreateGlossaryRequest,
@@ -139,10 +137,10 @@ DefaultTranslationServiceStub::AsyncCreateGlossary(
 
 StatusOr<google::cloud::translation::v3::ListGlossariesResponse>
 DefaultTranslationServiceStub::ListGlossaries(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::ListGlossariesRequest const& request) {
   google::cloud::translation::v3::ListGlossariesResponse response;
-  auto status = grpc_stub_->ListGlossaries(&client_context, request, &response);
+  auto status = grpc_stub_->ListGlossaries(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -151,10 +149,10 @@ DefaultTranslationServiceStub::ListGlossaries(
 
 StatusOr<google::cloud::translation::v3::Glossary>
 DefaultTranslationServiceStub::GetGlossary(
-    grpc::ClientContext& client_context,
+    grpc::ClientContext& context,
     google::cloud::translation::v3::GetGlossaryRequest const& request) {
   google::cloud::translation::v3::Glossary response;
-  auto status = grpc_stub_->GetGlossary(&client_context, request, &response);
+  auto status = grpc_stub_->GetGlossary(&context, request, &response);
   if (!status.ok()) {
     return google::cloud::MakeStatusFromRpcError(status);
   }
@@ -164,7 +162,7 @@ DefaultTranslationServiceStub::GetGlossary(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTranslationServiceStub::AsyncDeleteGlossary(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::cloud::translation::v3::DeleteGlossaryRequest const& request) {
   return internal::MakeUnaryRpcImpl<
       google::cloud::translation::v3::DeleteGlossaryRequest,
@@ -182,7 +180,7 @@ DefaultTranslationServiceStub::AsyncDeleteGlossary(
 future<StatusOr<google::longrunning::Operation>>
 DefaultTranslationServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::GetOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::GetOperationRequest,
                                     google::longrunning::Operation>(
@@ -197,7 +195,7 @@ DefaultTranslationServiceStub::AsyncGetOperation(
 
 future<Status> DefaultTranslationServiceStub::AsyncCancelOperation(
     google::cloud::CompletionQueue& cq,
-    std::shared_ptr<grpc::ClientContext> context,
+    std::shared_ptr<grpc::ClientContext> context, Options const&,
     google::longrunning::CancelOperationRequest const& request) {
   return internal::MakeUnaryRpcImpl<google::longrunning::CancelOperationRequest,
                                     google::protobuf::Empty>(
