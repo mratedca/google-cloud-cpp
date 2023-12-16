@@ -239,6 +239,18 @@ RoutingHeaders ExtractRoutingHeaders(
 
 }  // namespace
 
+/**
+ * Set server metadata on a `ClientContext`.
+ *
+ * @note A `grpc::ClientContext` can be used in only one gRPC. The caller
+ *   cannot reuse @p context for other RPCs or other calls to this function.
+ */
+void SetServerMetadata(grpc::ClientContext& context,
+                       RpcMetadata const& server_metadata) {
+  ValidateMetadataFixture f;
+  f.SetServerMetadata(context, server_metadata);
+}
+
 ValidateMetadataFixture::ValidateMetadataFixture() {
   // Start the generic server.
   grpc::ServerBuilder builder;
@@ -261,32 +273,17 @@ ValidateMetadataFixture::~ValidateMetadataFixture() {
 }
 
 std::multimap<std::string, std::string> ValidateMetadataFixture::GetMetadata(
-    grpc::ClientContext& context) {
+    grpc::ClientContext& client_context) {
   // Set the deadline to far in the future. If the deadline is in the past,
   // gRPC doesn't send the initial metadata at all (which makes sense, given
   // that the context is already expired). The `context` is destroyed by this
   // function anyway, so we're not making things worse by changing the
   // deadline.
-  context.set_deadline(std::chrono::system_clock::now() +
-                       std::chrono::hours(24));
+  client_context.set_deadline(std::chrono::system_clock::now() +
+                              std::chrono::hours(24));
 
-  // Send some garbage with the supplied context.
-  grpc::GenericStub generic_stub(
-      server_->InProcessChannel(grpc::ChannelArguments()));
-
-  auto cli_stream =
-      generic_stub.PrepareCall(&context, "made_up_method", &cli_cq_);
-  cli_stream->StartCall(nullptr);
-  bool ok;
-  void* placeholder;
-  cli_cq_.Next(&placeholder, &ok);  // actually start the client call
-
-  // Receive the garbage with the supplied context.
   grpc::GenericServerContext server_context;
-  grpc::GenericServerAsyncReaderWriter reader_writer(&server_context);
-  generic_service_.RequestCall(&server_context, &reader_writer, srv_cq_.get(),
-                               srv_cq_.get(), nullptr);
-  srv_cq_->Next(&placeholder, &ok);  // actually receive the data
+  ExchangeMetadata(client_context, server_context);
 
   // Now we've got the data - save it before cleaning up.
   std::multimap<std::string, std::string> res;
@@ -299,6 +296,20 @@ std::multimap<std::string, std::string> ValidateMetadataFixture::GetMetadata(
                  });
 
   return res;
+}
+
+void ValidateMetadataFixture::SetServerMetadata(
+    grpc::ClientContext& client_context, RpcMetadata const& server_metadata) {
+  // Create a server context with the given server metadata.
+  grpc::GenericServerContext server_context;
+  for (auto const& kv : server_metadata.headers) {
+    server_context.AddInitialMetadata(kv.first, kv.second);
+  }
+  for (auto const& kv : server_metadata.trailers) {
+    server_context.AddTrailingMetadata(kv.first, kv.second);
+  }
+
+  ExchangeMetadata(client_context, server_context);
 }
 
 /**
@@ -359,6 +370,49 @@ void ValidateMetadataFixture::IsContextMDValid(
         Pair(param.first, AllOf(IsUrlEncoded(), MatchesGlob(param.second))));
   }
   EXPECT_THAT(actual, UnorderedElementsAreArray(matchers));
+}
+
+void ValidateMetadataFixture::ExchangeMetadata(
+    grpc::ClientContext& client_context,
+    grpc::GenericServerContext& server_context) {
+  void* tag;
+  bool ok;
+
+  // Create an in-process stub to make client calls with.
+  grpc::GenericStub generic_stub(
+      server_->InProcessChannel(grpc::ChannelArguments()));
+
+  // Start a call, the contents of which, do not matter.
+  auto cli_stream =
+      generic_stub.PrepareCall(&client_context, "made_up_method", &cli_cq_);
+  int call_tag;
+  cli_stream->StartCall(&call_tag);
+  cli_cq_.Next(&tag, &ok);
+  ASSERT_TRUE(ok && tag == &call_tag) << "stub.PrepareCall() failed.";
+
+  grpc::GenericServerAsyncReaderWriter reader_writer(&server_context);
+
+  // Process the request.
+  int request_tag;
+  generic_service_.RequestCall(&server_context, &reader_writer, srv_cq_.get(),
+                               srv_cq_.get(), &request_tag);
+  srv_cq_->Next(&tag, &ok);
+  ASSERT_TRUE(ok && tag == &request_tag) << "service.RequestCall() failed.";
+
+  // Finish the stream on the server-side.
+  int srv_finish_tag;
+  reader_writer.Finish(
+      grpc::Status(grpc::StatusCode::UNIMPLEMENTED, "unimplemented"),
+      &srv_finish_tag);
+  srv_cq_->Next(&tag, &ok);
+  ASSERT_TRUE(ok && tag == &srv_finish_tag) << "reader_writer.Finish() failed.";
+
+  // Finish the stream on the client-side.
+  grpc::Status status;
+  int cli_finish_tag;
+  cli_stream->Finish(&status, &cli_finish_tag);
+  cli_cq_.Next(&tag, &ok);
+  ASSERT_TRUE(ok && tag == &cli_finish_tag) << "stream.Finish() failed.";
 }
 
 }  // namespace testing_util
