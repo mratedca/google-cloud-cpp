@@ -17,6 +17,7 @@
 #include "google/cloud/internal/user_agent_prefix.h"
 #include "google/cloud/opentelemetry_options.h"
 #include "google/cloud/testing_util/scoped_environment.h"
+#include "google/cloud/universe_domain_options.h"
 #include "absl/types/optional.h"
 #include <gmock/gmock.h>
 
@@ -36,11 +37,12 @@ TEST(PopulateCommonOptions, Simple) {
   // Unset all the relevant environment variables.
   ScopedEnvironment user("GOOGLE_CLOUD_CPP_USER_PROJECT", absl::nullopt);
   ScopedEnvironment tracing("GOOGLE_CLOUD_CPP_ENABLE_TRACING", absl::nullopt);
-  auto actual = PopulateCommonOptions(Options{}, {}, {}, {}, "default");
+  auto actual =
+      PopulateCommonOptions(Options{}, {}, {}, {}, "default.googleapis.com");
   EXPECT_TRUE(actual.has<EndpointOption>());
-  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default."));
+  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default.googleapis.com."));
   EXPECT_TRUE(actual.has<AuthorityOption>());
-  EXPECT_THAT(actual.get<AuthorityOption>(), Eq("default"));
+  EXPECT_THAT(actual.get<AuthorityOption>(), Eq("default.googleapis.com"));
   EXPECT_FALSE(actual.has<UserProjectOption>());
   EXPECT_TRUE(actual.has<TracingComponentsOption>());
   EXPECT_THAT(actual.get<TracingComponentsOption>(), IsEmpty());
@@ -51,25 +53,27 @@ TEST(PopulateCommonOptions, Simple) {
 
 TEST(PopulateCommonOptions, EmptyEndpointOption) {
   auto actual = PopulateCommonOptions(Options{}.set<EndpointOption>(""), {}, {},
-                                      {}, "default");
+                                      {}, "default.googleapis.com");
   EXPECT_TRUE(actual.has<EndpointOption>());
   EXPECT_THAT(actual.get<EndpointOption>(), Eq(""));
 }
 
 TEST(PopulateCommonOptions, EmptyEndpointEnvVar) {
   ScopedEnvironment endpoint("GOOGLE_CLOUD_CPP_SERVICE_ENDPOINT", "");
-  auto actual = PopulateCommonOptions(
-      Options{}, "GOOGLE_CLOUD_CPP_SERVICE_ENDPOINT", {}, {}, "default");
+  auto actual =
+      PopulateCommonOptions(Options{}, "GOOGLE_CLOUD_CPP_SERVICE_ENDPOINT", {},
+                            {}, "default.googleapis.com");
   EXPECT_TRUE(actual.has<EndpointOption>());
-  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default."));
+  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default.googleapis.com."));
 }
 
 TEST(PopulateCommonOptions, EmptyEmulatorEnvVar) {
   ScopedEnvironment endpoint("GOOGLE_CLOUD_CPP_EMULATOR_ENDPOINT", "");
-  auto actual = PopulateCommonOptions(
-      Options{}, {}, "GOOGLE_CLOUD_CPP_EMULATOR_ENDPOINT", {}, "default");
+  auto actual =
+      PopulateCommonOptions(Options{}, {}, "GOOGLE_CLOUD_CPP_EMULATOR_ENDPOINT",
+                            {}, "default.googleapis.com");
   EXPECT_TRUE(actual.has<EndpointOption>());
-  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default."));
+  EXPECT_THAT(actual.get<EndpointOption>(), Eq("default.googleapis.com."));
 }
 
 // TODO(#13191): Simplify into multiple tests.
@@ -93,9 +97,9 @@ TEST(PopulateCommonOptions, EndpointAuthority) {
           ScopedEnvironment emulator("SERVICE_EMULATOR", emulator_env);
           ScopedEnvironment authority("SERVICE_AUTHORITY", authority_env);
 
-          auto actual = PopulateCommonOptions(options, "SERVICE_ENDPOINT",
-                                              "SERVICE_EMULATOR",
-                                              "SERVICE_AUTHORITY", "default");
+          auto actual = PopulateCommonOptions(
+              options, "SERVICE_ENDPOINT", "SERVICE_EMULATOR",
+              "SERVICE_AUTHORITY", "default.googleapis.com");
 
           ASSERT_TRUE(actual.has<EndpointOption>());
           auto const& actual_endpoint = actual.get<EndpointOption>();
@@ -106,7 +110,7 @@ TEST(PopulateCommonOptions, EndpointAuthority) {
           } else if (options.has<EndpointOption>()) {
             EXPECT_THAT(actual_endpoint, Eq(options.get<EndpointOption>()));
           } else {
-            EXPECT_THAT(actual_endpoint, Eq("default."));
+            EXPECT_THAT(actual_endpoint, Eq("default.googleapis.com."));
           }
 
           ASSERT_TRUE(actual.has<AuthorityOption>());
@@ -116,12 +120,43 @@ TEST(PopulateCommonOptions, EndpointAuthority) {
           } else if (options.has<AuthorityOption>()) {
             EXPECT_THAT(actual_authority, Eq(options.get<AuthorityOption>()));
           } else {
-            EXPECT_THAT(actual_authority, Eq("default"));
+            EXPECT_THAT(actual_authority, Eq("default.googleapis.com"));
           }
         }
       }
     }
   }
+}
+
+TEST(PopulateCommonOptions, UniverseDomain) {
+  auto actual =
+      PopulateCommonOptions(Options{}.set<UniverseDomainOption>("my-ud.net"),
+                            {}, {}, {}, "default.googleapis.com");
+  EXPECT_EQ(actual.get<EndpointOption>(), "default.my-ud.net");
+}
+
+TEST(PopulateCommonOptions, EndpointOptionOverridesUniverseDomain) {
+  auto actual = PopulateCommonOptions(
+      Options{}
+          .set<UniverseDomainOption>("ignored-ud.net")
+          .set<EndpointOption>("custom-endpoint.googleapis.com"),
+      {}, {}, {}, "default.googleapis.com");
+  EXPECT_EQ(actual.get<EndpointOption>(), "custom-endpoint.googleapis.com");
+}
+
+TEST(PopulateCommonOptions, EnvVarsOverridesUniverseDomain) {
+  ScopedEnvironment endpoint("SERVICE_ENDPOINT", "endpoint-env.googleapis.com");
+  ScopedEnvironment emulator("SERVICE_EMULATOR", "emulator-env.googleapis.com");
+
+  auto actual = PopulateCommonOptions(
+      Options{}.set<UniverseDomainOption>("ignored-ud.net"), "SERVICE_ENDPOINT",
+      {}, {}, "default.googleapis.com");
+  EXPECT_EQ(actual.get<EndpointOption>(), "endpoint-env.googleapis.com");
+
+  actual = PopulateCommonOptions(
+      Options{}.set<UniverseDomainOption>("ignored-ud.net"), {},
+      "SERVICE_EMULATOR", {}, "default.googleapis.com");
+  EXPECT_EQ(actual.get<EndpointOption>(), "emulator-env.googleapis.com");
 }
 
 TEST(PopulateCommonOptions, UserProject) {
@@ -133,7 +168,8 @@ TEST(PopulateCommonOptions, UserProject) {
   for (auto const& options : optionses) {
     for (auto const& project_env : projects) {
       ScopedEnvironment projects("GOOGLE_CLOUD_CPP_USER_PROJECT", project_env);
-      auto actual = PopulateCommonOptions(options, {}, {}, {}, "default");
+      auto actual =
+          PopulateCommonOptions(options, {}, {}, {}, "default.googleapis.com");
       if (project_env.has_value() && !project_env->empty()) {
         EXPECT_THAT(actual.get<UserProjectOption>(), Eq(*project_env));
       } else if (options.has<UserProjectOption>()) {
