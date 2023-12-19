@@ -188,12 +188,18 @@ add_custom_target(google-cloud-cpp-protos)
 add_custom_target(doxygen-docs)
 add_custom_target(all-docfx)
 
-if (NOT TARGET absl::strings)
+if (TARGET absl::strings)
+    message(STATUS "Using pre-existing abseil config")
+else()
+    message(STATUS "Finding abseil from system")
     find_package(absl CONFIG REQUIRED)
 endif()
 if (GOOGLE_CLOUD_CPP_ENABLE_GRPC)
-    if (NOT TARGET gRPC::grpc++)
-        find_package(gRPC REQUIRED QUIET)
+    if (TARGET gRPC::grpc++)
+        message(STATUS "Using pre-existing grpc config")
+    else()
+        message(STATUS "Finding grpc from system")
+        find_package(gRPC REQUIRED REQUIRED)
     endif()
     # `Protobuf_PROTOC_EXECUTABLE` is pretty standard. It has been in use by
     # CMake's FindProtobuf module for years, and it is defined by Protobuf's
@@ -214,16 +220,18 @@ host environment.
 
     set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
         "find_dependency(Protobuf CONFIG)")
-    if (NOT TARGET protobuf::libprotobuf)
-        find_package(Protobuf CONFIG QUIET)
+    if (TARGET protobuf::libprotobuf)
+        message(STATUS "Found existing protobuf config")
+        set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
+            "TARGET protobuf:libprotobuf)")
+    else()
+        message(STATUS "Using system protobuf")
+        find_package(Protobuf CONFIG REQUIRED)
         if (NOT Protobuf_FOUND)
             set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
                 "find_dependency(Protobuf)")
             find_package(Protobuf REQUIRED)
         endif ()
-    else()
-        set(GOOGLE_CLOUD_CPP_FIND_DEPENDENCY_PROTOBUF
-            "TARGET protobuf:libprotobuf)")
     endif()
 endif ()
 
