@@ -15,6 +15,9 @@
 # ~~~
 
 function (find_nlohmann_json)
+    if (TARGET nlohmann_json::nlohmann_json)
+        return()
+    endif()
     find_package(nlohmann_json CONFIG QUIET)
     if (nlohmann_json_FOUND)
         return()

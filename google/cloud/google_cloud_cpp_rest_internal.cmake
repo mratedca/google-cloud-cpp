@@ -15,9 +15,15 @@
 # ~~~
 
 include(IncludeNlohmannJson)
-find_package(CURL REQUIRED)
-find_package(OpenSSL REQUIRED)
+if (NOT TARGET curl)
+    find_package(CURL REQUIRED)
+endif()
 
+if (NOT TARGET OpenSSL::SSL AND TARGET ssl)
+    add_library(OpenSSL::SSL ALIAS ssl)
+else()
+    find_package(OpenSSL REQUIRED)
+endif()
 # the library
 add_library(
     google_cloud_cpp_rest_internal # cmake-format: sort
