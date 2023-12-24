@@ -14,8 +14,9 @@
 # limitations under the License.
 # ~~~
 
-find_package(CURL REQUIRED)
-find_package(OpenSSL REQUIRED)
+# These will be found before.
+#find_package(CURL REQUIRED)
+#find_package(OpenSSL REQUIRED)
 
 # the client library
 add_library(
