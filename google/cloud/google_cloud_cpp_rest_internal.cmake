@@ -15,7 +15,7 @@
 # ~~~
 
 include(IncludeNlohmannJson)
-if (NOT TARGET libcurl_static)
+if (NOT TARGET CURL::libcurl)
     find_package(CURL REQUIRED)
 endif()
 
