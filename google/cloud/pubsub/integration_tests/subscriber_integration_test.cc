@@ -26,6 +26,7 @@
 #include "google/cloud/credentials.h"
 #include "google/cloud/internal/getenv.h"
 #include "google/cloud/internal/random.h"
+#include "google/cloud/opentelemetry_options.h"
 #include "google/cloud/testing_util/integration_test.h"
 #include "google/cloud/testing_util/status_matchers.h"
 #include <gmock/gmock.h>
@@ -168,12 +169,12 @@ void TestRoundtrip(pubsub::Publisher publisher, pubsub::Subscriber subscriber) {
   EXPECT_STATUS_OK(result.get());
 }
 
-TEST_F(SubscriberIntegrationTest, RawStub) {
+TEST_F(SubscriberIntegrationTest, Stub) {
   auto publisher = Publisher(MakePublisherConnection(topic_));
 
   internal::AutomaticallyCreatedBackgroundThreads background(4);
-  auto stub = pubsub_internal::CreateDefaultSubscriberStub(
-      pubsub_internal::DefaultCommonOptions({}), 0);
+  auto stub = pubsub_internal::MakeRoundRobinSubscriberStub(
+      background.cq(), pubsub_internal::DefaultCommonOptions({}));
   google::pubsub::v1::StreamingPullRequest request;
   request.set_client_id("test-client-0001");
   request.set_subscription(subscription_.FullName());
@@ -249,8 +250,8 @@ TEST_F(SubscriberIntegrationTest, StreamingSubscriptionBatchSource) {
       topic_, Options{}.set<GrpcBackgroundThreadPoolSizeOption>(2)));
 
   internal::AutomaticallyCreatedBackgroundThreads background(4);
-  auto stub = pubsub_internal::CreateDefaultSubscriberStub(
-      pubsub_internal::DefaultCommonOptions({}), 0);
+  auto stub = pubsub_internal::MakeRoundRobinSubscriberStub(
+      background.cq(), pubsub_internal::DefaultCommonOptions({}));
 
   auto shutdown = std::make_shared<pubsub_internal::SessionShutdownManager>();
   auto source =
@@ -456,22 +457,6 @@ TEST_F(SubscriberIntegrationTest, PublishOrdered) {
   EXPECT_STATUS_OK(result.get());
 }
 
-TEST_F(SubscriberIntegrationTest, UnifiedCredentials) {
-  auto options =
-      Options{}.set<UnifiedCredentialsOption>(MakeGoogleDefaultCredentials());
-  auto const using_emulator =
-      internal::GetEnv("PUBSUB_EMULATOR_HOST").has_value();
-  if (using_emulator) {
-    options = Options{}
-                  .set<UnifiedCredentialsOption>(MakeInsecureCredentials())
-                  .set<internal::UseInsecureChannelOption>(true);
-  }
-  auto publisher = Publisher(MakePublisherConnection(topic_, options));
-  auto subscriber =
-      Subscriber(MakeSubscriberConnection(subscription_, options));
-  ASSERT_NO_FATAL_FAILURE(TestRoundtrip(publisher, subscriber));
-}
-
 TEST_F(SubscriberIntegrationTest, ExactlyOnce) {
   auto publisher = Publisher(MakePublisherConnection(topic_));
   auto subscriber =
@@ -529,6 +514,60 @@ TEST_F(SubscriberIntegrationTest, BlockingPull) {
   auto publisher = Publisher(MakePublisherConnection(topic_));
   auto subscriber =
       Subscriber(MakeSubscriberConnection(exactly_once_subscription_));
+
+  std::set<std::string> ids;
+  for (auto const* data : {"message-0", "message-1", "message-2"}) {
+    auto response =
+        publisher.Publish(MessageBuilder{}.SetData(data).Build()).get();
+    EXPECT_STATUS_OK(response);
+    if (response) ids.insert(*std::move(response));
+  }
+  EXPECT_THAT(ids, Not(IsEmpty()));
+
+  auto const count = 2 * ids.size();
+  for (std::size_t i = 0; i != count && !ids.empty(); ++i) {
+    auto response = subscriber.Pull();
+    EXPECT_STATUS_OK(response);
+    if (!response) continue;
+    auto ack = std::move(response->handler).ack().get();
+    EXPECT_STATUS_OK(ack);
+    ids.erase(response->message.message_id());
+  }
+  EXPECT_THAT(ids, IsEmpty());
+}
+
+TEST_F(SubscriberIntegrationTest, TracingEnabledBlockingPull) {
+  auto publisher = Publisher(MakePublisherConnection(topic_));
+  auto subscriber = Subscriber(MakeSubscriberConnection(
+      exactly_once_subscription_,
+      google::cloud::Options{}.set<OpenTelemetryTracingOption>(true)));
+
+  std::set<std::string> ids;
+  for (auto const* data : {"message-0", "message-1", "message-2"}) {
+    auto response =
+        publisher.Publish(MessageBuilder{}.SetData(data).Build()).get();
+    EXPECT_STATUS_OK(response);
+    if (response) ids.insert(*std::move(response));
+  }
+  EXPECT_THAT(ids, Not(IsEmpty()));
+
+  auto const count = 2 * ids.size();
+  for (std::size_t i = 0; i != count && !ids.empty(); ++i) {
+    auto response = subscriber.Pull();
+    EXPECT_STATUS_OK(response);
+    if (!response) continue;
+    auto ack = std::move(response->handler).ack().get();
+    EXPECT_STATUS_OK(ack);
+    ids.erase(response->message.message_id());
+  }
+  EXPECT_THAT(ids, IsEmpty());
+}
+
+TEST_F(SubscriberIntegrationTest, TracingDisabledBlockingPull) {
+  auto publisher = Publisher(MakePublisherConnection(topic_));
+  auto subscriber = Subscriber(MakeSubscriberConnection(
+      exactly_once_subscription_,
+      google::cloud::Options{}.set<OpenTelemetryTracingOption>(false)));
 
   std::set<std::string> ids;
   for (auto const* data : {"message-0", "message-1", "message-2"}) {

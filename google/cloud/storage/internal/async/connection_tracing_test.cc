@@ -85,29 +85,28 @@ TEST(ConnectionTracing, Enabled) {
   EXPECT_NE(actual.get(), mock.get());
 }
 
-TEST(ConnectionTracing, AsyncInsertObject) {
+TEST(ConnectionTracing, InsertObject) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<StatusOr<storage::ObjectMetadata>> p;
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncInsertObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, InsertObject).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result = actual->AsyncInsertObject(AsyncConnection::InsertObjectParams{})
+  auto result = actual->InsertObject(AsyncConnection::InsertObjectParams{})
                     .then(expect_no_context);
 
   p.set_value(make_status_or(storage::ObjectMetadata{}));
   ASSERT_STATUS_OK(result.get());
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(
-      spans, ElementsAre(
-                 AllOf(SpanNamed("storage::AsyncConnection::AsyncInsertObject"),
-                       SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
-                       SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans, ElementsAre(AllOf(
+                         SpanNamed("storage::AsyncConnection::InsertObject"),
+                         SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                         SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncReadObjectError) {
+TEST(ConnectionTracing, ReadObjectError) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<
       StatusOr<std::unique_ptr<storage_experimental::AsyncReaderConnection>>>
@@ -115,9 +114,9 @@ TEST(ConnectionTracing, AsyncReadObjectError) {
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncReadObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, ReadObject).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result = actual->AsyncReadObject(AsyncConnection::ReadObjectParams{})
+  auto result = actual->ReadObject(AsyncConnection::ReadObjectParams{})
                     .then(expect_no_context);
 
   p.set_value(
@@ -128,12 +127,12 @@ TEST(ConnectionTracing, AsyncReadObjectError) {
   auto spans = span_catcher->GetSpans();
   EXPECT_THAT(
       spans, ElementsAre(
-                 AllOf(SpanNamed("storage::AsyncConnection::AsyncReadObject"),
+                 AllOf(SpanNamed("storage::AsyncConnection::ReadObject"),
                        SpanWithStatus(opentelemetry::trace::StatusCode::kError),
                        SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncReadObjectSuccess) {
+TEST(ConnectionTracing, ReadObjectSuccess) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<
       StatusOr<std::unique_ptr<storage_experimental::AsyncReaderConnection>>>
@@ -142,9 +141,9 @@ TEST(ConnectionTracing, AsyncReadObjectSuccess) {
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
 
-  EXPECT_CALL(*mock, AsyncReadObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, ReadObject).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto f = actual->AsyncReadObject(AsyncConnection::ReadObjectParams{})
+  auto f = actual->ReadObject(AsyncConnection::ReadObjectParams{})
                .then(expect_no_context);
 
   using Response = ::google::cloud::storage_experimental::
@@ -163,34 +162,32 @@ TEST(ConnectionTracing, AsyncReadObjectSuccess) {
 
   auto spans = span_catcher->GetSpans();
   EXPECT_THAT(spans, ElementsAre(AllOf(
-                         SpanNamed("storage::AsyncConnection::AsyncReadObject"),
+                         SpanNamed("storage::AsyncConnection::ReadObject"),
                          SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
                          SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncReadObjectRange) {
+TEST(ConnectionTracing, ReadObjectRange) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<StatusOr<storage_experimental::ReadPayload>> p;
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncReadObjectRange).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, ReadObjectRange).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result =
-      actual->AsyncReadObjectRange(AsyncConnection::ReadObjectParams{})
-          .then(expect_no_context);
+  auto result = actual->ReadObjectRange(AsyncConnection::ReadObjectParams{})
+                    .then(expect_no_context);
   p.set_value(storage_experimental::ReadPayload{});
   ASSERT_STATUS_OK(result.get());
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(spans,
-              ElementsAre(AllOf(
-                  SpanNamed("storage::AsyncConnection::AsyncReadObjectRange"),
-                  SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
-                  SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans, ElementsAre(AllOf(
+                         SpanNamed("storage::AsyncConnection::ReadObjectRange"),
+                         SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                         SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncWriteObjectError) {
+TEST(ConnectionTracing, MakeBufferedWriterError) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<
       StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
@@ -198,9 +195,9 @@ TEST(ConnectionTracing, AsyncWriteObjectError) {
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncWriteObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, StartUnbufferedUpload).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result = actual->AsyncWriteObject(AsyncConnection::WriteObjectParams{})
+  auto result = actual->StartUnbufferedUpload(AsyncConnection::UploadParams{})
                     .then(expect_no_context);
 
   p.set_value(
@@ -209,14 +206,14 @@ TEST(ConnectionTracing, AsyncWriteObjectError) {
   EXPECT_THAT(result.get(), StatusIs(PermanentError().code()));
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(
-      spans, ElementsAre(
-                 AllOf(SpanNamed("storage::AsyncConnection::AsyncWriteObject"),
-                       SpanWithStatus(opentelemetry::trace::StatusCode::kError),
-                       SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans,
+              ElementsAre(AllOf(
+                  SpanNamed("storage::AsyncConnection::StartUnbufferedUpload"),
+                  SpanWithStatus(opentelemetry::trace::StatusCode::kError),
+                  SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncWriteObjectSuccess) {
+TEST(ConnectionTracing, MakeBufferedWriterSuccess) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<
       StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
@@ -225,9 +222,9 @@ TEST(ConnectionTracing, AsyncWriteObjectSuccess) {
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
 
-  EXPECT_CALL(*mock, AsyncWriteObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, StartUnbufferedUpload).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto f = actual->AsyncWriteObject(AsyncConnection::WriteObjectParams{})
+  auto f = actual->StartUnbufferedUpload(AsyncConnection::UploadParams{})
                .then(expect_no_context);
 
   auto mock_reader = std::make_unique<MockAsyncWriterConnection>();
@@ -245,55 +242,114 @@ TEST(ConnectionTracing, AsyncWriteObjectSuccess) {
   EXPECT_STATUS_OK(r);
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(
-      spans,
-      ElementsAre(AllOf(SpanNamed("storage::AsyncConnection::AsyncWriteObject"),
-                        SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
-                        SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans,
+              ElementsAre(AllOf(
+                  SpanNamed("storage::AsyncConnection::StartUnbufferedUpload"),
+                  SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                  SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncComposeObject) {
+TEST(ConnectionTracing, StartBufferedUploadError) {
+  auto span_catcher = InstallSpanCatcher();
+  PromiseWithOTelContext<
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+      p;
+
+  auto mock = std::make_unique<MockAsyncConnection>();
+  EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
+  EXPECT_CALL(*mock, StartBufferedUpload).WillOnce(expect_context(p));
+  auto actual = MakeTracingAsyncConnection(std::move(mock));
+  auto result = actual->StartBufferedUpload(AsyncConnection::UploadParams{})
+                    .then(expect_no_context);
+
+  p.set_value(
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>(
+          PermanentError()));
+  EXPECT_THAT(result.get(), StatusIs(PermanentError().code()));
+
+  auto spans = span_catcher->GetSpans();
+  EXPECT_THAT(spans,
+              ElementsAre(AllOf(
+                  SpanNamed("storage::AsyncConnection::StartBufferedUpload"),
+                  SpanWithStatus(opentelemetry::trace::StatusCode::kError),
+                  SpanHasInstrumentationScope(), SpanKindIsClient())));
+}
+
+TEST(ConnectionTracing, StartBufferedUploadSuccess) {
+  auto span_catcher = InstallSpanCatcher();
+  PromiseWithOTelContext<
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+      p;
+
+  auto mock = std::make_unique<MockAsyncConnection>();
+  EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
+
+  EXPECT_CALL(*mock, StartBufferedUpload).WillOnce(expect_context(p));
+  auto actual = MakeTracingAsyncConnection(std::move(mock));
+  auto f = actual->StartBufferedUpload(AsyncConnection::UploadParams{})
+               .then(expect_no_context);
+
+  auto mock_reader = std::make_unique<MockAsyncWriterConnection>();
+  EXPECT_CALL(*mock_reader, Finalize)
+      .WillOnce(Return(ByMove(
+          make_ready_future(make_status_or(storage::ObjectMetadata{})))));
+  p.set_value(
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>(
+          std::move(mock_reader)));
+
+  auto result = f.get();
+  ASSERT_STATUS_OK(result);
+  auto reader = *std::move(result);
+  auto r = reader->Finalize(storage_experimental::WritePayload{}).get();
+  EXPECT_STATUS_OK(r);
+
+  auto spans = span_catcher->GetSpans();
+  EXPECT_THAT(spans,
+              ElementsAre(AllOf(
+                  SpanNamed("storage::AsyncConnection::StartBufferedUpload"),
+                  SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                  SpanHasInstrumentationScope(), SpanKindIsClient())));
+}
+
+TEST(ConnectionTracing, ComposeObject) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<StatusOr<storage::ObjectMetadata>> p;
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncComposeObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, ComposeObject).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result =
-      actual->AsyncComposeObject(AsyncConnection::ComposeObjectParams{})
-          .then(expect_no_context);
+  auto result = actual->ComposeObject(AsyncConnection::ComposeObjectParams{})
+                    .then(expect_no_context);
 
   p.set_value(make_status_or(storage::ObjectMetadata{}));
   ASSERT_STATUS_OK(result.get());
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(spans,
-              ElementsAre(AllOf(
-                  SpanNamed("storage::AsyncConnection::AsyncComposeObject"),
-                  SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
-                  SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans, ElementsAre(AllOf(
+                         SpanNamed("storage::AsyncConnection::ComposeObject"),
+                         SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                         SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
-TEST(ConnectionTracing, AsyncDeleteObject) {
+TEST(ConnectionTracing, DeleteObject) {
   auto span_catcher = InstallSpanCatcher();
   PromiseWithOTelContext<Status> p;
 
   auto mock = std::make_unique<MockAsyncConnection>();
   EXPECT_CALL(*mock, options).WillOnce(Return(TracingEnabled()));
-  EXPECT_CALL(*mock, AsyncDeleteObject).WillOnce(expect_context(p));
+  EXPECT_CALL(*mock, DeleteObject).WillOnce(expect_context(p));
   auto actual = MakeTracingAsyncConnection(std::move(mock));
-  auto result = actual->AsyncDeleteObject(AsyncConnection::DeleteObjectParams{})
+  auto result = actual->DeleteObject(AsyncConnection::DeleteObjectParams{})
                     .then(expect_no_context);
   p.set_value(Status{});
   ASSERT_STATUS_OK(result.get());
 
   auto spans = span_catcher->GetSpans();
-  EXPECT_THAT(
-      spans, ElementsAre(
-                 AllOf(SpanNamed("storage::AsyncConnection::AsyncDeleteObject"),
-                       SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
-                       SpanHasInstrumentationScope(), SpanKindIsClient())));
+  EXPECT_THAT(spans, ElementsAre(AllOf(
+                         SpanNamed("storage::AsyncConnection::DeleteObject"),
+                         SpanWithStatus(opentelemetry::trace::StatusCode::kOk),
+                         SpanHasInstrumentationScope(), SpanKindIsClient())));
 }
 
 }  // namespace

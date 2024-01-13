@@ -80,6 +80,17 @@ def gl_cpp_workspace0(name = None):
         strip_prefix = "rules_cc-0.0.9",
     )
 
+    # The version of `rules_apple` loaded by gRPC is too old for Bazel 7.
+    maybe(
+        http_archive,
+        name = "build_bazel_rules_apple",
+        urls = [
+            "https://storage.googleapis.com/cloud-cpp-community-archive/build_bazel_rules_apple/rules_apple.3.1.1.tar.gz",
+            "https://github.com/bazelbuild/rules_apple/releases/download/3.1.1/rules_apple.3.1.1.tar.gz",
+        ],
+        sha256 = "34c41bfb59cdaea29ac2df5a2fa79e5add609c71bb303b2ebb10985f93fa20e7",
+    )
+
     # Load Abseil
     maybe(
         http_archive,
@@ -110,11 +121,11 @@ def gl_cpp_workspace0(name = None):
         http_archive,
         name = "com_google_googleapis",
         urls = [
-            "https://storage.googleapis.com/cloud-cpp-community-archive/com_google_googleapis/db5ce67d735d2ceb6fe925f3e317a3f30835cfd6.tar.gz",
-            "https://github.com/googleapis/googleapis/archive/db5ce67d735d2ceb6fe925f3e317a3f30835cfd6.tar.gz",
+            "https://storage.googleapis.com/cloud-cpp-community-archive/com_google_googleapis/8d89c311624529a33a22033a18c168a35cf8ea7e.tar.gz",
+            "https://github.com/googleapis/googleapis/archive/8d89c311624529a33a22033a18c168a35cf8ea7e.tar.gz",
         ],
-        sha256 = "9094b43a8a8b6f05dd4868cb509fa934012725107995865b5c8eb9c67fbea35d",
-        strip_prefix = "googleapis-db5ce67d735d2ceb6fe925f3e317a3f30835cfd6",
+        sha256 = "851f0b7484a0bb3f68bb7f19225b209edfe279a4b710dd945d8146ab75877930",
+        strip_prefix = "googleapis-8d89c311624529a33a22033a18c168a35cf8ea7e",
         build_file = Label("//bazel:googleapis.BUILD"),
         # Scaffolding for patching googleapis after download. For example:
         #   patches = ["googleapis.patch"]
@@ -131,11 +142,11 @@ def gl_cpp_workspace0(name = None):
         http_archive,
         name = "com_google_protobuf",
         urls = [
-            "https://storage.googleapis.com/cloud-cpp-community-archive/com_google_protobuf/v25.1.tar.gz",
-            "https://github.com/protocolbuffers/protobuf/archive/v25.1.tar.gz",
+            "https://storage.googleapis.com/cloud-cpp-community-archive/com_google_protobuf/v25.2.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v25.2.tar.gz",
         ],
-        sha256 = "9bd87b8280ef720d3240514f884e56a712f2218f0d693b48050c836028940a42",
-        strip_prefix = "protobuf-25.1",
+        sha256 = "8ff511a64fc46ee792d3fe49a5a1bcad6f7dc50dfbba5a28b0e5b979c17f9871",
+        strip_prefix = "protobuf-25.2",
     )
 
     # Load BoringSSL. This could be automatically loaded by gRPC. But as of

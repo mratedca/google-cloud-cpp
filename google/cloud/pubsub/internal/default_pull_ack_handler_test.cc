@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include "google/cloud/pubsub/internal/default_pull_ack_handler.h"
-#include "google/cloud/pubsub/internal/pull_lease_manager.h"
+#include "google/cloud/pubsub/internal/default_pull_lease_manager.h"
 #include "google/cloud/pubsub/options.h"
 #include "google/cloud/pubsub/retry_policy.h"
 #include "google/cloud/pubsub/testing/mock_subscriber_stub.h"
@@ -175,6 +175,29 @@ TEST(PullAckHandlerTest, NackPermanentError) {
   auto status = handler->nack();
   EXPECT_THAT(status.get(),
               StatusIs(StatusCode::kPermissionDenied, HasSubstr("uh-oh")));
+}
+
+TEST(AckHandlerTest, Subscription) {
+  auto subscription = pubsub::Subscription("test-project", "test-subscription");
+  auto mock = std::make_shared<MockSubscriberStub>();
+  AsyncSequencer<bool> aseq;
+  auto cq = MakeMockCompletionQueue(aseq);
+  auto handler = std::make_unique<DefaultPullAckHandler>(
+      cq, mock, MakeTestOptions(), subscription, "test-ack-id", 42);
+
+  EXPECT_EQ(handler->subscription(), subscription);
+}
+
+TEST(AckHandlerTest, AckId) {
+  auto mock = std::make_shared<MockSubscriberStub>();
+  AsyncSequencer<bool> aseq;
+  auto cq = MakeMockCompletionQueue(aseq);
+  auto handler = std::make_unique<DefaultPullAckHandler>(
+      cq, mock, MakeTestOptions(),
+      pubsub::Subscription("test-project", "test-subscription"), "test-ack-id",
+      42);
+
+  EXPECT_EQ(handler->ack_id(), "test-ack-id");
 }
 
 }  // namespace

@@ -177,7 +177,7 @@ TEST_F(AsyncConnectionImplTest, AsyncInsertObject) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncInsertObject(
+  auto pending = connection->InsertObject(
       {storage_experimental::InsertObjectRequest("test-bucket", "test-object")
            .set_multiple_options(storage::Fields("field1,field2"),
                                  storage::QuotaUser("test-quota-user")),
@@ -223,7 +223,7 @@ TEST_F(AsyncConnectionImplTest, AsyncInsertObjectPermanentError) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncInsertObject(
+  auto pending = connection->InsertObject(
       {storage_experimental::InsertObjectRequest("test-bucket", "test-object")
            .set_multiple_options(storage::Fields("field1,field2"),
                                  storage::QuotaUser("test-quota-user")),
@@ -251,7 +251,7 @@ TEST_F(AsyncConnectionImplTest, AsyncInsertObjectTooManyTransients) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncInsertObject(
+  auto pending = connection->InsertObject(
       {storage_experimental::InsertObjectRequest("test-bucket", "test-object")
            .set_multiple_options(storage::Fields("field1,field2"),
                                  storage::QuotaUser("test-quota-user")),
@@ -325,13 +325,13 @@ TEST_F(AsyncConnectionImplTest, AsyncReadObject) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncReadObject(
+  auto pending = connection->ReadObject(
       {storage_experimental::ReadObjectRequest("test-bucket", "test-object")
            .set_multiple_options(storage::Fields("field1,field2"),
                                  storage::QuotaUser("test-quota-user")),
        connection->options()});
 
-  // First simulate a failed `AsyncReadObject()`. This returns a streaming RPC
+  // First simulate a failed `ReadObject()`. This returns a streaming RPC
   // that completes with `false` on `Start()` (i.e. never starts) and then
   // completes with a transient error on `Finish()`.
   auto next = sequencer.PopFrontWithName();
@@ -342,7 +342,7 @@ TEST_F(AsyncConnectionImplTest, AsyncReadObject) {
   EXPECT_EQ(next.second, "Finish");
   next.first.set_value(true);
 
-  // Then simulate a successful `AsyncReadObject()`. This returns a streaming
+  // Then simulate a successful `ReadObject()`. This returns a streaming
   // RPC that completes with `true` on `Start()`, then returns some data on the
   // first `Read()`, then an unset optional on the second `Read()` (indicating
   // 'end of the streaming RPC'), and then a success `Status` for `Finish()`.
@@ -385,7 +385,7 @@ TEST_F(AsyncConnectionImplTest, AsyncReadObjectPermanentError) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncReadObject(
+  auto pending = connection->ReadObject(
       {storage_experimental::ReadObjectRequest("test-bucket", "test-object"),
        connection->options()});
 
@@ -410,7 +410,7 @@ TEST_F(AsyncConnectionImplTest, AsyncReadObjectTooManyTransients) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncReadObject(
+  auto pending = connection->ReadObject(
       {storage_experimental::ReadObjectRequest("test-bucket", "test-object"),
        connection->options()});
 
@@ -428,7 +428,7 @@ TEST_F(AsyncConnectionImplTest, AsyncReadObjectTooManyTransients) {
   EXPECT_THAT(r, StatusIs(TransientError().code()));
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectNewUpload) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadNewUpload) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite)
@@ -502,7 +502,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectNewUpload) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(
@@ -563,7 +563,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectNewUpload) {
   next.first.set_value(true);
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeUpload) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadResumeUpload) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncQueryWriteStatus)
@@ -630,7 +630,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeUpload) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(
@@ -689,7 +689,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeUpload) {
   next.first.set_value(true);
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeFinalizedUpload) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadResumeFinalizedUpload) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncQueryWriteStatus)
@@ -717,7 +717,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeFinalizedUpload) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(
@@ -747,7 +747,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectResumeFinalizedUpload) {
 }
 
 TEST_F(AsyncConnectionImplTest,
-       AsyncWriteObjectTooManyTransientsOnStartResumableWrite) {
+       UnbufferedUploadTooManyTransientsOnStartResumableWrite) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite).Times(3).WillRepeatedly([&] {
@@ -759,7 +759,7 @@ TEST_F(AsyncConnectionImplTest,
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object"),
        connection->options()});
@@ -775,7 +775,7 @@ TEST_F(AsyncConnectionImplTest,
 }
 
 TEST_F(AsyncConnectionImplTest,
-       AsyncWriteObjectPermanentErrorOnStartResumableWrite) {
+       UnbufferedUploadPermanentErrorOnStartResumableWrite) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite).WillOnce([&] {
@@ -787,7 +787,7 @@ TEST_F(AsyncConnectionImplTest,
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object"),
        connection->options()});
@@ -800,7 +800,7 @@ TEST_F(AsyncConnectionImplTest,
   EXPECT_THAT(r, StatusIs(PermanentError().code()));
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectInvalidRequest) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadInvalidRequest) {
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite).Times(0);
 
@@ -810,7 +810,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectInvalidRequest) {
   // will fail, and that should result in a
   auto key = storage::EncryptionDataFromBinaryKey("123");
   key.sha256 = "not-a-valid-base-64-SHA256";
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(storage::EncryptionKey(key)),
@@ -821,7 +821,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectInvalidRequest) {
 }
 
 TEST_F(AsyncConnectionImplTest,
-       AsyncWriteObjectTooManyTransientsOnQueryWriteStatus) {
+       UnbufferedUploadTooManyTransientsOnQueryWriteStatus) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncQueryWriteStatus).Times(3).WillRepeatedly([&] {
@@ -833,7 +833,7 @@ TEST_F(AsyncConnectionImplTest,
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(
@@ -851,7 +851,7 @@ TEST_F(AsyncConnectionImplTest,
 }
 
 TEST_F(AsyncConnectionImplTest,
-       AsyncWriteObjectPermanentErrorOnQueryWriteStatus) {
+       UnbufferedUploadPermanentErrorOnQueryWriteStatus) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncQueryWriteStatus).WillOnce([&] {
@@ -863,7 +863,7 @@ TEST_F(AsyncConnectionImplTest,
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object")
            .set_multiple_options(
@@ -878,7 +878,7 @@ TEST_F(AsyncConnectionImplTest,
   EXPECT_THAT(r, StatusIs(PermanentError().code()));
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectTooManyTransients) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadTooManyTransients) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite).WillOnce([] {
@@ -892,7 +892,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectTooManyTransients) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object"),
        connection->options()});
@@ -911,7 +911,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectTooManyTransients) {
   EXPECT_THAT(r, StatusIs(TransientError().code()));
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncWriteObjectPermanentError) {
+TEST_F(AsyncConnectionImplTest, UnbufferedUploadPermanentError) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncStartResumableWrite).WillOnce([] {
@@ -925,7 +925,7 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectPermanentError) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncWriteObject(
+  auto pending = connection->StartUnbufferedUpload(
       {storage_experimental::ResumableUploadRequest("test-bucket",
                                                     "test-object"),
        connection->options()});
@@ -942,7 +942,317 @@ TEST_F(AsyncConnectionImplTest, AsyncWriteObjectPermanentError) {
   EXPECT_THAT(r, StatusIs(PermanentError().code()));
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncDeleteObject) {
+TEST_F(AsyncConnectionImplTest, BufferedUploadNewUpload) {
+  AsyncSequencer<bool> sequencer;
+  auto mock = std::make_shared<storage::testing::MockStorageStub>();
+  EXPECT_CALL(*mock, AsyncStartResumableWrite)
+      .WillOnce([&] {
+        return sequencer.PushBack("StartResumableWrite(1)").then([](auto) {
+          return StatusOr<google::storage::v2::StartResumableWriteResponse>(
+              TransientError());
+        });
+      })
+      .WillOnce(
+          [&](auto&, auto,
+              google::storage::v2::StartResumableWriteRequest const& request) {
+            auto const& spec = request.write_object_spec();
+            EXPECT_TRUE(spec.has_if_generation_match());
+            EXPECT_EQ(spec.if_generation_match(), 123);
+            auto const& resource = spec.resource();
+            EXPECT_EQ(resource.bucket(), "projects/_/buckets/test-bucket");
+            EXPECT_EQ(resource.name(), "test-object");
+            EXPECT_EQ(resource.content_type(), "text/plain");
+
+            return sequencer.PushBack("StartResumableWrite(2)").then([](auto) {
+              auto response =
+                  google::storage::v2::StartResumableWriteResponse{};
+              response.set_upload_id("test-upload-id");
+              return make_status_or(response);
+            });
+          });
+  EXPECT_CALL(*mock, AsyncBidiWriteObject)
+      .WillOnce(
+          [&] { return MakeErrorBidiWriteStream(sequencer, TransientError()); })
+      .WillOnce([&]() {
+        auto stream = std::make_unique<MockAsyncBidiWriteObjectStream>();
+        EXPECT_CALL(*stream, Start).WillOnce([&] {
+          return sequencer.PushBack("Start");
+        });
+        EXPECT_CALL(*stream, Write)
+            .WillOnce(
+                [&](google::storage::v2::BidiWriteObjectRequest const& request,
+                    grpc::WriteOptions wopt) {
+                  EXPECT_EQ(request.upload_id(), "test-upload-id");
+                  EXPECT_TRUE(request.finish_write());
+                  EXPECT_TRUE(request.has_object_checksums());
+                  EXPECT_TRUE(wopt.is_last_message());
+                  return sequencer.PushBack("Write");
+                });
+        EXPECT_CALL(*stream, Read).WillOnce([&] {
+          return sequencer.PushBack("Read").then([](auto) {
+            auto response = google::storage::v2::BidiWriteObjectResponse{};
+            response.mutable_resource()->set_bucket(
+                "projects/_/buckets/test-bucket");
+            response.mutable_resource()->set_name("test-object");
+            response.mutable_resource()->set_generation(123456);
+            return absl::make_optional(std::move(response));
+          });
+        });
+        EXPECT_CALL(*stream, Cancel).Times(1);
+        EXPECT_CALL(*stream, Finish).WillOnce([&] {
+          return sequencer.PushBack("Finish").then(
+              [](auto) { return Status{}; });
+        });
+        return std::unique_ptr<AsyncBidiWriteObjectStream>(std::move(stream));
+      });
+
+  internal::AutomaticallyCreatedBackgroundThreads pool(1);
+  auto connection = MakeTestConnection(pool.cq(), mock);
+  auto pending = connection->StartBufferedUpload(
+      {storage_experimental::ResumableUploadRequest("test-bucket",
+                                                    "test-object")
+           .set_multiple_options(
+               storage::WithObjectMetadata(
+                   storage::ObjectMetadata{}.set_content_type("text/plain")),
+               storage::IfGenerationMatch(123)),
+       connection->options()});
+
+  auto next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "StartResumableWrite(1)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "StartResumableWrite(2)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Start");
+  next.first.set_value(false);  // The first stream fails
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Finish");
+  next.first.set_value(false);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Start");
+  next.first.set_value(true);
+
+  auto r = pending.get();
+  ASSERT_STATUS_OK(r);
+  auto writer = *std::move(r);
+  EXPECT_EQ(writer->UploadId(), "test-upload-id");
+  EXPECT_EQ(absl::get<std::int64_t>(writer->PersistedState()), 0);
+
+  auto w1 = writer->Finalize({});
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Write");
+  next.first.set_value(true);
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Read");
+  next.first.set_value(true);
+
+  auto response = w1.get();
+  ASSERT_STATUS_OK(response);
+  EXPECT_EQ(response->bucket(), "test-bucket");
+  EXPECT_EQ(response->name(), "test-object");
+  EXPECT_EQ(response->generation(), 123456);
+
+  writer.reset();
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Finish");
+  next.first.set_value(true);
+}
+
+TEST_F(AsyncConnectionImplTest, BufferedUploadNewUploadResume) {
+  AsyncSequencer<bool> sequencer;
+  auto mock = std::make_shared<storage::testing::MockStorageStub>();
+  EXPECT_CALL(*mock, AsyncStartResumableWrite)
+      .WillOnce([&] {
+        return sequencer.PushBack("StartResumableWrite(1)").then([](auto) {
+          return StatusOr<google::storage::v2::StartResumableWriteResponse>(
+              TransientError());
+        });
+      })
+      .WillOnce(
+          [&](auto&, auto,
+              google::storage::v2::StartResumableWriteRequest const& request) {
+            auto const& spec = request.write_object_spec();
+            EXPECT_TRUE(spec.has_if_generation_match());
+            EXPECT_EQ(spec.if_generation_match(), 123);
+            auto const& resource = spec.resource();
+            EXPECT_EQ(resource.bucket(), "projects/_/buckets/test-bucket");
+            EXPECT_EQ(resource.name(), "test-object");
+            EXPECT_EQ(resource.content_type(), "text/plain");
+
+            return sequencer.PushBack("StartResumableWrite(2)").then([](auto) {
+              auto response =
+                  google::storage::v2::StartResumableWriteResponse{};
+              response.set_upload_id("test-upload-id");
+              return make_status_or(response);
+            });
+          });
+  EXPECT_CALL(*mock, AsyncQueryWriteStatus)
+      .WillOnce([&] {
+        return sequencer.PushBack("QueryWriteStatus(1)").then([](auto) {
+          return StatusOr<google::storage::v2::QueryWriteStatusResponse>(
+              TransientError());
+        });
+      })
+      .WillOnce(
+          [&](auto&, auto,
+              google::storage::v2::QueryWriteStatusRequest const& request) {
+            EXPECT_EQ(request.upload_id(), "test-upload-id");
+
+            return sequencer.PushBack("QueryWriteStatus(2)").then([](auto) {
+              auto response = google::storage::v2::QueryWriteStatusResponse{};
+              response.set_persisted_size(0);
+              return make_status_or(response);
+            });
+          });
+  EXPECT_CALL(*mock, AsyncBidiWriteObject)
+      .WillOnce(
+          [&] { return MakeErrorBidiWriteStream(sequencer, TransientError()); })
+      .WillOnce([&]() {
+        auto stream = std::make_unique<MockAsyncBidiWriteObjectStream>();
+        EXPECT_CALL(*stream, Start).WillOnce([&] {
+          return sequencer.PushBack("Start(1)");
+        });
+        EXPECT_CALL(*stream, Write)
+            .WillOnce(
+                [&](google::storage::v2::BidiWriteObjectRequest const& request,
+                    grpc::WriteOptions wopt) {
+                  EXPECT_EQ(request.upload_id(), "test-upload-id");
+                  EXPECT_TRUE(request.finish_write());
+                  EXPECT_TRUE(request.has_object_checksums());
+                  EXPECT_TRUE(wopt.is_last_message());
+                  return sequencer.PushBack("Write");
+                });
+        EXPECT_CALL(*stream, Read).WillOnce([&] {
+          return sequencer.PushBack("Read").then([](auto) {
+            return absl::optional<
+                google::storage::v2::BidiWriteObjectResponse>{};
+          });
+        });
+        EXPECT_CALL(*stream, Cancel).Times(1);
+        EXPECT_CALL(*stream, Finish).WillOnce([&] {
+          return sequencer.PushBack("Finish").then(
+              [](auto) { return TransientError(); });
+        });
+        return std::unique_ptr<AsyncBidiWriteObjectStream>(std::move(stream));
+      })
+      .WillOnce([&]() {
+        auto stream = std::make_unique<MockAsyncBidiWriteObjectStream>();
+        EXPECT_CALL(*stream, Start).WillOnce([&] {
+          return sequencer.PushBack("Start(2)");
+        });
+        EXPECT_CALL(*stream, Write)
+            .WillOnce(
+                [&](google::storage::v2::BidiWriteObjectRequest const& request,
+                    grpc::WriteOptions wopt) {
+                  EXPECT_EQ(request.upload_id(), "test-upload-id");
+                  EXPECT_TRUE(request.finish_write());
+                  EXPECT_TRUE(request.has_object_checksums());
+                  EXPECT_TRUE(wopt.is_last_message());
+                  return sequencer.PushBack("Write");
+                });
+        EXPECT_CALL(*stream, Read).WillOnce([&] {
+          return sequencer.PushBack("Read").then([](auto) {
+            auto response = google::storage::v2::BidiWriteObjectResponse{};
+            response.mutable_resource()->set_bucket(
+                "projects/_/buckets/test-bucket");
+            response.mutable_resource()->set_name("test-object");
+            response.mutable_resource()->set_generation(123456);
+            return absl::make_optional(std::move(response));
+          });
+        });
+        EXPECT_CALL(*stream, Cancel).Times(1);
+        EXPECT_CALL(*stream, Finish).WillOnce([&] {
+          return sequencer.PushBack("Finish").then(
+              [](auto) { return Status{}; });
+        });
+        return std::unique_ptr<AsyncBidiWriteObjectStream>(std::move(stream));
+      });
+
+  internal::AutomaticallyCreatedBackgroundThreads pool(1);
+  auto connection = MakeTestConnection(pool.cq(), mock);
+  auto pending = connection->StartBufferedUpload(
+      {storage_experimental::ResumableUploadRequest("test-bucket",
+                                                    "test-object")
+           .set_multiple_options(
+               storage::WithObjectMetadata(
+                   storage::ObjectMetadata{}.set_content_type("text/plain")),
+               storage::IfGenerationMatch(123)),
+       connection->options()});
+
+  auto next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "StartResumableWrite(1)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "StartResumableWrite(2)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Start");
+  next.first.set_value(false);  // The first stream fails
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Finish");
+  next.first.set_value(false);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Start(1)");
+  next.first.set_value(true);
+
+  auto r = pending.get();
+  ASSERT_STATUS_OK(r);
+  auto writer = *std::move(r);
+  EXPECT_EQ(writer->UploadId(), "test-upload-id");
+  EXPECT_EQ(absl::get<std::int64_t>(writer->PersistedState()), 0);
+
+  auto w1 = writer->Finalize({});
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Write");
+  next.first.set_value(true);
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Read");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Finish");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "QueryWriteStatus(1)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "QueryWriteStatus(2)");
+  next.first.set_value(true);
+
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Start(2)");
+  next.first.set_value(true);
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Write");
+  next.first.set_value(true);
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Read");
+  next.first.set_value(true);
+
+  auto response = w1.get();
+  ASSERT_STATUS_OK(response);
+  EXPECT_EQ(response->bucket(), "test-bucket");
+  EXPECT_EQ(response->name(), "test-object");
+  EXPECT_EQ(response->generation(), 123456);
+
+  writer.reset();
+  next = sequencer.PopFrontWithName();
+  EXPECT_EQ(next.second, "Finish");
+  next.first.set_value(true);
+}
+
+TEST_F(AsyncConnectionImplTest, DeleteObject) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncDeleteObject)
@@ -969,7 +1279,7 @@ TEST_F(AsyncConnectionImplTest, AsyncDeleteObject) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncDeleteObject(
+  auto pending = connection->DeleteObject(
       {storage_experimental::DeleteObjectRequest("test-bucket", "test-object")
            .set_multiple_options(storage::Fields("field1,field2"),
                                  storage::QuotaUser("test-quota-user")),
@@ -987,7 +1297,7 @@ TEST_F(AsyncConnectionImplTest, AsyncDeleteObject) {
   ASSERT_STATUS_OK(response);
 }
 
-TEST_F(AsyncConnectionImplTest, AsyncDeleteObjectPermanentError) {
+TEST_F(AsyncConnectionImplTest, DeleteObjectPermanentError) {
   AsyncSequencer<bool> sequencer;
   auto mock = std::make_shared<storage::testing::MockStorageStub>();
   EXPECT_CALL(*mock, AsyncDeleteObject).WillOnce([&] {
@@ -998,7 +1308,7 @@ TEST_F(AsyncConnectionImplTest, AsyncDeleteObjectPermanentError) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncDeleteObject(
+  auto pending = connection->DeleteObject(
       {storage_experimental::DeleteObjectRequest("test-bucket", "test-object"),
        connection->options()});
 
@@ -1021,7 +1331,7 @@ TEST_F(AsyncConnectionImplTest, AsyncDeleteObjectTooManyTransients) {
 
   internal::AutomaticallyCreatedBackgroundThreads pool(1);
   auto connection = MakeTestConnection(pool.cq(), mock);
-  auto pending = connection->AsyncDeleteObject(
+  auto pending = connection->DeleteObject(
       {storage_experimental::DeleteObjectRequest("test-bucket", "test-object"),
        connection->options()});
 

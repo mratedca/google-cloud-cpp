@@ -48,6 +48,7 @@ class AsyncConnection {
  public:
   virtual ~AsyncConnection() = default;
 
+  /// The options used to configure this connection, with any defaults applied.
   virtual Options options() const = 0;
 
   /**
@@ -57,7 +58,9 @@ class AsyncConnection {
    * prevent breaking any mocks when additional parameters are needed.
    */
   struct InsertObjectParams {
-    /// The metadata attributes to create the object.
+    /// The bucket and object name for the new object. Includes any optional
+    /// parameters, such as pre-conditions on the insert operation, or metadata
+    /// attributes.
     InsertObjectRequest request;
     /// The bulk payload, sometimes called the "media" or "contents".
     WritePayload payload;
@@ -67,7 +70,7 @@ class AsyncConnection {
   };
 
   /// Insert a new object.
-  virtual future<StatusOr<storage::ObjectMetadata>> AsyncInsertObject(
+  virtual future<StatusOr<storage::ObjectMetadata>> InsertObject(
       InsertObjectParams p) = 0;
 
   /**
@@ -77,8 +80,9 @@ class AsyncConnection {
    * prevent breaking any mocks when additional parameters are needed.
    */
   struct ReadObjectParams {
-    /// What object to read, what portion of the object to read, and any
-    /// pre-conditions on the read.
+    /// The name of the bucket and object to read. Includes optional parameters,
+    /// such as pre-conditions on the read operation, or the range within the
+    /// object to read.
     ReadObjectRequest request;
     /// Any options modifying the RPC behavior, including per-client and
     /// per-connection options.
@@ -86,12 +90,11 @@ class AsyncConnection {
   };
 
   /// Asynchronously create a stream to read object contents.
-  virtual future<StatusOr<std::unique_ptr<AsyncReaderConnection>>>
-  AsyncReadObject(ReadObjectParams p) = 0;
+  virtual future<StatusOr<std::unique_ptr<AsyncReaderConnection>>> ReadObject(
+      ReadObjectParams p) = 0;
 
   /// Read a range from an object returning all the contents.
-  virtual future<StatusOr<ReadPayload>> AsyncReadObjectRange(
-      ReadObjectParams p) = 0;
+  virtual future<StatusOr<ReadPayload>> ReadObjectRange(ReadObjectParams p) = 0;
 
   /**
    * A thin wrapper around the `WriteObject()` parameters.
@@ -99,18 +102,24 @@ class AsyncConnection {
    * We use a single struct as the input parameter for this function to
    * prevent breaking any mocks when additional parameters are needed.
    */
-  struct WriteObjectParams {
-    /// The metadata attributes for the new object.
+  struct UploadParams {
+    /// The bucket name and object name for the new object. Includes optional
+    /// parameters such as pre-conditions on the new object.
     ResumableUploadRequest request;
     /// Any options modifying the RPC behavior, including per-client and
     /// per-connection options.
     Options options;
   };
 
-  /// Start (or resume) a streaming write.
+  /// Start (or resume) an upload configured for persistent sources.
   virtual future<
       StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
-  AsyncWriteObject(WriteObjectParams p) = 0;
+  StartUnbufferedUpload(UploadParams p) = 0;
+
+  /// Start (or resume) an upload configured for streaming sources.
+  virtual future<
+      StatusOr<std::unique_ptr<storage_experimental::AsyncWriterConnection>>>
+  StartBufferedUpload(UploadParams p) = 0;
 
   /**
    * A thin wrapper around the `ComposeObject()` parameters.
@@ -119,7 +128,9 @@ class AsyncConnection {
    * prevent breaking any mocks when additional parameters are needed.
    */
   struct ComposeObjectParams {
-    /// The metadata attributes to create the object.
+    /// The bucket name, the name of the source objects, and the name of the
+    /// destination object. Including pre-conditions on the source objects, the
+    /// destination object, and other optional parameters.
     ComposeObjectRequest request;
     /// Any options modifying the RPC behavior, including per-client and
     /// per-connection options.
@@ -128,7 +139,7 @@ class AsyncConnection {
 
   /// Create a new object by composing (concatenating) the contents of existing
   /// objects.
-  virtual future<StatusOr<storage::ObjectMetadata>> AsyncComposeObject(
+  virtual future<StatusOr<storage::ObjectMetadata>> ComposeObject(
       ComposeObjectParams p) = 0;
 
   /**
@@ -138,7 +149,8 @@ class AsyncConnection {
    * prevent breaking any mocks when additional parameters are needed.
    */
   struct DeleteObjectParams {
-    /// The metadata attributes to create the object.
+    /// The bucket and object name for the object to be deleted. Including
+    /// pre-conditions on the object and other optional parameters.
     DeleteObjectRequest request;
     /// Any options modifying the RPC behavior, including per-client and
     /// per-connection options.
@@ -146,7 +158,7 @@ class AsyncConnection {
   };
 
   /// Delete an object.
-  virtual future<Status> AsyncDeleteObject(DeleteObjectParams p) = 0;
+  virtual future<Status> DeleteObject(DeleteObjectParams p) = 0;
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

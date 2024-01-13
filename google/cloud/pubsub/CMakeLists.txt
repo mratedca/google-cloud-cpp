@@ -121,6 +121,8 @@ add_library(
     internal/default_batch_sink.h
     internal/default_pull_ack_handler.cc
     internal/default_pull_ack_handler.h
+    internal/default_pull_lease_manager.cc
+    internal/default_pull_lease_manager.h
     internal/defaults.cc
     internal/defaults.h
     internal/exactly_once_policies.cc
@@ -153,8 +155,11 @@ add_library(
     internal/publisher_tracing_connection.h
     internal/publisher_tracing_stub.cc
     internal/publisher_tracing_stub.h
-    internal/pull_lease_manager.cc
+    internal/pull_ack_handler_factory.cc
+    internal/pull_ack_handler_factory.h
     internal/pull_lease_manager.h
+    internal/pull_lease_manager_factory.cc
+    internal/pull_lease_manager_factory.h
     internal/rejects_with_ordering_key.cc
     internal/rejects_with_ordering_key.h
     internal/schema_auth_decorator.cc
@@ -212,6 +217,12 @@ add_library(
     internal/subscription_session.h
     internal/tracing_batch_sink.cc
     internal/tracing_batch_sink.h
+    internal/tracing_helpers.cc
+    internal/tracing_helpers.h
+    internal/tracing_pull_ack_handler.cc
+    internal/tracing_pull_ack_handler.h
+    internal/tracing_pull_lease_manager.cc
+    internal/tracing_pull_lease_manager.h
     message.cc
     message.h
     options.cc
@@ -346,6 +357,7 @@ function (google_cloud_cpp_pubsub_client_define_tests)
         testing/fake_streaming_pull.h
         testing/mock_batch_sink.h
         testing/mock_publisher_stub.h
+        testing/mock_pull_lease_manager.h
         testing/mock_subscriber_stub.h
         testing/mock_subscription_batch_source.h
         testing/mock_subscription_message_source.h
@@ -375,6 +387,7 @@ function (google_cloud_cpp_pubsub_client_define_tests)
         internal/blocking_publisher_tracing_connection_test.cc
         internal/default_batch_sink_test.cc
         internal/default_pull_ack_handler_test.cc
+        internal/default_pull_lease_manager_test.cc
         internal/defaults_test.cc
         internal/exactly_once_policies_test.cc
         internal/extend_leases_with_retry_test.cc
@@ -385,7 +398,8 @@ function (google_cloud_cpp_pubsub_client_define_tests)
         internal/ordering_key_publisher_connection_test.cc
         internal/publisher_stub_factory_test.cc
         internal/publisher_tracing_connection_test.cc
-        internal/pull_lease_manager_test.cc
+        internal/pull_ack_handler_factory_test.cc
+        internal/pull_lease_manager_factory_test.cc
         internal/rejects_with_ordering_key_test.cc
         internal/sequential_batch_sink_test.cc
         internal/session_shutdown_manager_test.cc
@@ -398,6 +412,9 @@ function (google_cloud_cpp_pubsub_client_define_tests)
         internal/subscription_message_queue_test.cc
         internal/subscription_session_test.cc
         internal/tracing_batch_sink_test.cc
+        internal/tracing_helpers_test.cc
+        internal/tracing_pull_ack_handler_test.cc
+        internal/tracing_pull_lease_manager_test.cc
         message_test.cc
         options_test.cc
         publisher_connection_test.cc

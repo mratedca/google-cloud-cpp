@@ -60,6 +60,8 @@ else ()
         internal/async/connection_impl.h
         internal/async/connection_tracing.cc
         internal/async/connection_tracing.h
+        internal/async/default_options.cc
+        internal/async/default_options.h
         internal/async/insert_object.cc
         internal/async/insert_object.h
         internal/async/partial_upload.cc
@@ -74,6 +76,8 @@ else ()
         internal/async/token_impl.h
         internal/async/write_payload_fwd.h
         internal/async/write_payload_impl.h
+        internal/async/writer_connection_buffered.cc
+        internal/async/writer_connection_buffered.h
         internal/async/writer_connection_finalized.cc
         internal/async/writer_connection_finalized.h
         internal/async/writer_connection_impl.cc
@@ -280,6 +284,7 @@ if (BUILD_TESTING AND GOOGLE_CLOUD_CPP_STORAGE_ENABLE_GRPC)
 
     set(storage_client_grpc_unit_tests
         # cmake-format: sort
+        async/client_test.cc
         async/reader_test.cc
         async/token_test.cc
         async/writer_test.cc
@@ -287,12 +292,14 @@ if (BUILD_TESTING AND GOOGLE_CLOUD_CPP_STORAGE_ENABLE_GRPC)
         internal/async/accumulate_read_object_test.cc
         internal/async/connection_impl_test.cc
         internal/async/connection_tracing_test.cc
+        internal/async/default_options_test.cc
         internal/async/insert_object_test.cc
         internal/async/partial_upload_test.cc
         internal/async/read_payload_impl_test.cc
         internal/async/reader_connection_impl_test.cc
         internal/async/reader_connection_tracing_test.cc
         internal/async/write_payload_impl_test.cc
+        internal/async/writer_connection_buffered_test.cc
         internal/async/writer_connection_finalized_test.cc
         internal/async/writer_connection_impl_test.cc
         internal/async/writer_connection_tracing_test.cc
