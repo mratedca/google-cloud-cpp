@@ -33,7 +33,7 @@ set(GOOGLE_CLOUD_CPP_REST_ONLY_FEATURES
 set(GOOGLE_CLOUD_CPP_EXPERIMENTAL_LIBRARIES
     # cmake-format: sort
     "pubsublite" # This is WIP, it needs a number of hand-crafted APIs.
-)
+    "storagecontrol")
 
 set(GOOGLE_CLOUD_CPP_TRANSITION_LIBRARIES # cmake-format: sort
 )
@@ -136,6 +136,7 @@ set(GOOGLE_CLOUD_CPP_GA_LIBRARIES
     "secretmanager"
     "securesourcemanager"
     "securitycenter"
+    "securitycentermanagement"
     "servicecontrol"
     "servicedirectory"
     "servicehealth"
@@ -365,6 +366,7 @@ macro (google_cloud_cpp_enable_cleanup)
         OR (oauth2 IN_LIST GOOGLE_CLOUD_CPP_ENABLE)
         OR (opentelemetry IN_LIST GOOGLE_CLOUD_CPP_ENABLE)
         OR (sql IN_LIST GOOGLE_CLOUD_CPP_ENABLE)
+        OR (universe_domain IN_LIST GOOGLE_CLOUD_CPP_ENABLE)
         OR (generator IN_LIST GOOGLE_CLOUD_CPP_ENABLE))
         set(GOOGLE_CLOUD_CPP_ENABLE_REST ON)
     endif ()

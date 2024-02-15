@@ -126,17 +126,17 @@ int DefaultConnectionPoolSize() {
 Options HandleUniverseDomain(Options opts) {
   if (!opts.has<DataEndpointOption>()) {
     auto ep = google::cloud::internal::UniverseDomainEndpoint(
-        "bigtable.googleapis.com.", opts);
+        "bigtable.googleapis.com", opts);
     opts.set<DataEndpointOption>(std::move(ep));
   }
   if (!opts.has<AdminEndpointOption>()) {
     auto ep = google::cloud::internal::UniverseDomainEndpoint(
-        "bigtableadmin.googleapis.com.", opts);
+        "bigtableadmin.googleapis.com", opts);
     opts.set<AdminEndpointOption>(std::move(ep));
   }
   if (!opts.has<InstanceAdminEndpointOption>()) {
     auto ep = google::cloud::internal::UniverseDomainEndpoint(
-        "bigtableadmin.googleapis.com.", opts);
+        "bigtableadmin.googleapis.com", opts);
     opts.set<InstanceAdminEndpointOption>(std::move(ep));
   }
   return opts;
@@ -245,6 +245,9 @@ Options DefaultDataOptions(Options opts) {
   if (!opts.has<bigtable::IdempotentMutationPolicyOption>()) {
     opts.set<bigtable::IdempotentMutationPolicyOption>(
         bigtable::DefaultIdempotentMutationPolicy());
+  }
+  if (!opts.has<google::cloud::internal::EnableServerRetriesOption>()) {
+    opts.set<google::cloud::internal::EnableServerRetriesOption>(true);
   }
   opts = DefaultOptions(std::move(opts));
   return opts.set<EndpointOption>(opts.get<DataEndpointOption>());

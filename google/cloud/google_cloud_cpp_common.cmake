@@ -89,6 +89,8 @@ add_library(
     internal/getenv.cc
     internal/getenv.h
     internal/group_options.h
+    internal/invocation_id_generator.cc
+    internal/invocation_id_generator.h
     internal/invoke_result.h
     internal/ios_flags_saver.h
     internal/log_impl.cc
@@ -110,6 +112,7 @@ add_library(
     internal/port_platform.h
     internal/random.cc
     internal/random.h
+    internal/retry_info.h
     internal/retry_loop_helpers.cc
     internal/retry_loop_helpers.h
     internal/retry_policy_impl.cc
@@ -175,6 +178,7 @@ target_link_libraries(
            absl::memory
            absl::optional
            absl::span
+           absl::str_format
            absl::time
            absl::variant
            Threads::Threads
@@ -353,6 +357,7 @@ if (BUILD_TESTING)
         internal/future_impl_test.cc
         internal/future_then_impl_test.cc
         internal/group_options_test.cc
+        internal/invocation_id_generator_test.cc
         internal/invoke_result_test.cc
         internal/log_impl_test.cc
         internal/make_status_test.cc

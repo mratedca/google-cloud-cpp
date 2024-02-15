@@ -761,6 +761,55 @@ TEST_F(DataConnectionTest, BulkApplyRetriesOkStreamWithFailedMutations) {
   CheckFailedMutations(actual, expected);
 }
 
+TEST_F(DataConnectionTest, BulkApplyRetryInfoHeeded) {
+  bigtable::BulkMutation mut(IdempotentMutation("row"));
+
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, MutateRows)
+      .WillOnce([](auto, auto const&, v2::MutateRowsRequest const&) {
+        auto status = PermanentError();
+        internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+        auto stream = std::make_unique<MockMutateRowsStream>();
+        EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+        return stream;
+      })
+      .WillOnce([](auto, auto const&, v2::MutateRowsRequest const&) {
+        auto stream = std::make_unique<MockMutateRowsStream>();
+        EXPECT_CALL(*stream, Read)
+            .WillOnce(
+                Return(MakeBulkApplyResponse({{0, grpc::StatusCode::OK}})))
+            .WillOnce(Return(Status()));
+        return stream;
+      });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(true));
+  auto actual = conn->BulkApply(kTableName, std::move(mut));
+  CheckFailedMutations(actual, {});
+}
+
+TEST_F(DataConnectionTest, BulkApplyRetryInfoIgnored) {
+  std::vector<bigtable::FailedMutation> expected = {{PermanentError(), 0}};
+  bigtable::BulkMutation mut(IdempotentMutation("row"));
+
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, MutateRows)
+      .WillOnce([](auto, auto const&, v2::MutateRowsRequest const&) {
+        auto status = PermanentError();
+        internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+        auto stream = std::make_unique<MockMutateRowsStream>();
+        EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+        return stream;
+      });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(false));
+  auto actual = conn->BulkApply(kTableName, std::move(mut));
+  CheckFailedMutations(actual, expected);
+}
+
 TEST_F(DataConnectionTest, BulkApplyThrottling) {
   std::vector<bigtable::FailedMutation> expected = {{PermanentError(), 0}};
   bigtable::BulkMutation mut(IdempotentMutation("row"));
@@ -879,6 +928,54 @@ TEST_F(DataConnectionTest, ReadRowsFull) {
   auto reader = conn->ReadRowsFull(bigtable::ReadRowsParams{
       kTableName, kAppProfile, TestRowSet(), 42, TestFilter(), true});
   EXPECT_EQ(reader.begin(), reader.end());
+}
+
+TEST_F(DataConnectionTest, ReadRowsRetryInfoHeeded) {
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, ReadRows)
+      .WillOnce(
+          [](auto, auto const&, google::bigtable::v2::ReadRowsRequest const&) {
+            auto status = PermanentError();
+            internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+            auto stream = std::make_unique<MockReadRowsStream>();
+            EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+            return stream;
+          })
+      .WillOnce(
+          [](auto, auto const&, google::bigtable::v2::ReadRowsRequest const&) {
+            auto stream = std::make_unique<MockReadRowsStream>();
+            EXPECT_CALL(*stream, Read).WillOnce(Return(Status()));
+            return stream;
+          });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(true));
+  auto reader = conn->ReadRowsFull(bigtable::ReadRowsParams{
+      kTableName, kAppProfile, TestRowSet(), 42, TestFilter(), true});
+  EXPECT_EQ(reader.begin(), reader.end());
+}
+
+TEST_F(DataConnectionTest, ReadRowsRetryInfoIgnored) {
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, ReadRows)
+      .WillOnce(
+          [](auto, auto const&, google::bigtable::v2::ReadRowsRequest const&) {
+            auto status = PermanentError();
+            internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+            auto stream = std::make_unique<MockReadRowsStream>();
+            EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+            return stream;
+          });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(false));
+  auto reader = conn->ReadRowsFull(bigtable::ReadRowsParams{
+      kTableName, kAppProfile, TestRowSet(), 42, TestFilter(), true});
+  std::vector<StatusOr<bigtable::Row>> rows;
+  for (auto const& row : reader) rows.push_back(row);
+  EXPECT_THAT(rows, ElementsAre(StatusIs(PermanentError().code())));
 }
 
 TEST_F(DataConnectionTest, ReadRowEmpty) {
@@ -1515,6 +1612,47 @@ TEST_F(DataConnectionTest, SampleRowsBigtableCookie) {
   internal::OptionsSpan span(
       CallOptionsWithoutClientContextSetup().set<DataBackoffPolicyOption>(
           std::move(mock_b)));
+  auto samples = conn->SampleRows(kTableName);
+  EXPECT_THAT(samples, StatusIs(StatusCode::kPermissionDenied));
+}
+
+TEST_F(DataConnectionTest, SampleRowsRetryInfoHeeded) {
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, SampleRowKeys)
+      .WillOnce([](auto, auto const&, v2::SampleRowKeysRequest const&) {
+        auto status = PermanentError();
+        internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+        auto stream = std::make_unique<MockSampleRowKeysStream>();
+        EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+        return stream;
+      })
+      .WillOnce([](auto, auto const&, v2::SampleRowKeysRequest const&) {
+        auto stream = std::make_unique<MockSampleRowKeysStream>();
+        EXPECT_CALL(*stream, Read).WillOnce(Return(Status()));
+        return stream;
+      });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(true));
+  auto samples = conn->SampleRows(kTableName);
+  EXPECT_STATUS_OK(samples);
+}
+
+TEST_F(DataConnectionTest, SampleRowsRetryInfoIgnored) {
+  auto mock = std::make_shared<MockBigtableStub>();
+  EXPECT_CALL(*mock, SampleRowKeys)
+      .WillOnce([](auto, auto const&, v2::SampleRowKeysRequest const&) {
+        auto status = PermanentError();
+        internal::SetRetryInfo(status, internal::RetryInfo{ms(0)});
+        auto stream = std::make_unique<MockSampleRowKeysStream>();
+        EXPECT_CALL(*stream, Read).WillOnce(Return(status));
+        return stream;
+      });
+
+  auto conn = TestConnection(std::move(mock));
+  internal::OptionsSpan span(
+      CallOptions().set<internal::EnableServerRetriesOption>(false));
   auto samples = conn->SampleRows(kTableName);
   EXPECT_THAT(samples, StatusIs(StatusCode::kPermissionDenied));
 }

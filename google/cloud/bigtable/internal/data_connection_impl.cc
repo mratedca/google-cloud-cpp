@@ -20,8 +20,10 @@
 #include "google/cloud/bigtable/internal/default_row_reader.h"
 #include "google/cloud/bigtable/internal/defaults.h"
 #include "google/cloud/bigtable/internal/retry_context.h"
+#include "google/cloud/bigtable/internal/retry_info_helper.h"
 #include "google/cloud/bigtable/options.h"
 #include "google/cloud/background_threads.h"
+#include "google/cloud/grpc_options.h"
 #include "google/cloud/idempotency.h"
 #include "google/cloud/internal/async_retry_loop.h"
 #include "google/cloud/internal/retry_loop.h"
@@ -50,6 +52,10 @@ inline std::unique_ptr<BackoffPolicy> backoff_policy(Options const& options) {
 inline std::unique_ptr<bigtable::IdempotentMutationPolicy> idempotency_policy(
     Options const& options) {
   return options.get<bigtable::IdempotentMutationPolicyOption>()->clone();
+}
+
+inline bool enable_server_retries(Options const& options) {
+  return options.get<internal::EnableServerRetriesOption>();
 }
 
 }  // namespace
@@ -168,13 +174,14 @@ std::vector<bigtable::FailedMutation> DataConnectionImpl::BulkApply(
   std::unique_ptr<bigtable::DataRetryPolicy> retry;
   std::unique_ptr<BackoffPolicy> backoff;
   while (true) {
-    auto status = mutator.MakeOneRequest(*stub_, *limiter_);
+    auto status = mutator.MakeOneRequest(*stub_, *limiter_, *current);
     if (!mutator.HasPendingMutations()) break;
     if (!retry) retry = retry_policy(*current);
-    if (!retry->OnFailure(status)) break;
     if (!backoff) backoff = backoff_policy(*current);
-    auto delay = backoff->OnCompletion();
-    std::this_thread::sleep_for(delay);
+    auto delay = BackoffOrBreak(enable_server_retries(*current), status, *retry,
+                                *backoff);
+    if (!delay) break;
+    std::this_thread::sleep_for(*delay);
   }
   return std::move(mutator).OnRetryDone();
 }
@@ -195,7 +202,8 @@ bigtable::RowReader DataConnectionImpl::ReadRowsFull(
   auto impl = std::make_shared<DefaultRowReader>(
       stub_, std::move(params.app_profile_id), std::move(params.table_name),
       std::move(params.row_set), params.rows_limit, std::move(params.filter),
-      params.reverse, retry_policy(*current), backoff_policy(*current));
+      params.reverse, retry_policy(*current), backoff_policy(*current),
+      enable_server_retries(*current));
   return MakeRowReader(std::move(impl));
 }
 
@@ -348,16 +356,17 @@ StatusOr<std::vector<bigtable::RowKeySample>> DataConnectionImpl::SampleRows(
     // We wait to allocate the policies until they are needed as a
     // micro-optimization.
     if (!retry) retry = retry_policy(*current);
-    if (!retry->OnFailure(status)) {
+    if (!backoff) backoff = backoff_policy(*current);
+    auto delay = BackoffOrBreak(enable_server_retries(*current), status, *retry,
+                                *backoff);
+    if (!delay) {
       return Status(status.code(),
                     "Retry policy exhausted: " + status.message());
     }
     retry_context.PostCall(*context);
     // A new stream invalidates previously returned samples.
     samples.clear();
-    if (!backoff) backoff = backoff_policy(*current);
-    auto delay = backoff->OnCompletion();
-    std::this_thread::sleep_for(delay);
+    std::this_thread::sleep_for(*delay);
   }
   return samples;
 }
@@ -367,7 +376,8 @@ DataConnectionImpl::AsyncSampleRows(std::string const& table_name) {
   auto current = google::cloud::internal::SaveCurrentOptions();
   return AsyncRowSampler::Create(
       background_->cq(), stub_, retry_policy(*current),
-      backoff_policy(*current), app_profile_id(*current), table_name);
+      backoff_policy(*current), enable_server_retries(*current),
+      app_profile_id(*current), table_name);
 }
 
 StatusOr<bigtable::Row> DataConnectionImpl::ReadModifyWriteRow(

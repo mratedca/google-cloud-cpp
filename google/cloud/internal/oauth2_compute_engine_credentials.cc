@@ -256,10 +256,18 @@ StatusOr<std::string> ComputeEngineCredentials::RetrieveUniverseDomain(
           *current_options, request, __func__);
 
   if (!response.ok()) return std::move(response).status();
-  if (IsHttpError(**response)) return AsStatus(std::move(**response));
-  auto metadata = ParseMetadataServerResponse(**response);
-  if (!metadata) return std::move(metadata).status();
-  universe_domain_ = std::move(metadata->universe_domain);
+  if (IsHttpError(**response)) {
+    // MDS could be an older version that does not support universe_domain.
+    if ((*response)->StatusCode() == rest_internal::HttpStatusCode::kNotFound) {
+      return GoogleDefaultUniverseDomain();
+    }
+    return AsStatus(std::move(**response));
+  }
+
+  auto payload =
+      rest_internal::ReadAll((std::move(**response)).ExtractPayload());
+  if (!payload.ok()) return payload.status();
+  universe_domain_ = *std::move(payload);
   return *universe_domain_;
 }
 

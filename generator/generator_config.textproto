@@ -1226,6 +1226,15 @@ discovery_products {
   }
 
   rest_services {
+    service_proto_path: "google/cloud/compute/region_zones/v1/region_zones.proto"
+    product_path: "google/cloud/compute/region_zones/v1"
+    initial_copyright_year: "2024"
+    retryable_status_codes: ["kUnavailable"]
+    generate_rest_transport: true
+    generate_grpc_transport: false
+  }
+
+  rest_services {
     service_proto_path: "google/cloud/compute/regions/v1/regions.proto"
     product_path: "google/cloud/compute/regions/v1"
     initial_copyright_year: "2023"
@@ -2957,6 +2966,14 @@ service {
   retryable_status_codes: ["kUnavailable"]
 }
 
+# Security Center Management
+service {
+  service_proto_path: "google/cloud/securitycentermanagement/v1/security_center_management.proto"
+  product_path: "google/cloud/securitycentermanagement/v1"
+  initial_copyright_year: "2024"
+  retryable_status_codes: ["kUnavailable"]
+}
+
 # Service Control
 service {
   service_proto_path: "google/api/servicecontrol/v1/quota_controller.proto"
@@ -3214,6 +3231,20 @@ service {
     "WriteObject"
   ]
   omit_repo_metadata: true
+}
+
+# Storage Control
+service {
+  service_proto_path: "google/storage/control/v2/storage_control.proto"
+  product_path: "google/cloud/storagecontrol/v2"
+  initial_copyright_year: "2024"
+  retryable_status_codes: ["kUnavailable"]
+  omit_repo_metadata: true
+  idempotency_overrides: [
+    {rpc_name: "StorageControl.GetFolder", idempotency: IDEMPOTENT},
+    {rpc_name: "StorageControl.ListFolders", idempotency: IDEMPOTENT},
+    {rpc_name: "StorageControl.GetStorageLayout", idempotency: IDEMPOTENT}
+  ]
 }
 
 # Storage Insights

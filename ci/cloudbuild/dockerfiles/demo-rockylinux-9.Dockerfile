@@ -61,26 +61,17 @@ ENV PATH=/usr/local/bin:${PATH}
 
 # Rocky Linux 9 includes a package for Abseil, unfortunately, this package is
 # incomplete, as it lacks the CMake support files for it. We need to compile
-# Abseiil from source.
-
-# :warning: By default, Abseil's ABI changes depending on whether it is used
-# with C++ >= 17 enabled or not. Installing Abseil with the default
-# configuration is error-prone, unless you can guarantee that all the code using
-# Abseil (gRPC, google-cloud-cpp, your own code, etc.) is compiled with the same
-# C++ version. We recommend that you switch the default configuration to pin
-# Abseil's ABI to the version used at compile time. In Rocky Linux 9 the
-# compiler defaults to C++17. Therefore, we change `absl/base/options.h` to
-# **always** use `std::any`, `std::string_view`, and `std::variant`. See
-# [abseil/abseil-cpp#696] for more information.
+# Abseiil from source. Enabling `ABSL_PROPAGATE_CXX_STD` propagates the version
+# of C++ used to compile Abseil to anything that depends on Abseil.
 
 # ```bash
 WORKDIR /var/tmp/build/abseil-cpp
-RUN curl -fsSL https://github.com/abseil/abseil-cpp/archive/20230802.1.tar.gz | \
+RUN curl -fsSL https://github.com/abseil/abseil-cpp/archive/20240116.1.tar.gz | \
     tar -xzf - --strip-components=1 && \
-    sed -i 's/^#define ABSL_OPTION_USE_\(.*\) 2/#define ABSL_OPTION_USE_\1 1/' "absl/base/options.h" && \
     cmake \
       -DCMAKE_BUILD_TYPE=Release \
       -DABSL_BUILD_TESTING=OFF \
+      -DABSL_PROPAGATE_CXX_STD=ON \
       -DBUILD_SHARED_LIBS=yes \
       -S . -B cmake-out && \
     cmake --build cmake-out -- -j ${NCPU:-4} && \
@@ -117,7 +108,7 @@ RUN curl -fsSL https://github.com/protocolbuffers/protobuf/archive/v25.2.tar.gz 
 
 # ```bash
 WORKDIR /var/tmp/build/re2
-RUN curl -fsSL https://github.com/google/re2/archive/2023-11-01.tar.gz | \
+RUN curl -fsSL https://github.com/google/re2/archive/2024-02-01.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_SHARED_LIBS=ON \
@@ -137,7 +128,7 @@ RUN curl -fsSL https://github.com/google/re2/archive/2023-11-01.tar.gz | \
 
 # ```bash
 WORKDIR /var/tmp/build/grpc
-RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.60.0.tar.gz | \
+RUN curl -fsSL https://github.com/grpc/grpc/archive/v1.61.1.tar.gz | \
     tar -xzf - --strip-components=1 && \
     cmake \
         -DCMAKE_CXX_STANDARD=17 \
@@ -217,6 +208,7 @@ RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.13
         -DWITH_ABSEIL=ON \
         -DBUILD_TESTING=OFF \
         -DOPENTELEMETRY_INSTALL=ON \
+        -DOPENTELEMETRY_ABI_VERSION_NO=2 \
         -S . -B cmake-out && \
     cmake --build cmake-out --target install -- -j ${NCPU:-4} && \
     ldconfig
@@ -225,7 +217,7 @@ RUN curl -fsSL https://github.com/open-telemetry/opentelemetry-cpp/archive/v1.13
 ## [DONE packaging.md]
 
 WORKDIR /var/tmp/sccache
-RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.5/sccache-v0.7.5-x86_64-unknown-linux-musl.tar.gz | \
+RUN curl -fsSL https://github.com/mozilla/sccache/releases/download/v0.7.7/sccache-v0.7.7-x86_64-unknown-linux-musl.tar.gz | \
     tar -zxf - --strip-components=1 && \
     mkdir -p /usr/local/bin && \
     mv sccache /usr/local/bin/sccache && \

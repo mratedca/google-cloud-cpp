@@ -166,6 +166,13 @@ int WriteInstallDirectories(
     }
     auto const lib = LibraryName(product_path);
     install_directories.push_back("./lib64/cmake/google_cloud_cpp_" + lib);
+    // Note that storage does not have a public-facing mocks library. Only
+    // GCS+gRPC does.
+    // TODO(#5782) - install mocks for compute
+    if (lib != "compute" && lib != "storage") {
+      install_directories.push_back("./lib64/cmake/google_cloud_cpp_" + lib +
+                                    "_mocks");
+    }
   }
   std::sort(install_directories.begin(), install_directories.end());
   auto end =

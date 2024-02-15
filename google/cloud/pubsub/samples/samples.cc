@@ -125,7 +125,7 @@ void PleaseIgnoreThisSimplifiesTestingTheSamples() {
 void CreateTopic(google::cloud::pubsub::TopicAdminClient client,
                  std::vector<std::string> const& argv) {
   //! [START pubsub_quickstart_create_topic]
-  //! [START pubsub_create_topic] [create-topic]
+  //! [START pubsub_create_topic]
   namespace pubsub = ::google::cloud::pubsub;
   [](pubsub::TopicAdminClient client, std::string project_id,
      std::string topic_id) {
@@ -140,70 +140,14 @@ void CreateTopic(google::cloud::pubsub::TopicAdminClient client,
 
     std::cout << "The topic was successfully created: " << topic->DebugString()
               << "\n";
-  }
-  //! [END pubsub_create_topic] [create-topic]
-  //! [END pubsub_quickstart_create_topic]
-  (std::move(client), argv.at(0), argv.at(1));
-}
-
-void GetTopic(google::cloud::pubsub::TopicAdminClient client,
-              std::vector<std::string> const& argv) {
-  //! [get-topic]
-  namespace pubsub = ::google::cloud::pubsub;
-  [](pubsub::TopicAdminClient client, std::string project_id,
-     std::string topic_id) {
-    auto topic = client.GetTopic(
-        pubsub::Topic(std::move(project_id), std::move(topic_id)));
-    if (!topic) throw std::move(topic).status();
-
-    std::cout << "The topic information was successfully retrieved: "
-              << topic->DebugString() << "\n";
-  }
-  //! [get-topic]
-  (std::move(client), argv.at(0), argv.at(1));
-}
-
-void UpdateTopic(google::cloud::pubsub::TopicAdminClient client,
-                 std::vector<std::string> const& argv) {
-  //! [update-topic]
-  namespace pubsub = ::google::cloud::pubsub;
-  [](pubsub::TopicAdminClient client, std::string project_id,
-     std::string topic_id) {
-    auto topic = client.UpdateTopic(
-        pubsub::TopicBuilder(
-            pubsub::Topic(std::move(project_id), std::move(topic_id)))
-            .add_label("test-key", "test-value"));
-    if (!topic) throw std::move(topic).status();
-
-    std::cout << "The topic was successfully updated: " << topic->DebugString()
-              << "\n";
-  }
-  //! [update-topic]
-  (std::move(client), argv.at(0), argv.at(1));
-}
-
-void ListTopics(google::cloud::pubsub::TopicAdminClient client,
-                std::vector<std::string> const& argv) {
-  //! [START pubsub_list_topics] [list-topics]
-  namespace pubsub = ::google::cloud::pubsub;
-  [](pubsub::TopicAdminClient client, std::string const& project_id) {
-    int count = 0;
-    for (auto& topic : client.ListTopics(project_id)) {
-      if (!topic) throw std::move(topic).status();
-      std::cout << "Topic Name: " << topic->name() << "\n";
-      ++count;
-    }
-    if (count == 0) {
-      std::cout << "No topics found in project " << project_id << "\n";
-    }
-  }
-  //! [END pubsub_list_topics] [list-topics]
-  (std::move(client), argv.at(0));
+    //! [END pubsub_create_topic]
+    //! [END pubsub_quickstart_create_topic]
+  }(std::move(client), argv.at(0), argv.at(1));
 }
 
 void DeleteTopic(google::cloud::pubsub::TopicAdminClient client,
                  std::vector<std::string> const& argv) {
-  //! [START pubsub_delete_topic] [delete-topic]
+  //! [START pubsub_delete_topic]
   namespace pubsub = ::google::cloud::pubsub;
   [](pubsub::TopicAdminClient client, std::string const& project_id,
      std::string const& topic_id) {
@@ -216,9 +160,8 @@ void DeleteTopic(google::cloud::pubsub::TopicAdminClient client,
     if (!status.ok()) throw std::runtime_error(status.message());
 
     std::cout << "The topic was successfully deleted\n";
-  }
-  //! [END pubsub_delete_topic] [delete-topic]
-  (std::move(client), argv.at(0), argv.at(1));
+    //! [END pubsub_delete_topic]
+  }(std::move(client), argv.at(0), argv.at(1));
 }
 
 void DetachSubscription(google::cloud::pubsub::TopicAdminClient client,
@@ -238,9 +181,28 @@ void DetachSubscription(google::cloud::pubsub::TopicAdminClient client,
   (std::move(client), argv.at(0), argv.at(1));
 }
 
+void ListTopics(google::cloud::pubsub::TopicAdminClient client,
+                std::vector<std::string> const& argv) {
+  //! [START pubsub_list_topics]
+  namespace pubsub = ::google::cloud::pubsub;
+  [](pubsub::TopicAdminClient client, std::string const& project_id) {
+    int count = 0;
+    for (auto& topic : client.ListTopics(project_id)) {
+      if (!topic) throw std::move(topic).status();
+      std::cout << "Topic Name: " << topic->name() << "\n";
+      ++count;
+    }
+    if (count == 0) {
+      std::cout << "No topics found in project " << project_id << "\n";
+    }
+  }
+  //! [END pubsub_list_topics]
+  (std::move(client), argv.at(0));
+}
+
 void ListTopicSubscriptions(google::cloud::pubsub::TopicAdminClient client,
                             std::vector<std::string> const& argv) {
-  //! [START pubsub_list_topic_subscriptions] [list-topic-subscriptions]
+  //! [START pubsub_list_topic_subscriptions]
   namespace pubsub = ::google::cloud::pubsub;
   [](pubsub::TopicAdminClient client, std::string const& project_id,
      std::string const& topic_id) {
@@ -251,25 +213,7 @@ void ListTopicSubscriptions(google::cloud::pubsub::TopicAdminClient client,
       std::cout << "  " << *name << "\n";
     }
   }
-  //! [END pubsub_list_topic_subscriptions] [list-topic-subscriptions]
-  (std::move(client), argv.at(0), argv.at(1));
-}
-
-void ListTopicSnapshots(google::cloud::pubsub::TopicAdminClient client,
-                        std::vector<std::string> const& argv) {
-  //! [list-topic-snapshots]
-  namespace pubsub = ::google::cloud::pubsub;
-  [](pubsub::TopicAdminClient client, std::string project_id,
-     std::string topic_id) {
-    auto const topic =
-        pubsub::Topic(std::move(project_id), std::move(topic_id));
-    std::cout << "Snapshot list for topic " << topic << ":\n";
-    for (auto& name : client.ListTopicSnapshots(topic)) {
-      if (!name) throw std::move(name).status();
-      std::cout << "  " << *name << "\n";
-    }
-  }
-  //! [list-topic-snapshots]
+  //! [END pubsub_list_topic_subscriptions]
   (std::move(client), argv.at(0), argv.at(1));
 }
 
@@ -2418,21 +2362,11 @@ void AutoRun(std::vector<std::string> const& argv) {
   std::cout << "\nRunning CreateTopic() sample [3]" << std::endl;
   CreateTopic(topic_admin_client, {project_id, ordering_topic_id});
 
-  std::cout << "\nRunning GetTopic() sample" << std::endl;
-  GetTopic(topic_admin_client, {project_id, topic_id});
-
-  std::cout << "\nRunning UpdateTopic() sample" << std::endl;
-  ignore_emulator_failures(
-      [&] {
-        UpdateTopic(topic_admin_client, {project_id, topic_id});
-      },
-      StatusCode::kInvalidArgument);
+  std::cout << "\nRunning ListTopics() sample" << std::endl;
+  ListTopics(topic_admin_client, {project_id});
 
   std::cout << "\nRunning the StatusOr example" << std::endl;
   ExampleStatusOr(topic_admin_client, {project_id});
-
-  std::cout << "\nRunning ListTopics() sample" << std::endl;
-  ListTopics(topic_admin_client, {project_id});
 
   std::cout << "\nRunning CreateSubscription() sample [1]" << std::endl;
   CreateSubscription(subscription_admin_client,
@@ -2544,9 +2478,6 @@ void AutoRun(std::vector<std::string> const& argv) {
   std::cout << "\nRunning CreateSnapshot() sample [2]" << std::endl;
   CreateSnapshot(subscription_admin_client,
                  {project_id, subscription_id, snapshot_id});
-
-  std::cout << "\nRunning ListTopicSnapshots() sample" << std::endl;
-  ListTopicSnapshots(topic_admin_client, {project_id, topic_id});
 
   std::cout << "\nRunning GetSnapshot() sample" << std::endl;
   GetSnapshot(subscription_admin_client, {project_id, snapshot_id});
@@ -2757,167 +2688,13 @@ int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
   using ::google::cloud::pubsub::examples::CreateSchemaServiceCommand;
   using ::google::cloud::pubsub::examples::CreateSubscriberCommand;
   using ::google::cloud::pubsub::examples::CreateSubscriptionAdminCommand;
-  using ::google::cloud::pubsub::examples::CreateTopicAdminCommand;
   using ::google::cloud::testing_util::Example;
 
   Example example({
-      CreateTopicAdminCommand("create-topic", {"project-id", "topic-id"},
-                              CreateTopic),
-      CreateTopicAdminCommand("get-topic", {"project-id", "topic-id"},
-                              GetTopic),
-      CreateTopicAdminCommand("update-topic", {"project-id", "topic-id"},
-                              UpdateTopic),
-      CreateTopicAdminCommand("list-topics", {"project-id"}, ListTopics),
-      CreateTopicAdminCommand("delete-topic", {"project-id", "topic-id"},
-                              DeleteTopic),
-      CreateTopicAdminCommand("detach-subscription",
-                              {"project-id", "subscription-id"},
-                              DetachSubscription),
-      CreateTopicAdminCommand("list-topic-subscriptions",
-                              {"project-id", "topic-id"},
-                              ListTopicSubscriptions),
-      CreateTopicAdminCommand("list-topic-snapshots",
-                              {"project-id", "topic-id"}, ListTopicSnapshots),
-      CreateSubscriptionAdminCommand(
-          "create-subscription", {"project-id", "topic-id", "subscription-id"},
-          CreateSubscription),
-      CreateSubscriptionAdminCommand(
-          "create-filtered-subscription",
-          {"project-id", "topic-id", "subscription-id"},
-          CreateFilteredSubscription),
-      CreateSubscriptionAdminCommand(
-          "create-subscription-with-exactly-once-delivery",
-          {"project-id", "topic-id", "subscription-id"},
-          CreateSubscriptionWithExactlyOnceDelivery),
-      CreateSubscriptionAdminCommand(
-          "create-push-subscription",
-          {"project-id", "topic-id", "subscription-id", "endpoint"},
-          CreatePushSubscription),
-      CreateSubscriptionAdminCommand(
-          "create-unwrapped-push-subscription",
-          {"project-id", "topic-id", "subscription-id", "endpoint"},
-          CreateUnwrappedPushSubscription),
       CreateSubscriptionAdminCommand(
           "create-bigquery-subscription",
           {"project-id", "topic-id", "subscription-id", "table-id"},
           CreateBigQuerySubscription),
-      CreateSubscriptionAdminCommand(
-          "create-cloud-storage-subscription",
-          {"project-id", "topic-id", "subscription-id", "bucket"},
-          CreateCloudStorageSubscription),
-      CreateSubscriptionAdminCommand(
-          "create-ordering-subscription",
-          {"project-id", "topic-id", "subscription-id"},
-          CreateOrderingSubscription),
-      CreateSubscriptionAdminCommand(
-          "create-dead-letter-subscription",
-          {"project-id", "topic-id", "subscription-id", "dead-letter-topic-id",
-           "dead-letter-delivery-attempts"},
-          CreateDeadLetterSubscription),
-      CreateSubscriptionAdminCommand(
-          "update-dead-letter-subscription",
-          {"project-id", "subscription-id", "dead-letter-topic-id",
-           "dead-letter-delivery-attempts"},
-          UpdateDeadLetterSubscription),
-      CreateSubscriptionAdminCommand("remove-dead-letter-policy",
-                                     {"project-id", "subscription-id"},
-                                     RemoveDeadLetterPolicy),
-      CreateSubscriptionAdminCommand("get-subscription",
-                                     {"project-id", "subscription-id"},
-                                     GetSubscription),
-      CreateSubscriptionAdminCommand("update-subscription",
-                                     {"project-id", "subscription-id"},
-                                     UpdateSubscription),
-      CreateSubscriptionAdminCommand("list-subscriptions", {"project-id"},
-                                     ListSubscriptions),
-      CreateSubscriptionAdminCommand("delete-subscription",
-                                     {"project-id", "subscription-id"},
-                                     DeleteSubscription),
-      CreateSubscriptionAdminCommand(
-          "modify-push-config", {"project-id", "subscription-id", "endpoint"},
-          ModifyPushConfig),
-      CreateSubscriptionAdminCommand(
-          "create-snapshot", {"project-id", "subscription-id", "snapshot-id"},
-          CreateSnapshot),
-      CreateSubscriptionAdminCommand(
-          "get-snapshot", {"project-id", "snapshot-id"}, GetSnapshot),
-      CreateSubscriptionAdminCommand(
-          "update-snapshot", {"project-id", "snapshot-id"}, UpdateSnapshot),
-      CreateSubscriptionAdminCommand("list-snapshots", {"project-id"},
-                                     ListSnapshots),
-      CreateSubscriptionAdminCommand(
-          "delete-snapshot", {"project-id", "snapshot-id"}, DeleteSnapshot),
-      CreateSubscriptionAdminCommand(
-          "seek-with-snapshot",
-          {"project-id", "subscription-id", "snapshot-id"}, SeekWithSnapshot),
-      CreateSubscriptionAdminCommand(
-          "seek-with-timestamp", {"project-id", "subscription-id", "seconds"},
-          SeekWithTimestamp),
-
-      CreateSchemaServiceCommand(
-          "create-avro-schema",
-          {"project-id", "schema-id", "schema-definition-file"},
-          CreateAvroSchema),
-      CreateSchemaServiceCommand(
-          "create-protobuf-schema",
-          {"project-id", "schema-id", "schema-definition-file"},
-          CreateProtobufSchema),
-      CreateSchemaServiceCommand(
-          "commit-avro-schema",
-          {"project-id", "schema-id", "schema-definition-file"},
-          CommitAvroSchema),
-      CreateSchemaServiceCommand(
-          "commit-protobuf-schema",
-          {"project-id", "schema-id", "schema-definition-file"},
-          CommitProtobufSchema),
-      CreateSchemaServiceCommand("get-schema", {"project-id", "schema-id"},
-                                 GetSchema),
-      CreateSchemaServiceCommand("get-schema-revision",
-                                 {"project-id", "schema-id", "revision-id"},
-                                 GetSchemaRevision),
-      CreateSchemaServiceCommand("list-schemas", {"project-id"}, ListSchemas),
-      CreateSchemaServiceCommand("list-schema-revisions",
-                                 {"project-id", "schema-id"},
-                                 ListSchemaRevisions),
-      CreateSchemaServiceCommand("delete-schema", {"project-id", "schema-id"},
-                                 DeleteSchema),
-      CreateSchemaServiceCommand("delete-schema-revision",
-                                 {"project-id", "schema-id", "revision-id"},
-                                 DeleteSchemaRevision),
-      CreateSchemaServiceCommand("rollback-schema",
-                                 {"project-id", "schema-id", "revision-id"},
-                                 RollbackSchema),
-      CreateSchemaServiceCommand("validate-avro-schema",
-                                 {"project-id", "schema-definition-file"},
-                                 ValidateAvroSchema),
-      CreateSchemaServiceCommand("validate-protobuf-schema",
-                                 {"project-id", "schema-definition-file"},
-                                 ValidateProtobufSchema),
-      CreateSchemaServiceCommand(
-          "validate-message-avro",
-          {"project-id", "schema-definition-file", "message-file"},
-          ValidateMessageAvro),
-      CreateSchemaServiceCommand(
-          "validate-message-protobuf",
-          {"project-id", "schema-definition-file", "message-file"},
-          ValidateMessageProtobuf),
-      CreateSchemaServiceCommand("validate-message-named-schema",
-                                 {"project-id", "schema-id", "message-file"},
-                                 ValidateMessageNamedSchema),
-
-      CreateTopicAdminCommand(
-          "create-topic-with-schema",
-          {"project-id", "topic-id", "schema-id", "encoding"},
-          CreateTopicWithSchema),
-      CreateTopicAdminCommand(
-          "create-topic-with-schema-revisions",
-          {"project-id", "topic-id", "schema-id", "encoding",
-           "first-revision-id", "last-revision-id"},
-          CreateTopicWithSchemaRevisions),
-      CreateTopicAdminCommand(
-          "update-topic-schema",
-          {"project-id", "topic-id", "first-revision-id", "last-revision-id"},
-          UpdateTopicSchema),
       CreatePublisherCommand("publish-avro-records", {}, PublishAvroRecords),
       CreateSubscriberCommand("subscribe-avro-records", {},
                               SubscribeAvroRecords),
@@ -2925,7 +2702,6 @@ int main(int argc, char* argv[]) {  // NOLINT(bugprone-exception-escape)
                              PublishProtobufRecords),
       CreateSubscriberCommand("subscribe-protobuf-records", {},
                               SubscribeProtobufRecords),
-
       CreatePublisherCommand("publish", {}, Publish),
       CreatePublisherCommand("publish-custom-attributes", {},
                              PublishCustomAttributes),
